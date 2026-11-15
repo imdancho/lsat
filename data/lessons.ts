@@ -235,10 +235,10 @@ export const LESSONS: Record<Focus, Lesson> = {
     example: {
       argument:
         "The library started lending board games last year, and since then more teenagers have been visiting. So the board games are attracting teenagers to the library.",
-      weak: "Board games are the only reason any teenager visits the library.",
+      weak: "The board games are the only thing at the library that changed last year.",
       strong:
-        "At least some of the teenagers who now visit come because of the board games.",
-      why: "The argument needs the games to be drawing some teenagers, not to be the only thing that ever does. Deny the modest version and the argument fails, which is all that 'required' means.",
+        "The rise in teenage visitors is not due entirely to something else that changed last year.",
+      why: "The argument can live with other changes, such as a new study room, as long as they do not account for the whole rise. Deny the modest version and the argument fails, which is all that 'required' means.",
     },
     avoid: [
       "Find 'all', 'only', 'never' and 'always' in your answer and question each one.",

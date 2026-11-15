@@ -39,11 +39,11 @@ export const SAMPLE_FEEDBACK: GradeResult = {
 
 /** A sample reasoning profile: 18 graded answers over five question types. */
 export const SAMPLE_TYPE_STATS: Record<QuestionType, TypeStats> = {
-  main_conclusion: { attempts: 4, averageScore: 86 },
-  flaw: { attempts: 5, averageScore: 58 },
-  necessary_assumption: { attempts: 3, averageScore: 64 },
-  strengthen: { attempts: 3, averageScore: 77 },
-  weaken: { attempts: 3, averageScore: 72 },
+  main_conclusion: { attempts: 4, averageScore: 86, picks: 4, correctPicks: 4 },
+  flaw: { attempts: 5, averageScore: 58, picks: 5, correctPicks: 3 },
+  necessary_assumption: { attempts: 3, averageScore: 64, picks: 3, correctPicks: 2 },
+  strengthen: { attempts: 3, averageScore: 77, picks: 3, correctPicks: 3 },
+  weaken: { attempts: 3, averageScore: 72, picks: 3, correctPicks: 2 },
 };
 
 /** Headline numbers that agree with SAMPLE_TYPE_STATS. */

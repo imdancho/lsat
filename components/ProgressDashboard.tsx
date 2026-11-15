@@ -8,8 +8,9 @@ import { ManagePro } from "@/components/ProStatus";
 import { ResetProgress } from "@/components/ResetProgress";
 import { useAttempts, useToday } from "@/components/useAttempts";
 import {
-  ATTEMPTS_TO_UNLOCK,
   pickNextQuestion,
+  QUESTIONS_TO_UNLOCK,
+  questionsAnswered,
   recentAttempts,
   recommend,
   statsByType,
@@ -67,25 +68,33 @@ function Locked({
   onReset: () => void;
 }) {
   const next = pickNextQuestion(questions, attempts);
-  const remaining = ATTEMPTS_TO_UNLOCK - attempts.length;
+  // Counted in different questions, as the heading says: retries do not unlock the profile.
+  const answered = questionsAnswered(attempts);
+  const remaining = QUESTIONS_TO_UNLOCK - answered;
   return (
     <div className="space-y-6">
       <section className="rounded-xl border border-line bg-surface p-6 sm:p-8">
         <h2 ref={headingRef} tabIndex={-1} className="rounded-md text-2xl font-semibold">
-          Answer {ATTEMPTS_TO_UNLOCK} questions to unlock your reasoning profile
+          Answer {QUESTIONS_TO_UNLOCK} questions to unlock your reasoning profile
         </h2>
         <p className="mt-3 max-w-2xl leading-relaxed text-muted">
           {attempts.length === 0
             ? "Your profile shows your score by question type, the reasoning mistakes you make most often, and the drill that will help most."
-            : `You have answered ${attempts.length} so far. ${remaining} more to go.`}
+            : `You have answered ${answered} so far. ${remaining} more to go.`}
         </p>
-        {next && (
-          <p className="mt-6">
+        <p className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
+          {next && (
             <Link href={`/practice/${next.id}`} className={PRIMARY_BUTTON}>
               {attempts.length === 0 ? "Answer your first question" : "Answer the next question"}
             </Link>
-          </p>
-        )}
+          )}
+          <Link
+            href="/lessons"
+            className="rounded-md font-medium text-accent underline underline-offset-4"
+          >
+            Browse the lessons
+          </Link>
+        </p>
       </section>
       {attempts.length > 0 && (
         <>
@@ -220,7 +229,7 @@ export function ProgressDashboard({ questions }: { questions: QuestionSummary[] 
   if (today === null) return <DashboardSkeleton />;
   return (
     <div className="space-y-6">
-      {attempts.length < ATTEMPTS_TO_UNLOCK ? (
+      {questionsAnswered(attempts) < QUESTIONS_TO_UNLOCK ? (
         <Locked
           attempts={attempts}
           questions={questions}

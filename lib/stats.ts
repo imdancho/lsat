@@ -12,8 +12,12 @@ import {
   type TrapTag,
 } from "@/lib/types";
 
-/** Attempts needed before the reasoning profile is shown. */
-export const ATTEMPTS_TO_UNLOCK = 3;
+/** Different questions a student must answer before the reasoning profile is shown. */
+export const QUESTIONS_TO_UNLOCK = 3;
+
+/** How many different questions the attempts cover. */
+export const questionsAnswered = (attempts: Attempt[]): number =>
+  new Set(attempts.map((a) => a.questionId)).size;
 
 const mean = (values: number[]): number | null =>
   values.length ? values.reduce((sum, v) => sum + v, 0) / values.length : null;
@@ -83,14 +87,25 @@ export function summarize(
   };
 }
 
-/** AI-graded attempts on one question type, and their mean reasoning score. */
-export type TypeStats = { attempts: number; averageScore: number | null };
+/** One question type: its AI-graded attempts with their mean reasoning score, and its multiple-choice picks. */
+export type TypeStats = {
+  attempts: number;
+  averageScore: number | null;
+  picks: number;
+  correctPicks: number;
+};
 
 export function statsByType(attempts: Attempt[]): Record<QuestionType, TypeStats> {
   const stats = {} as Record<QuestionType, TypeStats>;
   for (const type of QUESTION_TYPES) {
-    const scores = scoresOf(attempts.filter((a) => a.type === type));
-    stats[type] = { attempts: scores.length, averageScore: mean(scores) };
+    const ofType = attempts.filter((a) => a.type === type);
+    const scores = scoresOf(ofType);
+    stats[type] = {
+      attempts: scores.length,
+      averageScore: mean(scores),
+      picks: ofType.filter((a) => a.mcqCorrect !== null).length,
+      correctPicks: ofType.filter((a) => a.mcqCorrect === true).length,
+    };
   }
   return stats;
 }
