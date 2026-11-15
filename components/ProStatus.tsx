@@ -57,9 +57,8 @@ export function ManagePro() {
       <summary className="cursor-pointer font-medium">Manage / reset demo Pro</summary>
       <p className="mt-3 max-w-2xl leading-relaxed text-muted">
         {PAID_PLANS[membership.plan].name} has been active on this device since{" "}
-        {sinceFormat.format(new Date(membership.since))}. It came from a Stripe
-        test-mode checkout, so nothing was charged. Resetting brings back the
-        free plan and its daily limit.
+        {sinceFormat.format(new Date(membership.since))}. Resetting brings back the free
+        plan and its daily limit.
       </p>
       <button
         type="button"

@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import { CheckoutButton } from "@/components/CheckoutButton";
 import { CanceledToast } from "@/components/PricingNotices";
 import { ProNotice } from "@/components/ProStatus";
-import { TestModeBanner, TestModeNote } from "@/components/TestModeBanner";
 import {
   BEST_VALUE_PLAN,
   FREE_PLAN,
@@ -58,9 +57,8 @@ export default function PricingPage() {
         Start free, with no sign-up. Upgrade when you want every answer graded.
       </p>
 
-      <div className="mt-8 space-y-4">
+      <div className="mt-8">
         <ProNotice />
-        <TestModeBanner />
       </div>
 
       <ul className="mt-8 grid gap-5 lg:grid-cols-3">
@@ -100,9 +98,8 @@ export default function PricingPage() {
               <div className="mt-6 flex-1">
                 <FeatureList features={info.features} />
               </div>
-              <div className="mt-8 space-y-2 text-center">
+              <div className="mt-8">
                 <CheckoutButton plan={plan} emphasized={bestValue} />
-                <TestModeNote />
               </div>
             </li>
           );
@@ -115,8 +112,9 @@ export default function PricingPage() {
       </p>
       <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
         Other products&rsquo; prices are approximate and may change. While
-        Prephrase is in preview, the lesson library is open on every plan, and
-        Pro is remembered on this device only: there are no accounts.
+        Prephrase is in preview, the lesson library and the timed section are
+        open on every plan, and Pro is remembered on this device only: there
+        are no accounts.
       </p>
 
       <Suspense fallback={null}>

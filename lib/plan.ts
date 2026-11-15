@@ -70,7 +70,7 @@ export const PAID_PLANS: Record<ProPlan, PaidPlanInfo> = {
         text: "Unlimited generated questions targeting your weak spots",
         comingSoon: true,
       },
-      { text: "Timed sections", comingSoon: true },
+      { text: "Timed sections" },
       { text: "Full lesson library" },
     ],
   },

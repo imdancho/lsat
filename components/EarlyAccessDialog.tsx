@@ -91,8 +91,8 @@ export function EarlyAccessDialog({
         ) : (
           <form onSubmit={handleSubmit}>
             <p className="mt-3 leading-relaxed text-muted">
-              Checkout isn&rsquo;t switched on for this demo yet. Leave your
-              email and we&rsquo;ll tell you when {planName} opens.
+              Checkout isn&rsquo;t open yet. Leave your email and we&rsquo;ll
+              tell you when {planName} opens.
             </p>
             <label htmlFor={emailId} className="mt-5 block font-medium">
               Email

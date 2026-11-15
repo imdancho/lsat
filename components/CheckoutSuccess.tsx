@@ -89,7 +89,7 @@ export function CheckoutSuccess() {
           Welcome to Pro 🎉
         </h1>
         <p className="mt-4 text-lg leading-relaxed text-muted">
-          Your {planName} test payment is confirmed
+          Your {planName} payment is confirmed
           {result.email ? ` for ${result.email}` : ""}. The daily limit is gone
           on this device, so you can have every answer graded.
         </p>
@@ -97,9 +97,6 @@ export function CheckoutSuccess() {
           <Link href="/practice" className={PRIMARY_BUTTON}>
             Start practicing
           </Link>
-        </p>
-        <p className="mt-6 text-sm text-muted">
-          This was a Stripe test-mode checkout. No real charge was made.
         </p>
       </div>
     );
@@ -112,7 +109,7 @@ export function CheckoutSuccess() {
       </h1>
       <p className="mt-4 text-lg leading-relaxed text-muted">
         {sessionId
-          ? "Stripe did not report a completed payment for this checkout, so Pro was not turned on. If you finished the test checkout, try again in a moment."
+          ? "Stripe did not report a completed payment for this checkout, so Pro was not turned on. If you finished paying, try again in a moment."
           : "This page opens after a checkout. There is no checkout to confirm here."}
       </p>
       <p className="mt-8 flex flex-wrap gap-3">

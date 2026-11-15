@@ -8,6 +8,7 @@ import {
   TRAP_TAGS,
   type Attempt,
   type Membership,
+  type TestResult,
   type Usage,
 } from "@/lib/types";
 
@@ -38,16 +39,25 @@ const UsageSchema: z.ZodType<Usage> = z.object({
   count: z.number().int().min(0),
 });
 
+const TestResultSchema: z.ZodType<TestResult> = z.object({
+  at: z.iso.datetime(),
+  correct: z.number().int().min(0),
+  total: z.number().int().min(1),
+  seconds: z.number().min(0),
+});
+
 /** Everything this app keeps in localStorage. */
 export type Store = {
   attempts: Attempt[];
+  /** Finished timed sections, oldest first. */
+  tests: TestResult[];
   /** Set after a confirmed checkout; null on the free plan. */
   membership: Membership | null;
   /** AI-graded answers used on the most recent day of practice. */
   usage: Usage | null;
 };
 
-const EMPTY_STORE: Store = { attempts: [], membership: null, usage: null };
+const EMPTY_STORE: Store = { attempts: [], tests: [], membership: null, usage: null };
 const CHANGE_EVENT = "prephrase:progress";
 
 function parsePart<T>(schema: z.ZodType<T>, value: unknown): T | null {
@@ -70,6 +80,10 @@ function parseStore(raw: string | null): Store {
       attempts: entries.flatMap((entry) => {
         const attempt = parsePart(AttemptSchema, entry);
         return attempt ? [attempt] : [];
+      }),
+      tests: (Array.isArray(fields.tests) ? fields.tests : []).flatMap((entry: unknown) => {
+        const test = parsePart(TestResultSchema, entry);
+        return test ? [test] : [];
       }),
       membership: parsePart(MembershipSchema, fields.membership),
       usage: parsePart(UsageSchema, fields.usage),
@@ -154,6 +168,17 @@ export function subscribeToStore(onChange: () => void): () => void {
 export function saveAttempt(attempt: Attempt) {
   updateStore((store) => ({
     attempts: [...store.attempts.filter((a) => a.at !== attempt.at), attempt],
+  }));
+}
+
+/**
+ * Saves a finished timed section: its result, and one attempt per answered
+ * question so the picks count toward the progress page.
+ */
+export function saveTest(result: TestResult, attempts: Attempt[]) {
+  updateStore((store) => ({
+    tests: [...store.tests, result].slice(-50),
+    attempts: [...store.attempts, ...attempts],
   }));
 }
 
