@@ -234,3 +234,35 @@ export function pickNextQuestion(
     (lastSeen.get(a.id) ?? "").localeCompare(lastSeen.get(b.id) ?? ""),
   )[0];
 }
+
+/** A break longer than this ends a run of questions answered one after another. */
+const SITTING_GAP_MS = 30 * 60 * 1000;
+
+/**
+ * How many questions the student has just finished in a row: the latest
+ * attempts that each ended with a pick and followed the previous one within
+ * half an hour.
+ */
+export function questionsInARow(attempts: Attempt[]): number {
+  const finished = attempts
+    .filter((a) => a.mcqCorrect !== null)
+    .sort((a, b) => a.at.localeCompare(b.at));
+  let run = 0;
+  for (let i = finished.length - 1; i >= 0; i--) {
+    const later = finished[i + 1];
+    if (later && Date.parse(later.at) - Date.parse(finished[i].at) > SITTING_GAP_MS) break;
+    run += 1;
+  }
+  return run;
+}
+
+/** Whether every question of a type in the bank has been answered at least once. */
+export function typeCompleted(
+  questions: QuestionSummary[],
+  attempts: Attempt[],
+  type: QuestionType,
+): boolean {
+  const answered = new Set(attempts.map((a) => a.questionId));
+  const ofType = questions.filter((q) => q.type === type);
+  return ofType.length > 0 && ofType.every((q) => answered.has(q.id));
+}

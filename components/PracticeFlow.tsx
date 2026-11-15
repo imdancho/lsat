@@ -5,6 +5,7 @@ import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { AnswerField } from "@/components/AnswerField";
 import { ChoiceList } from "@/components/ChoiceList";
 import { FeedbackCard, FeedbackCardSkeleton } from "@/components/FeedbackCard";
+import { ProOffer } from "@/components/ProOffer";
 import { Stimulus } from "@/components/Stimulus";
 import { DifficultyLabel, TypeBadge } from "@/components/TypeBadge";
 import { useAccess, useAttempts } from "@/components/useAttempts";
@@ -17,7 +18,13 @@ import {
   recordGradedAnswer,
   saveAttempt,
 } from "@/lib/progress";
-import { localDay, pickNextQuestion, recommendType } from "@/lib/stats";
+import {
+  localDay,
+  pickNextQuestion,
+  questionsInARow,
+  recommendType,
+  typeCompleted,
+} from "@/lib/stats";
 import { QUESTION_TYPE_INFO } from "@/lib/taxonomy";
 import type {
   ApiErrorBody,
@@ -368,6 +375,19 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
   const weakType = recommendType(attempts);
   const drill = pickNextQuestion(questions, attempts, { excludeId: question.id });
 
+  // Offer Pro when the student is on a roll: every third question in a row,
+  // or on finishing every question of this type. Never to someone who has it.
+  const run = questionsInARow(attempts);
+  const ofThisType = questions.filter((q) => q.type === question.type).length;
+  let proOffer: string | null = null;
+  if (answered && access !== null && access.kind !== "pro") {
+    if (typeCompleted(questions, attempts, question.type)) {
+      proOffer = `You have finished all ${ofThisType} ${typeInfo.label} questions`;
+    } else if (run >= 3 && run % 3 === 0) {
+      proOffer = `${run} questions in a row. You are on a roll`;
+    }
+  }
+
   return (
     <article className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
       <header className="flex flex-wrap items-center gap-x-3 gap-y-2">
@@ -611,6 +631,12 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
             </Link>
           )}
         </nav>
+      )}
+
+      {proOffer && (
+        <div className="mt-8">
+          <ProOffer title={proOffer} />
+        </div>
       )}
 
       {answered && grade !== null && outOfGrades && (
