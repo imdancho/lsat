@@ -55,7 +55,7 @@ export function dayStreak(attempts: Attempt[], today: string): number {
 }
 
 export type Summary = {
-  /** Distinct questions answered at least once. */
+  /** Distinct questions from the bank answered at least once. */
   questionsDone: number;
   /** Mean reasoning score over the AI-graded attempts, 0–100. */
   averageScore: number | null;
@@ -65,10 +65,17 @@ export type Summary = {
   streakDays: number;
 };
 
-export function summarize(attempts: Attempt[], today: string): Summary {
+export function summarize(
+  attempts: Attempt[],
+  questions: QuestionSummary[],
+  today: string,
+): Summary {
   const picked = attempts.filter((a) => a.mcqCorrect !== null);
+  // An attempt can outlive its question (the bank changes between versions).
+  const inBank = new Set(questions.map((q) => q.id));
+  const done = attempts.map((a) => a.questionId).filter((id) => inBank.has(id));
   return {
-    questionsDone: new Set(attempts.map((a) => a.questionId)).size,
+    questionsDone: new Set(done).size,
     averageScore: mean(scoresOf(attempts)),
     picks: picked.length,
     correctPicks: picked.filter((a) => a.mcqCorrect).length,
@@ -121,28 +128,52 @@ export function recentAttempts(attempts: Attempt[], limit = 10): Attempt[] {
   return [...attempts].sort((a, b) => b.at.localeCompare(a.at)).slice(0, limit);
 }
 
-const MIN_ATTEMPTS_TO_JUDGE = 2;
+/** Graded attempts a type needs before its average says anything. */
+export const MIN_ATTEMPTS_TO_JUDGE = 2;
+/** An average at or above this is going well enough to look at other types first. */
+const GOING_WELL = 75;
+
+export type Recommendation = {
+  type: QuestionType;
+  reason: "lowest_average" | "least_practiced";
+};
 
 /**
- * The type to drill next: the lowest average score among types tried at least
+ * The type to drill next: the lowest average among types graded at least
  * twice, otherwise the least practiced type.
+ *
+ * One refinement keeps the drill from locking onto whichever type happened to
+ * reach two attempts first: while some types are still unjudged, the weakest
+ * judged type is only recommended if it really is weak. If it is going well,
+ * the student is sent to the type they have practiced least, until every type
+ * has an average to compare.
  */
-export function recommendType(attempts: Attempt[]): QuestionType {
+export function recommend(attempts: Attempt[]): Recommendation {
   const stats = statsByType(attempts);
+  const leastPracticed = QUESTION_TYPES.reduce((least, type) =>
+    stats[type].attempts < stats[least].attempts ? type : least,
+  );
   const judged = QUESTION_TYPES.filter(
     (type) => stats[type].attempts >= MIN_ATTEMPTS_TO_JUDGE,
   );
-  if (judged.length > 0) {
-    return judged.reduce((weakest, type) =>
-      (stats[type].averageScore ?? 0) < (stats[weakest].averageScore ?? 0)
-        ? type
-        : weakest,
-    );
-  }
-  return QUESTION_TYPES.reduce((least, type) =>
-    stats[type].attempts < stats[least].attempts ? type : least,
+  if (judged.length === 0) return { type: leastPracticed, reason: "least_practiced" };
+
+  const average = (type: QuestionType) => stats[type].averageScore ?? 0;
+  // Equal averages: the one with fewer attempts is the less settled of the two.
+  const weakest = judged.reduce((low, type) =>
+    average(type) < average(low) ||
+    (average(type) === average(low) && stats[type].attempts < stats[low].attempts)
+      ? type
+      : low,
   );
+  const everyTypeJudged = judged.length === QUESTION_TYPES.length;
+  return everyTypeJudged || average(weakest) < GOING_WELL
+    ? { type: weakest, reason: "lowest_average" }
+    : { type: leastPracticed, reason: "least_practiced" };
 }
+
+export const recommendType = (attempts: Attempt[]): QuestionType =>
+  recommend(attempts).type;
 
 const isQuestionType = (value: string): value is QuestionType =>
   (QUESTION_TYPES as readonly string[]).includes(value);

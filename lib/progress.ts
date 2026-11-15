@@ -101,9 +101,39 @@ export function readStore(): Store {
 
 export const serverStore = (): Store => EMPTY_STORE;
 
-function updateStore(update: (store: Store) => Store) {
+/** The stored object exactly as it is, including anything this version does not understand. */
+function readRawFields(): Record<string, unknown> {
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(update(readStore())));
+    const data: unknown = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? "null");
+    return typeof data === "object" && data !== null && !Array.isArray(data)
+      ? (data as Record<string, unknown>)
+      : {};
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * Saves a change to part of the store. Everything else in storage is written
+ * back untouched, including fields and attempt entries this version of the app
+ * cannot read: a tab still running an older version must not erase what a
+ * newer one saved.
+ */
+function updateStore(
+  change: (store: Store) => Partial<Store>,
+  { keepUnreadableAttempts = true } = {},
+) {
+  try {
+    const stored = readRawFields();
+    const patch = change(readStore());
+    const next: Record<string, unknown> = { ...stored, ...patch };
+    if (patch.attempts && keepUnreadableAttempts && Array.isArray(stored.attempts)) {
+      const unreadable = stored.attempts.filter(
+        (entry: unknown) => !AttemptSchema.safeParse(entry).success,
+      );
+      next.attempts = [...unreadable, ...patch.attempts];
+    }
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
   } catch {
     return; // storage full or blocked: the session still works, it just isn't saved
   }
@@ -123,20 +153,18 @@ export function subscribeToStore(onChange: () => void): () => void {
 /** Adds an attempt, or replaces the one with the same timestamp. */
 export function saveAttempt(attempt: Attempt) {
   updateStore((store) => ({
-    ...store,
     attempts: [...store.attempts.filter((a) => a.at !== attempt.at), attempt],
   }));
 }
 
-/** Deletes every saved attempt. The plan and today's usage count are kept. */
+/** Deletes every saved attempt, readable or not. The plan and today's usage count are kept. */
 export function clearAttempts() {
-  updateStore((store) => ({ ...store, attempts: [] }));
+  updateStore(() => ({ attempts: [] }), { keepUnreadableAttempts: false });
 }
 
 /** Counts one AI-graded answer against the given local day (YYYY-MM-DD). */
 export function recordGradedAnswer(day: string) {
   updateStore((store) => ({
-    ...store,
     usage: { day, count: (store.usage?.day === day ? store.usage.count : 0) + 1 },
   }));
 }
@@ -144,7 +172,6 @@ export function recordGradedAnswer(day: string) {
 /** Turns Pro on in this browser. An existing membership on the same plan keeps its start date. */
 export function saveMembership(membership: Membership) {
   updateStore((store) => ({
-    ...store,
     membership:
       store.membership?.plan === membership.plan ? store.membership : membership,
   }));
@@ -152,7 +179,7 @@ export function saveMembership(membership: Membership) {
 
 /** Turns Pro off in this browser (the demo's way to get back to the free plan). */
 export function clearMembership() {
-  updateStore((store) => ({ ...store, membership: null }));
+  updateStore(() => ({ membership: null }));
 }
 
 /**

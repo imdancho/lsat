@@ -11,7 +11,7 @@ import {
   ATTEMPTS_TO_UNLOCK,
   pickNextQuestion,
   recentAttempts,
-  recommendType,
+  recommend,
   statsByType,
   summarize,
   topMistakes,
@@ -110,9 +110,9 @@ function Profile({
   today: string;
   onReset: () => void;
 }) {
-  const summary = summarize(attempts, today);
+  const summary = summarize(attempts, questions, today);
   const byType = statsByType(attempts);
-  const weakType = recommendType(attempts);
+  const { type: weakType, reason } = recommend(attempts);
   const drill = pickNextQuestion(questions, attempts);
   const weakStats = byType[weakType];
 
@@ -158,7 +158,7 @@ function Profile({
           Recommended drill: {QUESTION_TYPE_INFO[weakType].label}
         </h2>
         <p className="mt-2 max-w-2xl leading-relaxed">
-          {weakStats.averageScore !== null && weakStats.attempts >= 2
+          {reason === "lowest_average" && weakStats.averageScore !== null
             ? `This is your lowest average so far: ${Math.round(weakStats.averageScore)} out of 100 over ${weakStats.attempts} attempts.`
             : "This is the question type you have practiced least."}
         </p>
