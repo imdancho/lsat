@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { MISTAKE_TAG_INFO } from "@/lib/taxonomy";
 import type { StudentMistakeTag } from "@/lib/types";
 
@@ -7,7 +8,7 @@ import type { StudentMistakeTag } from "@/lib/types";
  */
 export function MistakeTagChip({ tag }: { tag: StudentMistakeTag }) {
   const { label, description } = MISTAKE_TAG_INFO[tag];
-  const tooltipId = `mistake-${tag}`;
+  const tooltipId = useId();
   return (
     <span className="group relative inline-block">
       <button

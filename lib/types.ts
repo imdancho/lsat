@@ -60,6 +60,9 @@ export const STUDENT_MISTAKE_TAGS = [
 ] as const;
 export type StudentMistakeTag = (typeof STUDENT_MISTAKE_TAGS)[number];
 
+/** What a lesson teaches or a drill targets: a question type or a reasoning mistake. */
+export type Focus = QuestionType | StudentMistakeTag;
+
 export type Difficulty = 1 | 2 | 3;
 export type ChoiceIndex = 0 | 1 | 2 | 3 | 4;
 export type FiveOf<T> = [T, T, T, T, T];
@@ -148,10 +151,35 @@ export type Attempt = {
   questionId: string;
   type: QuestionType;
   flawTag: FlawTag;
-  score: number;
+  /** Reasoning score, 0–100. Null when the question was answered in multiple-choice mode, without AI grading. */
+  score: number | null;
   mistakeTags: StudentMistakeTag[];
   mcqCorrect: boolean | null;
   mcqTrap: TrapTag | null;
   inputMode: InputMode;
   at: string;
 };
+
+/** Body of POST /api/reveal: the choice a student picked in multiple-choice mode. */
+export type RevealRequest = { questionId: string; pick: ChoiceIndex };
+
+export const PRO_PLANS = ["pro_monthly", "test_day"] as const;
+export type ProPlan = (typeof PRO_PLANS)[number];
+
+/** The Pro flag saved in this browser after a confirmed (test-mode) checkout. */
+export type Membership = { pro: true; plan: ProPlan; since: string };
+
+/** AI-graded answers used on one local calendar day (YYYY-MM-DD), for the free plan's daily limit. */
+export type Usage = { day: string; count: number };
+
+/** Body and successful response of POST /api/checkout. */
+export type CheckoutRequest = { plan: ProPlan };
+export type CheckoutResponse = { url: string };
+
+/** Response of GET /api/checkout/verify. */
+export type VerifyResponse =
+  | { ok: true; plan: ProPlan; email: string | null }
+  | { ok: false };
+
+/** Body of POST /api/early-access. */
+export type EarlyAccessRequest = { email: string; plan: ProPlan };

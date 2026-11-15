@@ -6,6 +6,7 @@ import {
   MissingApiKeyError,
   ModelRefusalError,
 } from "@/lib/anthropic";
+import { fail, HOUR_MS, readJson, tooManyRequests } from "@/lib/api";
 import {
   buildGraderUser,
   GRADER_SYSTEM,
@@ -14,13 +15,12 @@ import {
 import { getQuestion, toReveal } from "@/lib/questions";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { GradeResultSchema } from "@/lib/schemas";
-import type { ApiErrorBody, GradeResponse } from "@/lib/types";
+import type { GradeResponse } from "@/lib/types";
 
 // Grading is one model call; allow for a slow one.
 export const maxDuration = 60;
 
 const GRADES_PER_HOUR = 40;
-const HOUR_MS = 60 * 60 * 1000;
 const MAX_ANSWER_CHARS = 600;
 const MAX_TRANSCRIPT_CHARS = 1500;
 
@@ -38,16 +38,6 @@ const VoiceBodySchema = z.object({
   transcript: z.string().trim().min(1).max(MAX_TRANSCRIPT_CHARS),
 });
 const BodySchema = z.union([VoiceBodySchema, FieldsBodySchema]);
-
-function fail(
-  status: number,
-  code: string,
-  message: string,
-  headers?: HeadersInit,
-): Response {
-  const body: ApiErrorBody = { error: { code, message } };
-  return Response.json(body, { status, headers });
-}
 
 /** Turns a failure of the model call into a response the student can act on. */
 function modelFailure(error: unknown): Response {
@@ -90,21 +80,13 @@ function modelFailure(error: unknown): Response {
 export async function POST(request: Request): Promise<Response> {
   const limit = rateLimit(`grade:${clientIp(request)}`, GRADES_PER_HOUR, HOUR_MS);
   if (!limit.ok) {
-    return fail(
-      429,
-      "rate_limited",
+    return tooManyRequests(
       `You have reached the limit of ${GRADES_PER_HOUR} graded answers per hour.`,
-      { "Retry-After": String(limit.retryAfterSeconds) },
+      limit.retryAfterSeconds,
     );
   }
 
-  let json: unknown;
-  try {
-    json = await request.json();
-  } catch {
-    return fail(400, "bad_request", "The request body is not valid JSON.");
-  }
-  const body = BodySchema.safeParse(json);
+  const body = BodySchema.safeParse(await readJson(request));
   if (!body.success) {
     return fail(
       400,

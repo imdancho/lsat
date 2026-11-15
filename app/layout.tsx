@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter } from "next/font/google";
+import { Suspense } from "react";
+import { DemoModeSwitch } from "@/components/DemoModeSwitch";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import "./globals.css";
@@ -37,6 +39,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />
+        {/* Reads ?demo=1 from the address, which only exists in the browser. */}
+        <Suspense fallback={null}>
+          <DemoModeSwitch />
+        </Suspense>
       </body>
     </html>
   );

@@ -1,8 +1,10 @@
-import type {
-  FlawTag,
-  QuestionType,
-  StudentMistakeTag,
-  TrapTag,
+import {
+  QUESTION_TYPES,
+  type FlawTag,
+  type Focus,
+  type QuestionType,
+  type StudentMistakeTag,
+  type TrapTag,
 } from "@/lib/types";
 
 type Entry = { label: string; description: string };
@@ -206,3 +208,34 @@ export const MISTAKE_TAG_INFO: Record<StudentMistakeTag, Entry> = {
       "You overlooked a word in the argument that changes what it claims.",
   },
 };
+
+/**
+ * The question types where each reasoning mistake is most at home. A drill on
+ * a mistake draws its questions from these types.
+ */
+export const MISTAKE_FOCUS_TYPES: Record<StudentMistakeTag, QuestionType[]> = {
+  misidentified_conclusion: ["main_conclusion"],
+  restated_premise: ["main_conclusion"],
+  missed_gap: ["flaw", "necessary_assumption"],
+  too_vague: ["flaw"],
+  wrong_flaw: ["flaw"],
+  out_of_scope: ["strengthen", "weaken"],
+  reversed_direction: ["strengthen", "weaken"],
+  too_strong: ["necessary_assumption"],
+  necessary_sufficient_confusion: ["necessary_assumption"],
+  ignored_key_term: ["necessary_assumption", "flaw"],
+};
+
+/** The label for a lesson or drill target, and which kind of thing it is. */
+export function focusInfo(focus: Focus): {
+  label: string;
+  kind: "Question type" | "Reasoning mistake";
+} {
+  const type = QUESTION_TYPES.find((t) => t === focus);
+  return type
+    ? { label: QUESTION_TYPE_INFO[type].label, kind: "Question type" }
+    : {
+        label: MISTAKE_TAG_INFO[focus as StudentMistakeTag].label,
+        kind: "Reasoning mistake",
+      };
+}

@@ -7,6 +7,7 @@ export const metadata: Metadata = {
 };
 
 export default function PracticePage() {
+  const questions = listSummaries();
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
       <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
@@ -18,7 +19,7 @@ export default function PracticePage() {
         graded.
       </p>
       <div className="mt-8">
-        <PracticeMenu questions={listSummaries()} />
+        <PracticeMenu questions={questions} />
       </div>
     </div>
   );

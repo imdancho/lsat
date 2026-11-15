@@ -14,6 +14,9 @@
   --color-accent: #3730a3;
   --color-accent-strong: #312e81;
   --color-accent-soft: #eef0fb;
+  /* Data marks (progress meters): one hue, with a lighter step of it as the track. */
+  --color-data: #4338ca;
+  --color-data-track: #e0e7ff;
 }
 
 /* `inline` because these point at the variables next/font sets on <html>. */
