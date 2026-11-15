@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# output of the optional question pipeline (scripts/generate-questions.ts)
+/data/generated/

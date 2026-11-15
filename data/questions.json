@@ -1,0 +1,1833 @@
+[
+  {
+    "id": "main_conclusion-001",
+    "type": "main_conclusion",
+    "difficulty": 1,
+    "topic": "urban street trees",
+    "stimulus": "City planner: The city should plant shade trees along Marlow Avenue this fall, before the street is repaved next spring. Planting after the repaving would mean cutting into new pavement, which doubles the cost of every tree. And the avenue clearly needs the trees: its summer surface temperatures are the highest in the city, and shade is the cheapest reliable way to bring such temperatures down.",
+    "stem": "Which one of the following most accurately expresses the overall conclusion of the city planner's argument?",
+    "key": {
+      "conclusion": "The city should plant shade trees along Marlow Avenue this fall, before the street is repaved.",
+      "premises": [
+        "Planting after the repaving would mean cutting into new pavement, which doubles the cost of each tree.",
+        "Marlow Avenue needs the trees (an intermediate conclusion).",
+        "The avenue's summer surface temperatures are the highest in the city, and shade is the cheapest reliable way to lower them."
+      ],
+      "gap": "No flaw is being tested: the task is to separate the recommendation from the two lines of support, one of which (the avenue needs trees) is itself a small conclusion.",
+      "flawTag": "none",
+      "idealAnswer": "The city should plant shade trees on Marlow Avenue this fall, before the repaving. The cost of planting later says why now, and the avenue's heat says why trees at all.",
+      "acceptableIdeas": [
+        "The trees should go in before the street is repaved.",
+        "Marlow Avenue should get shade trees now rather than after next spring's repaving.",
+        "The city ought to plant the avenue's trees this fall because waiting doubles the cost and the street needs shade."
+      ],
+      "commonMistakes": [
+        "Giving the intermediate conclusion that the avenue needs trees.",
+        "Restating the cost premise: planting after repaving doubles the cost.",
+        "Dropping the timing and saying only that the city should plant trees."
+      ]
+    },
+    "choices": [
+      "Planting trees after a street has been repaved doubles the cost of each tree.",
+      "Marlow Avenue needs shade trees more than any other street in the city does.",
+      "Marlow Avenue's shade trees should be planted before the street is repaved.",
+      "Marlow Avenue is clearly a street that needs the shade that trees would provide.",
+      "Repaving Marlow Avenue should be postponed until its surface temperatures have come down."
+    ],
+    "correctIndex": 2,
+    "choiceExplanations": [
+      "This is a premise: it explains why the planting should come before the repaving, not what the planner is urging.",
+      "The planner says the avenue is the hottest street, not that it needs trees more than every other street, and this is not the recommendation anyway.",
+      "Correct. Everything else in the passage is offered as a reason to plant the trees this fall, ahead of the repaving.",
+      "This is an intermediate conclusion: it is supported by the temperature facts and in turn supports the recommendation to plant.",
+      "The planner never suggests delaying the repaving; the argument takes the spring repaving as given."
+    ],
+    "choiceTraps": [
+      "restates_premise",
+      "too_strong",
+      "correct",
+      "intermediate_conclusion",
+      "out_of_scope"
+    ],
+    "mostTempting": 3
+  },
+  {
+    "id": "main_conclusion-002",
+    "type": "main_conclusion",
+    "difficulty": 1,
+    "topic": "museum admission fees",
+    "stimulus": "When the Halden Museum dropped its admission fee last year, attendance rose by half, and most of the new visitors came from the city's poorest neighborhoods. Spending in the museum's shop and café grew so much that total revenue barely changed. A museum exists to bring art to the whole public, and the Halden now reaches far more of it at almost no cost to itself. Therefore, the museum should keep admission free.",
+    "stem": "Which one of the following most accurately expresses the conclusion drawn in the argument?",
+    "key": {
+      "conclusion": "The Halden Museum should keep admission free.",
+      "premises": [
+        "After the fee was dropped, attendance rose by half, mostly visitors from the poorest neighborhoods.",
+        "Shop and café spending grew enough that total revenue barely changed.",
+        "A museum exists to bring art to the whole public.",
+        "The Halden now reaches far more of the public at almost no cost to itself (an intermediate conclusion)."
+      ],
+      "gap": "No flaw is being tested: the task is to see that the claim about reaching more people at little cost is a step toward the recommendation, not the recommendation itself.",
+      "flawTag": "none",
+      "idealAnswer": "The museum should keep admission free. The attendance and revenue figures show it now reaches more people at almost no cost, which is the reason given.",
+      "acceptableIdeas": [
+        "The Halden should not bring back its admission fee.",
+        "Admission to the museum should stay free.",
+        "The museum ought to continue its free-admission policy because it serves the museum's purpose cheaply."
+      ],
+      "commonMistakes": [
+        "Giving the intermediate conclusion that the museum now reaches more of the public at almost no cost.",
+        "Restating the result that attendance rose by half.",
+        "Stating the general principle about what museums are for."
+      ]
+    },
+    "choices": [
+      "The Halden Museum should continue to charge nothing for admission.",
+      "The Halden Museum now reaches far more of the public at almost no cost.",
+      "Dropping the admission fee caused the Halden Museum's attendance to rise by half.",
+      "Every museum that eliminates its admission fee will see its revenue stay the same.",
+      "A museum's purpose is to earn revenue from its shop and café rather than fees."
+    ],
+    "correctIndex": 0,
+    "choiceExplanations": [
+      "Correct. The final sentence, marked by 'Therefore', is what all the other statements are offered to support.",
+      "This is an intermediate conclusion: it follows from the attendance and revenue facts and is then used to support keeping admission free.",
+      "This restates evidence about what happened last year; the argument uses it as support.",
+      "The argument is about one museum; it makes no claim about every museum.",
+      "The passage says a museum exists to bring art to the public; this swaps that purpose for a different one."
+    ],
+    "choiceTraps": [
+      "correct",
+      "intermediate_conclusion",
+      "restates_premise",
+      "too_strong",
+      "shifted_term"
+    ],
+    "mostTempting": 1
+  },
+  {
+    "id": "main_conclusion-003",
+    "type": "main_conclusion",
+    "difficulty": 1,
+    "topic": "handwritten lecture notes",
+    "stimulus": "Education researcher: Students who want to remember lectures would do better to take notes by hand than on a laptop. Typing is fast enough that students tend to copy a lecturer's words verbatim, without thinking about them. Writing by hand is slower, so students must decide what matters and put it in their own words. And it is this effort of selecting and rephrasing, not the mere existence of notes, that fixes material in memory.",
+    "stem": "Which one of the following most accurately expresses the conclusion drawn in the education researcher's argument?",
+    "key": {
+      "conclusion": "Students who want to remember lectures would do better to take notes by hand than on a laptop.",
+      "premises": [
+        "Typing is fast enough that students copy the lecturer's words without thinking about them.",
+        "Because handwriting is slower, students must select what matters and rephrase it (an intermediate conclusion).",
+        "The effort of selecting and rephrasing is what fixes material in memory."
+      ],
+      "gap": "No flaw is being tested: the conclusion comes first and the three later sentences explain why handwriting leads to better memory.",
+      "flawTag": "none",
+      "idealAnswer": "For remembering lectures, handwritten notes beat laptop notes. Handwriting forces you to select and rephrase, and that effort is what makes material stick.",
+      "acceptableIdeas": [
+        "Students should take lecture notes by hand rather than typing if they want to remember the material.",
+        "Handwriting notes is better for memory than typing them.",
+        "A student trying to retain a lecture is better served by pen and paper than by a laptop."
+      ],
+      "commonMistakes": [
+        "Giving the claim that slow handwriting forces students to select and rephrase.",
+        "Giving the final sentence about what fixes material in memory.",
+        "Overstating the point into a ban on laptops."
+      ]
+    },
+    "choices": [
+      "Typing allows students to record a lecturer's words without thinking about them.",
+      "Because handwriting is slow, students who use it must select and rephrase what they hear.",
+      "Students should never be permitted to bring laptops into a lecture hall.",
+      "Students who take notes by hand end up with fewer notes than those who type.",
+      "Students aiming to remember lectures are better off writing notes by hand than typing them."
+    ],
+    "correctIndex": 4,
+    "choiceExplanations": [
+      "This is a premise explaining what goes wrong with typed notes.",
+      "This is an intermediate conclusion, marked by 'so'; it is a step toward the claim that handwriting is the better choice.",
+      "The researcher compares two ways of taking notes and proposes no rule about what students may bring to class.",
+      "The passage never says how many notes each group ends up with, and this is not what it sets out to show.",
+      "Correct. The first sentence states this comparison, and every later sentence is a reason for it."
+    ],
+    "choiceTraps": [
+      "restates_premise",
+      "intermediate_conclusion",
+      "too_strong",
+      "out_of_scope",
+      "correct"
+    ],
+    "mostTempting": 1
+  },
+  {
+    "id": "main_conclusion-004",
+    "type": "main_conclusion",
+    "difficulty": 2,
+    "topic": "honeybee colony losses",
+    "stimulus": "Some beekeepers blame the recent collapse of honeybee colonies in the valley on a new class of pesticides. But the pesticides are very unlikely to be the cause. Colonies kept far from any sprayed field have collapsed at the same rate as those beside the orchards. Moreover, every failed colony examined so far was infested with a parasitic mite that reached the valley shortly before the losses began, and such infestations alone are known to destroy colonies.",
+    "stem": "Which one of the following most accurately expresses the conclusion drawn in the argument?",
+    "key": {
+      "conclusion": "The new pesticides are very unlikely to be the cause of the recent colony collapses.",
+      "premises": [
+        "Colonies far from sprayed fields have collapsed at the same rate as colonies beside the orchards.",
+        "Every failed colony examined so far was infested with a parasitic mite that arrived shortly before the losses began.",
+        "Mite infestations alone are known to destroy colonies."
+      ],
+      "gap": "No flaw is being tested: the argument rebuts the beekeepers' view. It offers the mite as a rival explanation but never concludes that the mite is the cause.",
+      "flawTag": "none",
+      "idealAnswer": "The pesticides are probably not what is killing the colonies. Colonies far from spraying die just as often, and a mite that can kill colonies by itself is found in every failed one.",
+      "acceptableIdeas": [
+        "The beekeepers who blame the pesticides are probably wrong.",
+        "It is unlikely that the new pesticides caused the colony losses.",
+        "The recent collapses are most likely not due to the pesticides."
+      ],
+      "commonMistakes": [
+        "Saying the conclusion is that the mite caused the losses, which goes beyond what the author claims.",
+        "Restating the evidence that distant colonies collapsed at the same rate.",
+        "Giving the beekeepers' view that pesticides are to blame."
+      ]
+    },
+    "choices": [
+      "A parasitic mite is definitely what destroyed the valley's honeybee colonies.",
+      "The new pesticides are probably not what caused the valley's recent colony losses.",
+      "Colonies far from sprayed fields have collapsed as often as those near orchards.",
+      "The new class of pesticides is responsible for the recent losses of honeybee colonies.",
+      "Beekeepers in the valley should stop keeping their colonies beside sprayed orchards."
+    ],
+    "correctIndex": 1,
+    "choiceExplanations": [
+      "The author says only that mite infestations can destroy colonies and were present; the passage never concludes that the mite is definitely the cause.",
+      "Correct. The second sentence rejects the beekeepers' explanation, and the rest of the passage is evidence for that rejection.",
+      "This is a piece of evidence offered against the pesticide explanation.",
+      "This is the beekeepers' view, which the argument sets out to rebut.",
+      "The passage gives no advice about where to keep colonies."
+    ],
+    "choiceTraps": [
+      "too_strong",
+      "correct",
+      "restates_premise",
+      "reversed",
+      "out_of_scope"
+    ],
+    "mostTempting": 0
+  },
+  {
+    "id": "main_conclusion-005",
+    "type": "main_conclusion",
+    "difficulty": 2,
+    "topic": "independent bookstores",
+    "stimulus": "Economist: It is widely assumed that independent bookstores can survive only by matching the discounts of online retailers. This assumption is mistaken. In our region, many independent stores that have never discounted are prospering, because readers will pay full price at a store that offers what a website cannot: readings, clubs, and classes. Meanwhile, most of the independent stores that closed in the past decade had been discounting heavily for years.",
+    "stem": "Which one of the following most accurately expresses the overall conclusion of the economist's argument?",
+    "key": {
+      "conclusion": "The assumption that independent bookstores can survive only by matching online discounts is mistaken.",
+      "premises": [
+        "Many independent stores in the region that have never discounted are prospering.",
+        "Readers will pay full price at a store that offers what a website cannot, such as readings, clubs, and classes.",
+        "Most independent stores that closed in the past decade had been discounting heavily."
+      ],
+      "gap": "No flaw is being tested: the conclusion is the short rebuttal in the second sentence, and everything after it is evidence that stores survive without discounting.",
+      "flawTag": "none",
+      "idealAnswer": "Independent bookstores do not need to match online discounts to survive. Stores that never discounted are doing well because they offer things a website cannot, while heavy discounters closed anyway.",
+      "acceptableIdeas": [
+        "It is wrong to think independent bookstores must discount to stay in business.",
+        "Matching online prices is not the only way for an independent bookstore to survive.",
+        "The common belief that these stores survive only by discounting is false."
+      ],
+      "commonMistakes": [
+        "Giving the explanation that readers will pay full price at a store that offers something a website cannot.",
+        "Restating the fact that the stores that closed had been discounting.",
+        "Overstating the point into a claim that events are the only way to survive."
+      ]
+    },
+    "choices": [
+      "Most independent bookstores that closed in the past decade had been discounting heavily.",
+      "Readers will pay full price at a bookstore that offers something a website cannot.",
+      "Independent bookstores can survive only if they host readings, clubs, and classes.",
+      "Independent bookstores do not have to match online discounts in order to survive.",
+      "Independent bookstores cannot survive unless they match the discounts of online retailers."
+    ],
+    "correctIndex": 3,
+    "choiceExplanations": [
+      "This is evidence the economist cites against the common assumption.",
+      "This is the economist's explanation of why some stores prosper; it supports the claim that the assumption is mistaken but is only part of the case.",
+      "The economist says stores with events prospered, not that events are the only route to survival.",
+      "Correct. 'This assumption is mistaken' is the claim the rest of the passage supports, and this choice states what that amounts to.",
+      "This is the widely held assumption that the economist rejects."
+    ],
+    "choiceTraps": [
+      "restates_premise",
+      "half_right",
+      "too_strong",
+      "correct",
+      "reversed"
+    ],
+    "mostTempting": 1
+  },
+  {
+    "id": "main_conclusion-006",
+    "type": "main_conclusion",
+    "difficulty": 3,
+    "topic": "translating proverbs",
+    "stimulus": "In translating proverbs, the freest versions are often the most faithful. A translator who renders a proverb word for word preserves its vocabulary and little else. Brevity, rhyme, and familiar imagery rarely survive the passage between languages unaltered, and it is through these, far more than through literal meaning, that a proverb persuades its hearers. A translation that is true to a proverb must therefore reproduce its force, which cannot be done without departing from its words.",
+    "stem": "Which one of the following most accurately expresses the conclusion drawn in the argument?",
+    "key": {
+      "conclusion": "In translating proverbs, the freest versions are often the most faithful.",
+      "premises": [
+        "A word-for-word translation preserves a proverb's vocabulary and little else.",
+        "Brevity, rhyme, and imagery rarely survive translation unaltered, and it is through these that a proverb persuades.",
+        "A translation true to a proverb must reproduce its force, which requires departing from its words (an intermediate conclusion)."
+      ],
+      "gap": "No flaw is being tested: the conclusion is the unmarked first sentence, while the sentence containing 'therefore' is a sub-conclusion that supports it.",
+      "flawTag": "none",
+      "idealAnswer": "The freest translations of proverbs are often the most faithful ones. A faithful translation has to carry over the proverb's force, and that requires leaving the literal wording behind.",
+      "acceptableIdeas": [
+        "Translations of proverbs that stray furthest from the original words are often the truest to the original.",
+        "Being faithful to a proverb often means translating it loosely.",
+        "Loose translations of proverbs are frequently more faithful than literal ones."
+      ],
+      "commonMistakes": [
+        "Picking the sentence with 'therefore', that a true translation must reproduce the proverb's force.",
+        "Restating the premise about how a proverb persuades.",
+        "Overstating the point into a claim that proverbs cannot be translated."
+      ]
+    },
+    "choices": [
+      "Translations of proverbs that depart most from the original wording are often the most faithful.",
+      "A translation that is true to a proverb must reproduce the force the proverb has.",
+      "A proverb persuades its hearers far more through rhyme and imagery than through literal meaning.",
+      "No translation of a proverb can ever be faithful to the original in any respect.",
+      "Word-for-word translations of a proverb preserve what matters most about the original."
+    ],
+    "correctIndex": 0,
+    "choiceExplanations": [
+      "Correct. This restates the opening sentence, which the rest of the passage, including the 'therefore' sentence, is offered to support.",
+      "This is a sub-conclusion: it follows from the claim about how proverbs persuade, and it is then used to show that free translations are often the faithful ones.",
+      "This is a premise about how proverbs work.",
+      "The argument holds that free translations are often faithful, which is the opposite of saying faithfulness is impossible.",
+      "This is the view the argument opposes; the passage says word-for-word translation preserves vocabulary and little else."
+    ],
+    "choiceTraps": [
+      "correct",
+      "intermediate_conclusion",
+      "restates_premise",
+      "too_strong",
+      "reversed"
+    ],
+    "mostTempting": 1
+  },
+  {
+    "id": "main_conclusion-007",
+    "type": "main_conclusion",
+    "difficulty": 3,
+    "topic": "unanimous jury verdicts",
+    "stimulus": "Legal scholar: Critics of the unanimity rule for criminal juries point out that it lets a single holdout force a costly retrial. That cost is real, but it is the price of something more valuable. When a verdict requires only a majority, jurors in the majority have no need to answer the doubts of those who disagree, and deliberation tends to end as soon as the votes are counted. Under unanimity, every doubt must be addressed before a verdict is possible, so verdicts are reached only after the evidence has been examined thoroughly. The rule should stay.",
+    "stem": "Which one of the following most accurately expresses the overall conclusion of the legal scholar's argument?",
+    "key": {
+      "conclusion": "The unanimity rule for criminal juries should be kept.",
+      "premises": [
+        "Under majority verdicts, the majority need not answer dissenters' doubts and deliberation ends once the votes are counted.",
+        "Under unanimity every doubt must be addressed before a verdict is possible.",
+        "So unanimous verdicts are reached only after the evidence has been examined thoroughly (an intermediate conclusion).",
+        "The cost of retrials is real but is the price of something more valuable."
+      ],
+      "gap": "No flaw is being tested: the conclusion is the short, unmarked final sentence; the 'so' clause about thorough examination is a sub-conclusion that supports it.",
+      "flawTag": "none",
+      "idealAnswer": "Criminal juries should keep the unanimity rule. It forces every doubt to be addressed, so the evidence gets examined thoroughly, and that is worth the cost of occasional retrials.",
+      "acceptableIdeas": [
+        "The requirement of unanimous verdicts should be retained.",
+        "The unanimity rule should not be abolished despite the cost of retrials.",
+        "Criminal juries should continue to be required to agree unanimously."
+      ],
+      "commonMistakes": [
+        "Giving the sub-conclusion that unanimity means evidence is examined thoroughly.",
+        "Giving the concession that the cost of retrials is the price of something more valuable.",
+        "Stating the critics' objection about holdouts and retrials."
+      ]
+    },
+    "choices": [
+      "Majority verdicts allow jurors to ignore the doubts of those who disagree with them.",
+      "Unanimity ensures that verdicts come only after the evidence is thoroughly examined.",
+      "The requirement that criminal juries reach unanimous verdicts ought to be retained.",
+      "The unanimity rule should be abandoned because a single holdout can force a retrial.",
+      "Unanimous verdicts are always correct, since every juror's doubt has been answered."
+    ],
+    "correctIndex": 2,
+    "choiceExplanations": [
+      "This is a premise describing what happens when only a majority is required.",
+      "This is a sub-conclusion, marked by 'so'; it is the scholar's reason for keeping the rule, not the final recommendation.",
+      "Correct. 'The rule should stay' is what the comparison of majority and unanimous verdicts is meant to establish.",
+      "This is the critics' position, which the scholar answers.",
+      "The scholar claims thorough examination of the evidence, not that unanimous verdicts are never mistaken."
+    ],
+    "choiceTraps": [
+      "restates_premise",
+      "intermediate_conclusion",
+      "correct",
+      "reversed",
+      "too_strong"
+    ],
+    "mostTempting": 1
+  },
+  {
+    "id": "flaw-001",
+    "type": "flaw",
+    "difficulty": 1,
+    "topic": "office plants and sick days",
+    "stimulus": "Any company that wants to cut absenteeism should fill its offices with potted plants. A survey of forty offices found that those with many plants recorded far fewer employee sick days last year than those with few or none. The offices were similar in size, and all were located in the same city. Plants, it seems clear, make an office a healthier place to work.",
+    "stem": "The reasoning in the argument is flawed in that the argument",
+    "key": {
+      "conclusion": "Any company that wants to cut absenteeism should fill its offices with potted plants.",
+      "premises": [
+        "In a survey of forty similar offices in one city, those with many plants recorded far fewer sick days than those with few or none.",
+        "Plants make an office a healthier place to work (an intermediate conclusion drawn from the survey)."
+      ],
+      "gap": "The survey shows only that plants and fewer sick days go together; it does not show that the plants are what reduced the sick days.",
+      "flawTag": "correlation_causation",
+      "idealAnswer": "It treats a correlation as a cause. Offices with plants may differ in some other way, such as employers who spend more on working conditions generally, and that could explain the fewer sick days.",
+      "acceptableIdeas": [
+        "Something else about offices that buy plants, such as better-funded or more attentive management, could be what keeps people healthy.",
+        "The argument assumes the plants caused the lower absenteeism just because the two were found together.",
+        "Companies with healthier or happier staff might simply be the ones that bother to buy plants.",
+        "Correlation is not causation: no evidence shows that adding plants would change sick days."
+      ],
+      "commonMistakes": [
+        "Saying only that the sample of forty offices is too small.",
+        "Saying the evidence is weak without naming the jump from correlation to cause.",
+        "Objecting that plants cost money or need upkeep."
+      ]
+    },
+    "choices": [
+      "draws a general conclusion about all offices from a single unusual case",
+      "infers that one thing causes another merely because the two occur together",
+      "presumes, without justification, that plants are the only influence on employees' health",
+      "fails to compare the cost of plants with that of other office furnishings",
+      "neglects to specify which kinds of plants the healthier offices contained"
+    ],
+    "correctIndex": 1,
+    "choiceExplanations": [
+      "The evidence is a survey of forty offices, not a single unusual case.",
+      "Correct. The only evidence is that plants and fewer sick days were found together, yet the argument concludes that plants make offices healthier.",
+      "The argument claims plants improve health; it never says nothing else affects health.",
+      "What plants cost compared with other furnishings has no bearing on whether they reduce sick days.",
+      "Leaving out the kinds of plants is a missing detail, not the reason the evidence fails to support the conclusion."
+    ],
+    "choiceTraps": [
+      "wrong_flaw",
+      "correct",
+      "too_strong",
+      "irrelevant_comparison",
+      "out_of_scope"
+    ],
+    "mostTempting": 2
+  },
+  {
+    "id": "flaw-002",
+    "type": "flaw",
+    "difficulty": 1,
+    "topic": "hiking trail fee survey",
+    "stimulus": "Columnist: The public overwhelmingly opposes the proposed fee for using state hiking trails, so the legislature should drop it. Trailhead Monthly, a magazine for hiking enthusiasts, invited its readers to mail in their opinions of the fee. Of the nearly two thousand readers who responded, ninety percent were against it. No measure opposed by so large a share of the public deserves to become law.",
+    "stem": "The columnist's reasoning is flawed because it",
+    "key": {
+      "conclusion": "The legislature should drop the proposed trail fee, because the public overwhelmingly opposes it.",
+      "premises": [
+        "A hiking magazine invited its readers to mail in opinions of the fee.",
+        "Of nearly two thousand readers who responded, ninety percent opposed it.",
+        "No measure opposed by so large a share of the public deserves to become law."
+      ],
+      "gap": "The respondents are hiking enthusiasts who chose to write in, the people most likely to object to a trail fee, so they do not show what the public as a whole thinks.",
+      "flawTag": "unrepresentative_sample",
+      "idealAnswer": "It generalizes from an unrepresentative sample. Readers of a hiking magazine who bother to mail in an opinion are exactly the people who would pay the fee, so they tell us little about the general public.",
+      "acceptableIdeas": [
+        "The people surveyed are hikers, who have a personal stake in opposing the fee, not a cross-section of the public.",
+        "Only readers who felt strongly enough to respond were counted, so the sample is self-selected.",
+        "The views of a hiking magazine's readers cannot stand in for the views of everyone in the state.",
+        "The sample is biased toward opponents of the fee."
+      ],
+      "commonMistakes": [
+        "Saying two thousand people is too small a sample; the problem is who they are, not how many.",
+        "Saying the columnist attacks the legislature rather than the fee.",
+        "Arguing that the fee is a good idea, which does not describe the flaw."
+      ]
+    },
+    "choices": [
+      "attacks the motives of the fee's supporters rather than addressing their arguments",
+      "takes for granted that a fee opposed by hikers would raise little revenue",
+      "concludes that hikers oppose the fee merely because the general public opposes it",
+      "generalizes about the public from a group unlikely to be representative of it",
+      "presumes, without justification, that every reader of the magazine sent in an opinion"
+    ],
+    "correctIndex": 3,
+    "choiceExplanations": [
+      "The columnist says nothing about the motives of the fee's supporters.",
+      "How much money the fee would raise plays no part in the argument.",
+      "This gets the direction backward: the columnist reasons from hikers' opinions to the public's, not from the public's to hikers'.",
+      "Correct. Hiking enthusiasts who chose to write in are far more likely than the average resident to oppose a trail fee.",
+      "The columnist reports on those who responded and does not assume that every reader did."
+    ],
+    "choiceTraps": [
+      "wrong_flaw",
+      "out_of_scope",
+      "reversed",
+      "correct",
+      "too_strong"
+    ],
+    "mostTempting": 2
+  },
+  {
+    "id": "flaw-003",
+    "type": "flaw",
+    "difficulty": 1,
+    "topic": "hospital error-rate disclosure",
+    "stimulus": "Hospital trustee: Dr. Okafor has urged this board to publish the hospital's surgical error rates, arguing that patients choose more wisely when they have such figures. But consider the source. Dr. Okafor was passed over for chief of surgery last year and has criticized the administration ever since. Her proposal is obviously an attempt to embarrass the people who denied her the promotion, so the board should reject her argument.",
+    "stem": "The trustee's argument is most vulnerable to criticism on the grounds that it",
+    "key": {
+      "conclusion": "The board should reject Dr. Okafor's argument for publishing surgical error rates.",
+      "premises": [
+        "Dr. Okafor was passed over for chief of surgery and has criticized the administration ever since.",
+        "Her proposal is an attempt to embarrass the people who denied her the promotion."
+      ],
+      "gap": "Dr. Okafor's motives have no bearing on whether her reason, that patients choose more wisely with the figures, is a good one; the trustee never addresses that reason.",
+      "flawTag": "ad_hominem",
+      "idealAnswer": "It attacks the person instead of the argument. Even if Dr. Okafor has a grudge, that does not show her point about patients choosing more wisely is wrong.",
+      "acceptableIdeas": [
+        "The trustee dismisses the proposal because of Dr. Okafor's supposed motives and never evaluates the proposal itself.",
+        "Whether she resents the administration is irrelevant to whether publishing error rates would help patients.",
+        "A person with bad motives can still make a sound argument.",
+        "It is an ad hominem attack."
+      ],
+      "commonMistakes": [
+        "Arguing that publishing error rates is a good or bad idea instead of describing the reasoning error.",
+        "Saying only that the trustee is biased.",
+        "Claiming the trustee lacks evidence that she was passed over, which is not the problem."
+      ]
+    },
+    "choices": [
+      "rejects a proposal because of its advocate's supposed motives rather than its merits",
+      "relies on the opinion of an authority who lacks expertise in the relevant field",
+      "presumes, without justification, that publishing error rates would embarrass every surgeon",
+      "fails to consider how the hospital's error rates compare with those of other hospitals",
+      "overlooks the possibility that patients already have access to the hospital's error rates"
+    ],
+    "correctIndex": 0,
+    "choiceExplanations": [
+      "Correct. The trustee gives no reason to doubt that patients would choose more wisely; the only ground for rejection is why Dr. Okafor is thought to be proposing it.",
+      "The trustee does not cite any authority's opinion in support of the conclusion.",
+      "The trustee speaks of embarrassing the administrators who denied the promotion, not every surgeon.",
+      "How this hospital compares with others is irrelevant to the way the trustee reasons.",
+      "Whether patients already have the figures is a separate question that the trustee's reasoning does not turn on."
+    ],
+    "choiceTraps": [
+      "correct",
+      "wrong_flaw",
+      "too_strong",
+      "irrelevant_comparison",
+      "out_of_scope"
+    ],
+    "mostTempting": 2
+  },
+  {
+    "id": "flaw-004",
+    "type": "flaw",
+    "difficulty": 2,
+    "topic": "chamber orchestra of soloists",
+    "stimulus": "Some patrons worry that the newly formed Calloway Chamber Orchestra, whose members have never played together, will sound ragged in its first season. But the orchestra is certain to be outstanding from its very first concert. Its founders auditioned hundreds of musicians and accepted only those who had won major solo competitions, so every one of its players is an outstanding musician.",
+    "stem": "The reasoning in the argument is flawed in that the argument",
+    "key": {
+      "conclusion": "The Calloway Chamber Orchestra is certain to be outstanding from its first concert.",
+      "premises": [
+        "The founders accepted only musicians who had won major solo competitions.",
+        "So every one of its players is an outstanding musician (an intermediate conclusion)."
+      ],
+      "gap": "That each player is outstanding individually does not show the group will be outstanding; an orchestra's quality depends on how well its members play together, which is exactly what the patrons doubt.",
+      "flawTag": "part_whole",
+      "idealAnswer": "It assumes that because each member is outstanding, the orchestra as a whole will be. Playing well together is a different skill from playing well alone, and these musicians have never played together.",
+      "acceptableIdeas": [
+        "What is true of each part is assumed to be true of the whole.",
+        "Great soloists do not automatically make a great ensemble; ensemble playing takes coordination and practice together.",
+        "The argument ignores the patrons' actual worry, that the members have never played with one another.",
+        "Individual excellence does not guarantee group excellence."
+      ],
+      "commonMistakes": [
+        "Saying that winning a competition does not prove someone is an outstanding musician.",
+        "Saying only that the prediction is too confident.",
+        "Reversing the flaw: claiming the argument infers something about each member from the group."
+      ]
+    },
+    "choices": [
+      "infers that each member of a group has a quality merely because the group as a whole has it",
+      "takes for granted that winning a solo competition requires years of orchestral experience",
+      "bases a claim about musicians in general on a sample selected for unusual talent",
+      "fails to compare the orchestra's players with those of longer-established orchestras",
+      "assumes that what is true of each part of a whole must also be true of the whole"
+    ],
+    "correctIndex": 4,
+    "choiceExplanations": [
+      "This is the reverse of what happens: the argument moves from the individual players to the group, not from the group to the players.",
+      "The argument assumes nothing about what winning a solo competition requires.",
+      "The argument makes no claim about musicians in general; it is about this one orchestra.",
+      "A comparison with other orchestras would not fix the reasoning, which concerns whether skilled individuals make a skilled group.",
+      "Correct. From the excellence of each player the argument concludes that the orchestra itself will be excellent, ignoring that an ensemble must also play well together."
+    ],
+    "choiceTraps": [
+      "reversed",
+      "out_of_scope",
+      "wrong_flaw",
+      "irrelevant_comparison",
+      "correct"
+    ],
+    "mostTempting": 0
+  },
+  {
+    "id": "flaw-005",
+    "type": "flaw",
+    "difficulty": 2,
+    "topic": "alpine seed germination",
+    "stimulus": "Some of the staff at Greenhollow Nursery doubt that next week's sowing of alpine gentian will succeed. Their doubts are unfounded: the seeds will certainly germinate. Botanists have established that seeds of this plant will not germinate unless they have first been exposed to several weeks of near-freezing temperatures, and the seeds the nursery plans to sow were kept in cold storage, just above freezing, for the entire winter.",
+    "stem": "The argument is most vulnerable to criticism on the grounds that it",
+    "key": {
+      "conclusion": "The alpine gentian seeds will certainly germinate.",
+      "premises": [
+        "Seeds of this plant will not germinate unless they have first had several weeks of near-freezing temperatures.",
+        "The nursery's seeds were kept just above freezing for the entire winter."
+      ],
+      "gap": "Cold exposure is something the seeds need in order to germinate, but nothing says it is all they need; soil, moisture, light, or seed age could still prevent germination.",
+      "flawTag": "necessary_vs_sufficient",
+      "idealAnswer": "It treats a necessary condition as a sufficient one. Cold is required for these seeds to germinate, but meeting one requirement does not guarantee that they will; they may need other things too.",
+      "acceptableIdeas": [
+        "The botanists said the seeds will not germinate without cold, not that cold guarantees germination.",
+        "Other conditions such as moisture, soil, or viable seeds might also be needed.",
+        "Meeting one requirement for germination is not the same as meeting all of them.",
+        "It confuses 'needed for' with 'enough for'."
+      ],
+      "commonMistakes": [
+        "Reversing the confusion: saying the argument treats something sufficient as if it were necessary.",
+        "Saying the botanists might be wrong about the cold requirement.",
+        "Saying only that 'certainly' is too strong, without explaining what is missing."
+      ]
+    },
+    "choices": [
+      "treats a condition that guarantees germination as though germination could not occur without it",
+      "relies on the testimony of botanists who may have no experience running a nursery",
+      "treats a condition that germination requires as though it were enough to ensure germination",
+      "overlooks the possibility that some alpine plants can be grown from cuttings",
+      "presumes, without justification, that no seed can survive a winter without cold storage"
+    ],
+    "correctIndex": 2,
+    "choiceExplanations": [
+      "This describes the mirror-image error; the passage presents cold as required for germination, and the argument wrongly treats it as a guarantee.",
+      "The botanists' finding is about the plant's seeds, and experience running a nursery has no bearing on it.",
+      "Correct. Cold exposure is something the seeds cannot germinate without, but the argument concludes from it alone that they certainly will germinate.",
+      "Whether other alpine plants grow from cuttings is beside the point of whether these seeds will germinate.",
+      "The argument makes no claim about seeds surviving a winter, with or without cold storage."
+    ],
+    "choiceTraps": [
+      "reversed",
+      "wrong_flaw",
+      "correct",
+      "out_of_scope",
+      "too_strong"
+    ],
+    "mostTempting": 0
+  },
+  {
+    "id": "flaw-006",
+    "type": "flaw",
+    "difficulty": 3,
+    "topic": "traffic signal retiming study",
+    "stimulus": "Transportation analyst: Our study timed thousands of trips on Harbor Road before and after its traffic signals were retimed. The average trip became eleven seconds shorter, and with so many trips measured, that difference is statistically significant: it is very unlikely to be due to chance. The council promised to fund retiming on other roads if the Harbor Road trial showed a significant benefit to drivers. Since the trial has shown a significant benefit, the council is now obliged to fund the wider project.",
+    "stem": "The analyst's reasoning is flawed because it",
+    "key": {
+      "conclusion": "The council is now obliged to fund the retiming of signals on other roads.",
+      "premises": [
+        "After the retiming, the average trip on Harbor Road was eleven seconds shorter.",
+        "With so many trips measured, that difference is statistically significant, meaning it is very unlikely to be due to chance.",
+        "The council promised to fund retiming elsewhere if the trial showed a significant benefit to drivers."
+      ],
+      "gap": "'Significant' means 'unlikely to be due to chance' in the study but 'large enough to matter' in the council's promise; an eleven-second saving can be the first without being the second.",
+      "flawTag": "equivocation",
+      "idealAnswer": "It uses 'significant' in two senses. The study shows the saving is statistically significant, meaning not a fluke, but the council promised funding for a benefit that is significant in the sense of large, and eleven seconds may not be.",
+      "acceptableIdeas": [
+        "Statistically significant is not the same as important; the argument slides from one meaning to the other.",
+        "The council's condition was about a meaningful benefit to drivers, and a reliable eleven-second saving does not show that.",
+        "The word 'significant' changes meaning between the evidence and the conclusion.",
+        "A difference can be real without being big enough to count as the benefit the council had in mind."
+      ],
+      "commonMistakes": [
+        "Saying the council promised only a necessary condition; the promise was 'if', so that is not the error.",
+        "Saying the sample is too small, when thousands of trips were measured.",
+        "Saying only that eleven seconds is not much, without tying it to the double use of 'significant'."
+      ]
+    },
+    "choices": [
+      "treats a condition the council said was required for funding as one that guarantees it",
+      "allows a key term to shift in meaning from one of its premises to another",
+      "presumes, without justification, that every trip on Harbor Road became eleven seconds shorter",
+      "fails to consider how much it cost the city to retime the Harbor Road signals",
+      "bases its conclusion on the average length of trips rather than on individual trips"
+    ],
+    "correctIndex": 1,
+    "choiceExplanations": [
+      "The council promised funding if the trial showed a significant benefit, so it named a condition that triggers funding, not one merely required for it.",
+      "Correct. 'Significant' means 'unlikely to be due to chance' in the study and 'large enough to matter' in the council's promise, and the argument treats the two as the same.",
+      "The analyst reports an average and never claims that each individual trip was shortened by eleven seconds.",
+      "The conclusion is about what the council's promise obliges it to do, and the cost of the trial does not affect that.",
+      "The argument does rely on an average, but that is not why its conclusion fails to follow."
+    ],
+    "choiceTraps": [
+      "wrong_flaw",
+      "correct",
+      "too_strong",
+      "out_of_scope",
+      "half_right"
+    ],
+    "mostTempting": 0
+  },
+  {
+    "id": "flaw-007",
+    "type": "flaw",
+    "difficulty": 3,
+    "topic": "authorship of a sea captain's memoir",
+    "stimulus": "Scholars have long debated whether the memoir attributed to Captain Elias Thorne was really written by him. The debate should end, for the memoir's authenticity is beyond question. Its account of the 1790 voyage is accurate in every detail, and no forger could have produced an account so accurate. Nor can that accuracy be doubted: the account was written by Thorne himself, and a captain who lived through the voyage would not have misremembered it.",
+    "stem": "The reasoning in the argument is flawed in that the argument",
+    "key": {
+      "conclusion": "The memoir attributed to Captain Thorne is authentic, that is, really written by him.",
+      "premises": [
+        "The memoir's account of the 1790 voyage is accurate in every detail.",
+        "No forger could have produced an account so accurate.",
+        "The account's accuracy cannot be doubted because Thorne himself wrote it and would not have misremembered the voyage."
+      ],
+      "gap": "The accuracy of the account is the evidence for Thorne's authorship, but the only support given for that accuracy is that Thorne wrote it, which is the very thing to be proved.",
+      "flawTag": "circular_reasoning",
+      "idealAnswer": "It argues in a circle. It proves Thorne wrote the memoir from the accuracy of the account, then proves the account is accurate by saying Thorne wrote it, so it assumes what it set out to show.",
+      "acceptableIdeas": [
+        "The claim that the account is accurate rests on the assumption that Thorne was its author, which is the conclusion.",
+        "The argument takes the memoir's authenticity for granted in order to establish its authenticity.",
+        "It gives no independent evidence that the account is accurate.",
+        "It begs the question."
+      ],
+      "commonMistakes": [
+        "Saying a forger could have been accurate, which disputes a premise rather than naming the structural flaw.",
+        "Saying the argument relies on scholars' opinions.",
+        "Saying only that there is not enough evidence."
+      ]
+    },
+    "choices": [
+      "appeals to the opinions of scholars who disagree among themselves about the memoir",
+      "infers that the memoir is inaccurate merely because its authorship has been disputed",
+      "fails to consider whether other captains of the period also wrote memoirs",
+      "offers as evidence a claim that presupposes the truth of what it sets out to prove",
+      "presumes, without justification, that every memoir attributed to a sea captain is authentic"
+    ],
+    "correctIndex": 3,
+    "choiceExplanations": [
+      "The scholars' debate is mentioned only as background; the argument does not rest on anyone's opinion.",
+      "The argument concludes that the memoir is accurate and authentic, not that it is inaccurate.",
+      "Whether other captains wrote memoirs has nothing to do with who wrote this one.",
+      "Correct. The account's accuracy is used to show that Thorne wrote the memoir, but that accuracy is itself defended by asserting that Thorne wrote it.",
+      "The argument concerns this one memoir and makes no claim about every memoir attributed to a sea captain."
+    ],
+    "choiceTraps": [
+      "wrong_flaw",
+      "reversed",
+      "out_of_scope",
+      "correct",
+      "too_strong"
+    ],
+    "mostTempting": 4
+  },
+  {
+    "id": "necessary_assumption-001",
+    "type": "necessary_assumption",
+    "difficulty": 1,
+    "topic": "nesting loons and a motorboat ban",
+    "stimulus": "Since the nature reserve banned motorboats from Lake Arden two years ago, the lake has become far quieter during the months when loons nest along its shore. Loons are easily startled, and a startled loon will leave its eggs uncovered, often long enough that they fail to hatch. Therefore, the ban will lead to more loon chicks hatching at Lake Arden than hatched before it.",
+    "stem": "Which one of the following is an assumption required by the argument?",
+    "key": {
+      "conclusion": "The motorboat ban will lead to more loon chicks hatching at Lake Arden than hatched before it.",
+      "premises": [
+        "Since the ban, the lake has been far quieter during the nesting months.",
+        "Loons are easily startled, and a startled loon leaves its eggs uncovered, often long enough that they fail to hatch."
+      ],
+      "gap": "The evidence is that the lake is quieter; the conclusion is about more chicks hatching. That link holds only if motorboat noise was actually startling the nesting loons.",
+      "flawTag": "term_shift",
+      "idealAnswer": "Motorboat noise must have been startling at least some nesting loons off their eggs. If the boats never disturbed the loons, a quieter lake would not mean more chicks.",
+      "acceptableIdeas": [
+        "The noise of motorboats was one of the things that startled loons at this lake.",
+        "Some eggs at Lake Arden were failing to hatch because motorboats frightened the parents away.",
+        "Whatever replaced the motorboats does not startle the loons just as much.",
+        "A quieter lake actually means fewer startled loons."
+      ],
+      "commonMistakes": [
+        "Saying motorboats were the only thing that startled loons, which is more than the argument needs.",
+        "Restating that loons are easily startled, which is already given.",
+        "Saying the ban was meant to protect loons; its purpose does not matter."
+      ]
+    },
+    "choices": [
+      "Motorboat noise was the only thing that ever startled the loons nesting at Lake Arden.",
+      "Loons nest at Lake Arden in greater numbers than at any other lake in the region.",
+      "The reserve banned motorboats chiefly in order to protect the lake's nesting loons.",
+      "Canoes and other quiet boats do not come near the loons' nests at Lake Arden.",
+      "Noise from motorboats used to startle at least some of the loons nesting at Lake Arden."
+    ],
+    "correctIndex": 4,
+    "choiceExplanations": [
+      "The argument needs motorboats to have been one source of disturbance, not the only one; other disturbances could remain and the ban could still help.",
+      "How Lake Arden compares with other lakes does not affect whether the ban will raise hatching there.",
+      "The reason for the ban is irrelevant; only its effect on the loons matters.",
+      "This would help, but even if quiet boats sometimes pass the nests, removing motorboat noise could still mean more chicks.",
+      "Correct. If motorboat noise never startled any nesting loon, the quieter lake would give no reason to expect more eggs to hatch."
+    ],
+    "choiceTraps": [
+      "too_strong",
+      "irrelevant_comparison",
+      "out_of_scope",
+      "not_required",
+      "correct"
+    ],
+    "mostTempting": 0
+  },
+  {
+    "id": "necessary_assumption-002",
+    "type": "necessary_assumption",
+    "difficulty": 1,
+    "topic": "hospital hand-sanitizing stations",
+    "stimulus": "The new hand-sanitizing stations at Westfield Hospital are clearly responsible for the drop in infections among its surgical patients. The stations were installed outside every surgical ward in March, and nurses report that staff and visitors use them many times a day. In the six months that followed, the rate of post-surgical infections fell by a third compared with the six months before.",
+    "stem": "The argument depends on assuming which one of the following?",
+    "key": {
+      "conclusion": "The new hand-sanitizing stations are responsible for the drop in infections among surgical patients.",
+      "premises": [
+        "The stations were installed outside every surgical ward in March and are used many times a day.",
+        "In the following six months the post-surgical infection rate fell by a third compared with the six months before."
+      ],
+      "gap": "The drop came after the stations, but something else that changed at about the same time could explain it; the argument never rules that out.",
+      "flawTag": "ignores_alternatives",
+      "idealAnswer": "Nothing else that changed around March, such as a new antibiotic routine or different kinds of surgery, accounts for the drop. If something else explains the whole decline, the stations are not responsible.",
+      "acceptableIdeas": [
+        "No other infection-control measure introduced at about the same time caused the decline.",
+        "The fall in infections was not simply a seasonal change that happens every year.",
+        "The patients treated after March were not healthier or lower-risk than those before.",
+        "The drop is not fully explained by some other change at the hospital."
+      ],
+      "commonMistakes": [
+        "Saying the stations are the most effective way to prevent infection, which the argument does not need.",
+        "Saying everyone uses the stations every time, which is stronger than required.",
+        "Restating that infections fell after the stations were installed."
+      ]
+    },
+    "choices": [
+      "Hand-sanitizing stations reduce infections more effectively than any other measure a hospital can take.",
+      "Surgical patients at Westfield are infected less often than those at other hospitals.",
+      "The drop was not entirely due to some other change made at the hospital around March.",
+      "Most visitors to the surgical wards use the stations before going in.",
+      "The stations cost the hospital less to install than the infections had cost to treat."
+    ],
+    "correctIndex": 2,
+    "choiceExplanations": [
+      "The stations need only have caused this drop; they do not have to be better than every other measure.",
+      "A comparison with other hospitals has no bearing on what caused the drop at Westfield.",
+      "Correct. If some other change made around March produced the entire drop, then the stations are not what is responsible for it.",
+      "This would help, but the argument survives without it: use by staff alone could account for the drop.",
+      "The cost of the stations is irrelevant to whether they caused infections to fall."
+    ],
+    "choiceTraps": [
+      "too_strong",
+      "irrelevant_comparison",
+      "correct",
+      "not_required",
+      "out_of_scope"
+    ],
+    "mostTempting": 3
+  },
+  {
+    "id": "necessary_assumption-003",
+    "type": "necessary_assumption",
+    "difficulty": 1,
+    "topic": "archive records of a mill sale",
+    "stimulus": "Archivist: Family tradition holds that the Dunmore mill was sold to a neighboring landowner in the 1840s and later bought back. I have now read every surviving deed, ledger, and letter in the county archive for that decade, and none of them mentions any sale of the mill. The tradition must therefore be false: the mill was not sold at any time in that decade.",
+    "stem": "The archivist's argument requires the assumption that",
+    "key": {
+      "conclusion": "The family tradition is false: the Dunmore mill was not sold at any time in the 1840s.",
+      "premises": [
+        "The archivist read every surviving deed, ledger, and letter in the county archive for the 1840s.",
+        "None of those documents mentions any sale of the mill."
+      ],
+      "gap": "Finding no record of a sale shows there was no sale only if a sale would have left a record that survives in that archive.",
+      "flawTag": "absence_of_evidence",
+      "idealAnswer": "If the mill had been sold, some document that survives in the county archive would mention it. Otherwise the silence of the records proves nothing, since the record could be lost or kept somewhere else.",
+      "acceptableIdeas": [
+        "A sale of the mill would have been recorded in a document that still exists in the archive.",
+        "The record of the sale has not been lost, destroyed, or stored somewhere other than the county archive.",
+        "Sales of property like the mill were written down at the time, and those papers survive.",
+        "The surviving documents are complete enough that a sale would show up in them."
+      ],
+      "commonMistakes": [
+        "Saying the archive contains every document from the 1840s, which is more than the argument needs.",
+        "Saying family traditions are usually unreliable, which is not required.",
+        "Restating that no document mentions a sale."
+      ]
+    },
+    "choices": [
+      "the county archive holds every document that was written in the county during the 1840s",
+      "had the mill been sold in the 1840s, some surviving archive document would mention it",
+      "family traditions about the ownership of property are more often false than true",
+      "the neighboring landowner could not have afforded to buy the mill in the 1840s",
+      "the mill was more valuable in the 1840s than at any later time"
+    ],
+    "correctIndex": 1,
+    "choiceExplanations": [
+      "The argument needs only that a record of this sale would have survived there, not that the archive holds every document written in the county.",
+      "Correct. If a sale could have taken place without any surviving archive document mentioning it, the lack of such a document would not show the mill was never sold.",
+      "This would lend some support, but the argument rests on the records, and it would stand even if most such traditions were true.",
+      "The landowner's finances are not part of the archivist's reasoning.",
+      "The mill's value over time is irrelevant to whether it was sold."
+    ],
+    "choiceTraps": [
+      "too_strong",
+      "correct",
+      "not_required",
+      "out_of_scope",
+      "irrelevant_comparison"
+    ],
+    "mostTempting": 0
+  },
+  {
+    "id": "necessary_assumption-004",
+    "type": "necessary_assumption",
+    "difficulty": 2,
+    "topic": "retail complaint rates",
+    "stimulus": "The head of the complaints office at Brightway Stores insists that her staff is as busy as ever. In fact, the office must have had less work last year than it had two years ago. Two years ago, four percent of the chain's customers filed a complaint; last year, after sales staff were retrained, only two percent did. And each complaint takes the office about the same time to resolve.",
+    "stem": "The argument depends on assuming which one of the following?",
+    "key": {
+      "conclusion": "The complaints office had less work last year than it had two years ago.",
+      "premises": [
+        "Two years ago four percent of Brightway's customers filed a complaint; last year only two percent did.",
+        "Each complaint takes the office about the same time to resolve."
+      ],
+      "gap": "The evidence is a falling percentage of customers; the conclusion is about the amount of work, which depends on the number of complaints. If the chain had far more customers last year, two percent of them could be as many complaints as before, or more.",
+      "flawTag": "percent_vs_number",
+      "idealAnswer": "The number of customers did not double or more between the two years. If it did, two percent of the larger total would be at least as many complaints as four percent of the smaller one, so the office would not have less work.",
+      "acceptableIdeas": [
+        "Brightway did not have at least twice as many customers last year as two years ago.",
+        "The total number of complaints, not just the percentage, went down.",
+        "The customer base did not grow enough to cancel out the lower complaint rate.",
+        "A smaller share of customers complaining means fewer complaints only if the number of customers stayed in the same range."
+      ],
+      "commonMistakes": [
+        "Saying the number of customers stayed exactly the same, which is sufficient but more than is required.",
+        "Saying the retraining caused the drop; the cause of the lower rate does not matter here.",
+        "Restating that the complaint rate fell from four percent to two percent."
+      ]
+    },
+    "choices": [
+      "Brightway did not have at least twice as many customers last year as it had two years ago.",
+      "Brightway had exactly the same number of customers last year as it had two years ago.",
+      "The retraining of sales staff was the main reason that the complaint rate fell.",
+      "Customers who file complaints at Brightway are more demanding than those at rival chains.",
+      "The complaints office resolved every complaint it received during the past two years."
+    ],
+    "correctIndex": 0,
+    "choiceExplanations": [
+      "Correct. If the number of customers had at least doubled, two percent of them would be as many complaints as before or more, and the office would not have had less work.",
+      "This would guarantee the conclusion, but the argument does not need it: the customer count could rise or fall somewhat and complaints would still be fewer.",
+      "Why the rate fell does not matter to whether the office had fewer complaints to handle.",
+      "A comparison with customers of rival chains has nothing to do with this office's workload.",
+      "The argument concerns how much work arrived, measured by complaints filed, not whether every one was resolved."
+    ],
+    "choiceTraps": [
+      "correct",
+      "too_strong",
+      "not_required",
+      "irrelevant_comparison",
+      "out_of_scope"
+    ],
+    "mostTempting": 1
+  },
+  {
+    "id": "necessary_assumption-005",
+    "type": "necessary_assumption",
+    "difficulty": 2,
+    "topic": "community theater deficit",
+    "stimulus": "Theater director: Our company will end this season with a deficit unless something changes. Some board members want to raise ticket prices, but higher prices would drive away the students and retirees who fill most of our seats, and we would take in less money than we do now. That leaves us one way to balance the budget: we must cut the number of productions from six to four.",
+    "stem": "The theater director's argument requires the assumption that",
+    "key": {
+      "conclusion": "To balance the budget, the company must cut the number of productions from six to four.",
+      "premises": [
+        "The company will end the season with a deficit unless something changes.",
+        "Raising ticket prices would drive away the students and retirees who fill most seats, so the company would take in less money."
+      ],
+      "gap": "The director rules out one alternative, higher prices, and concludes that only one option is left. That follows only if there are no other ways to close the deficit, such as donations, grants, or cheaper productions.",
+      "flawTag": "false_dichotomy",
+      "idealAnswer": "There is no third way to close the deficit, such as raising money from donors or grants or cutting other costs. The director treats raising prices and cutting productions as the only two choices.",
+      "acceptableIdeas": [
+        "The company cannot cover the shortfall with donations, sponsorships, or grants.",
+        "Costs cannot be cut enough in some other way, such as cheaper sets or a smaller staff.",
+        "Raising prices and cutting productions are the only options available.",
+        "Cutting two productions would save more money than it loses in ticket sales."
+      ],
+      "commonMistakes": [
+        "Saying that cutting productions is the best possible option, which is stronger than needed.",
+        "Restating that students and retirees fill most of the seats.",
+        "Saying audiences would not mind fewer productions, which the argument does not depend on."
+      ]
+    },
+    "choices": [
+      "cutting two productions would save more money than any other step the company could take",
+      "students and retirees attend the company's productions more often than other patrons do",
+      "audiences would prefer four excellent productions to six that are merely adequate",
+      "the company cannot cover the deficit by raising more money from donors and grants",
+      "the company's ticket prices are currently lower than those of other theaters nearby"
+    ],
+    "correctIndex": 3,
+    "choiceExplanations": [
+      "The cut must be enough to balance the budget, but it need not save more than any other conceivable step.",
+      "This echoes the stated fact that students and retirees fill most of the seats; it is given, not assumed.",
+      "What audiences would prefer is not part of the director's reasoning about the budget.",
+      "Correct. If donors and grants could cover the deficit, cutting productions would not be the one way left to balance the budget.",
+      "How the company's prices compare with other theaters' does not affect the claim that only one option remains."
+    ],
+    "choiceTraps": [
+      "too_strong",
+      "restates_premise",
+      "out_of_scope",
+      "correct",
+      "irrelevant_comparison"
+    ],
+    "mostTempting": 0
+  },
+  {
+    "id": "necessary_assumption-006",
+    "type": "necessary_assumption",
+    "difficulty": 3,
+    "topic": "stadium economic impact",
+    "stimulus": "Councilor Abara: The proposed stadium deserves this council's support. Opponents say it will never repay the public money it requires, but they should listen to Dr. Lena Voss. No one in this city is more widely respected: she has directed our heart institute for twenty years and saved thousands of lives. Dr. Voss is convinced that the stadium will bring far more money into the local economy than it costs.",
+    "stem": "Councilor Abara's argument depends on assuming which one of the following?",
+    "key": {
+      "conclusion": "The proposed stadium deserves the council's support.",
+      "premises": [
+        "Dr. Voss is the most widely respected person in the city, having directed the heart institute for twenty years and saved thousands of lives.",
+        "Dr. Voss is convinced the stadium will bring in far more money than it costs."
+      ],
+      "gap": "Dr. Voss's standing comes from medicine, but the question is an economic forecast. The argument works only if her distinction as a physician is a reason to trust her judgment about the stadium's finances.",
+      "flawTag": "appeal_to_authority",
+      "idealAnswer": "Dr. Voss's achievements in medicine give us reason to trust her opinion about the stadium's economic effects. Without that, being a respected heart doctor says nothing about whether her forecast is right.",
+      "acceptableIdeas": [
+        "Being a distinguished physician makes someone a reliable judge of an economic question.",
+        "Dr. Voss's respect and success in medicine carry over to her judgment about public finance.",
+        "Someone who is respected for saving lives is likely to be right about a stadium's finances.",
+        "The qualities that earned her the city's respect are relevant to predicting the stadium's economic impact."
+      ],
+      "commonMistakes": [
+        "Saying she must know more about economics than the opponents do, which is a comparison the argument does not need.",
+        "Saying that anyone widely respected is always right about the economy, which is far stronger than required.",
+        "Restating that Dr. Voss is widely respected."
+      ]
+    },
+    "choices": [
+      "Anyone who is widely respected in a city is certain to be right about that city's economy.",
+      "Dr. Voss has advised the council on questions of public spending in the past.",
+      "No resident of the city is more widely respected than Dr. Voss is.",
+      "A stadium that repays its public cost would also improve the health of residents.",
+      "Dr. Voss's distinction in medicine is some indication that her economic judgments are sound."
+    ],
+    "correctIndex": 4,
+    "choiceExplanations": [
+      "The argument relies on Dr. Voss in particular and does not need the sweeping claim that every widely respected person is certain to be right about the economy.",
+      "Past advice to the council would add to her credibility, but the argument does not rely on it; it rests entirely on her standing as a physician.",
+      "This is stated outright in the passage, so it is a premise rather than an unstated assumption.",
+      "Any effect of the stadium on residents' health plays no role in the argument.",
+      "Correct. The only reason given for heeding Dr. Voss is her standing as a physician; if that tells us nothing about her economic judgment, her opinion gives no support to the stadium."
+    ],
+    "choiceTraps": [
+      "too_strong",
+      "not_required",
+      "restates_premise",
+      "out_of_scope",
+      "correct"
+    ],
+    "mostTempting": 0
+  },
+  {
+    "id": "necessary_assumption-007",
+    "type": "necessary_assumption",
+    "difficulty": 3,
+    "topic": "history textbook review",
+    "stimulus": "A committee asked specialists to check the new history textbook chapter by chapter. Each specialist reviewed only the chapter in his or her own field, and each reported that it contained no factual errors. Since the chapters make up the entire book, the book contains no factual errors. The critics who call it a misleading account of the nation's past are therefore mistaken.",
+    "stem": "Which one of the following is an assumption required by the argument?",
+    "key": {
+      "conclusion": "The critics who call the textbook a misleading account of the nation's past are mistaken.",
+      "premises": [
+        "Each specialist reviewed the chapter in his or her field and found no factual errors.",
+        "The chapters make up the entire book.",
+        "So the book contains no factual errors (an intermediate conclusion)."
+      ],
+      "gap": "Each chapter being free of factual errors does not show that the book as a whole gives a fair picture; a book can mislead through what it selects, omits, or emphasizes even if every statement in it is true.",
+      "flawTag": "part_whole",
+      "idealAnswer": "A book made of error-free chapters cannot be misleading through what it leaves out or emphasizes. The argument needs the book's selection of material not to distort the overall picture.",
+      "acceptableIdeas": [
+        "The textbook does not mislead by omitting important events or perspectives.",
+        "An account in which every statement is true cannot be misleading as a whole.",
+        "The way the book selects and arranges accurate facts does not give a false overall impression.",
+        "Being free of factual errors is enough to make the book not misleading."
+      ],
+      "commonMistakes": [
+        "Saying the specialists can never be wrong, which is stronger than the argument needs.",
+        "Questioning whether the chapters really make up the whole book, which the passage states.",
+        "Saying the critics did not read the book, which the argument does not rely on."
+      ]
+    },
+    "choices": [
+      "A specialist is never mistaken about matters of fact within his or her own field.",
+      "The critics of the textbook have not themselves read every one of its chapters.",
+      "The textbook's choice of which events to cover does not itself distort the nation's past.",
+      "The textbook contains fewer factual errors than the textbook that it is meant to replace.",
+      "The specialists agreed with one another about how the nation's past should be interpreted."
+    ],
+    "correctIndex": 2,
+    "choiceExplanations": [
+      "The argument needs these reports to be right, not the sweeping claim that specialists are never mistaken in their fields.",
+      "Whether the critics read every chapter is not something the argument relies on.",
+      "Correct. If the book's selection of events distorts the past, it can be misleading even though every chapter is free of factual errors, and the critics would be right.",
+      "A comparison with the older textbook is irrelevant to whether this one is misleading.",
+      "Agreement among the specialists would be reassuring, but each reviewed only one chapter for errors, and the argument does not depend on a shared interpretation."
+    ],
+    "choiceTraps": [
+      "too_strong",
+      "out_of_scope",
+      "correct",
+      "irrelevant_comparison",
+      "not_required"
+    ],
+    "mostTempting": 0
+  },
+  {
+    "id": "strengthen-001",
+    "type": "strengthen",
+    "difficulty": 1,
+    "topic": "barn owls and rodent control",
+    "stimulus": "Putting up nest boxes for barn owls is an effective way for grain farms in the Tully Valley to reduce rodent damage. Farms in the valley that have such boxes suffer much less damage to their stored grain than farms without them. Barn owls hunt mice and rats, and a single nesting pair can catch several thousand of them in the course of a year.",
+    "stem": "Which one of the following, if true, most strengthens the argument?",
+    "key": {
+      "conclusion": "Putting up nest boxes for barn owls is an effective way for grain farms in the Tully Valley to reduce rodent damage.",
+      "premises": [
+        "Valley farms with nest boxes suffer much less rodent damage to stored grain than farms without them.",
+        "Barn owls hunt mice and rats, and a nesting pair can catch several thousand a year."
+      ],
+      "gap": "Farms with boxes have less damage, but that does not show the boxes are the reason; such farms might differ in other ways, such as better grain storage.",
+      "flawTag": "correlation_causation",
+      "idealAnswer": "Farms that added nest boxes saw their rodent damage drop afterward, while similar farms nearby that added none saw no change. That shows the boxes themselves, not some other difference between the farms, reduced the damage.",
+      "acceptableIdeas": [
+        "Rodent damage on a farm fell after nest boxes were installed there.",
+        "Farms with and without nest boxes store their grain the same way and use the same poisons and traps.",
+        "When owls abandoned the boxes on a farm, rodent damage there went back up.",
+        "The farms with boxes had just as much rodent damage as other farms before they installed them."
+      ],
+      "commonMistakes": [
+        "Repeating that owls eat rodents, which the passage already says.",
+        "Giving a fact about the cost or ease of building boxes, which does not touch whether they work.",
+        "Offering a fact that suggests another cause, such as better storage on those farms, which weakens the argument."
+      ]
+    },
+    "choices": [
+      "Farms with nest boxes are more likely than other farms to store their grain in sealed steel bins.",
+      "Barn owls are found in the Tully Valley in greater numbers than in neighboring valleys.",
+      "Nest boxes for barn owls cost far less to build than most farmers assume.",
+      "Rodent damage fell on farms that added nest boxes but not on nearby farms that did not.",
+      "Barn owls hunt mainly at night, when mice and rats are most active."
+    ],
+    "correctIndex": 3,
+    "choiceExplanations": [
+      "This weakens the argument: sealed bins, not owls, could explain why those farms lose less grain.",
+      "How many owls this valley has compared with others does not show that nest boxes reduce damage on a farm.",
+      "The cost of a nest box has no bearing on whether it reduces rodent damage.",
+      "Correct. A drop in damage that follows the boxes, and does not occur on comparable farms without them, points to the boxes as the cause.",
+      "The passage already says owls hunt mice and rats; when they hunt adds nothing about whether the boxes cut damage."
+    ],
+    "choiceTraps": [
+      "reversed",
+      "irrelevant_comparison",
+      "out_of_scope",
+      "correct",
+      "restates_premise"
+    ],
+    "mostTempting": 4
+  },
+  {
+    "id": "strengthen-002",
+    "type": "strengthen",
+    "difficulty": 1,
+    "topic": "blood pressure drug trial",
+    "stimulus": "In a clinical trial, a new drug lowered blood pressure substantially in nearly every participant who took it for three months. All of the participants were men between the ages of twenty and thirty-five. The drug's maker nonetheless concludes that the drug will be just as effective for the elderly patients, most of them women, who make up the majority of people treated for high blood pressure.",
+    "stem": "Which one of the following, if true, adds the most support for the drug maker's conclusion?",
+    "key": {
+      "conclusion": "The drug will be just as effective for elderly patients, most of them women, as it was in the trial.",
+      "premises": [
+        "In a three-month trial the drug substantially lowered blood pressure in nearly every participant.",
+        "All participants were men aged twenty to thirty-five."
+      ],
+      "gap": "The trial group, young men, differs from the group the conclusion is about, elderly patients who are mostly women; the drug might work differently in older or female bodies.",
+      "flawTag": "unrepresentative_sample",
+      "idealAnswer": "The way the drug lowers blood pressure works the same regardless of a patient's age or sex. That would make results from young men a fair guide to how elderly women will respond.",
+      "acceptableIdeas": [
+        "A second trial in elderly patients, mostly women, showed the same reduction in blood pressure.",
+        "Age and sex do not affect how the body absorbs or responds to this drug.",
+        "Other drugs that act in the same way have worked equally well in young men and elderly women.",
+        "The biological process the drug targets is the same in old and young, male and female patients."
+      ],
+      "commonMistakes": [
+        "Repeating that the drug worked well in the trial.",
+        "Pointing out a difference between the groups, such as the elderly taking other medicines, which weakens the conclusion.",
+        "Giving a fact about price or convenience, which is not about effectiveness."
+      ]
+    },
+    "choices": [
+      "Elderly patients are more likely than young adults to take several medications at the same time.",
+      "The process by which the drug lowers blood pressure does not vary with a patient's age or sex.",
+      "The trial's participants were monitored more closely than patients normally are by their own doctors.",
+      "High blood pressure is more common among the elderly than it is among young adults.",
+      "The new drug is less expensive to manufacture than the drugs now used to lower blood pressure."
+    ],
+    "correctIndex": 1,
+    "choiceExplanations": [
+      "This points to a difference between the two groups that could change how the drug works, so it weakens the conclusion.",
+      "Correct. If the drug works the same way whatever a patient's age or sex, results from young men are good evidence about elderly women.",
+      "How closely participants were monitored does not show that the drug works equally well in a different kind of patient.",
+      "The passage already says the elderly make up most patients; this does nothing to show the drug works for them.",
+      "Manufacturing cost is irrelevant to how well the drug works in elderly patients."
+    ],
+    "choiceTraps": [
+      "reversed",
+      "correct",
+      "out_of_scope",
+      "restates_premise",
+      "irrelevant_comparison"
+    ],
+    "mostTempting": 3
+  },
+  {
+    "id": "strengthen-003",
+    "type": "strengthen",
+    "difficulty": 1,
+    "topic": "marsh frogs and road salt",
+    "stimulus": "Ecologist: The collapse of the frog population in Miller's Marsh was almost certainly caused by road salt. Five winters ago the county began salting the highway that runs along the marsh, and the number of frogs has fallen every year since. Runoff from the highway drains directly into the marsh, and frog eggs are known to be damaged by salty water.",
+    "stem": "Which one of the following, if true, most strengthens the ecologist's argument?",
+    "key": {
+      "conclusion": "The collapse of the frog population in Miller's Marsh was almost certainly caused by road salt.",
+      "premises": [
+        "The county began salting the highway beside the marsh five winters ago, and frog numbers have fallen every year since.",
+        "Highway runoff drains directly into the marsh.",
+        "Frog eggs are known to be damaged by salty water."
+      ],
+      "gap": "The decline followed the salting, but something else that began around the same time, such as a disease, drought, or a new predator, could be responsible; nothing rules those out.",
+      "flawTag": "ignores_alternatives",
+      "idealAnswer": "Frog populations in nearby marshes that get no salty runoff have stayed healthy over the same five years. That rules out a region-wide cause such as disease or weather and leaves the salt as the difference.",
+      "acceptableIdeas": [
+        "Marshes in the area that are not near salted roads have not lost their frogs.",
+        "Salt levels measured in Miller's Marsh are high enough to kill frog eggs.",
+        "No frog disease, drought, or new predator has appeared in the marsh during those years.",
+        "Frog numbers fell fastest in the part of the marsh closest to the highway."
+      ],
+      "commonMistakes": [
+        "Repeating that salt harms frog eggs, which is already given.",
+        "Naming another possible cause such as a fungal disease, which weakens the argument.",
+        "Giving a fact about how much salt other counties use, which does not bear on this marsh."
+      ]
+    },
+    "choices": [
+      "A fungal disease that kills frogs was first detected in the region about five years ago.",
+      "The county uses less salt per mile of highway than most neighboring counties do.",
+      "Several species of birds that feed on frogs have also become scarcer near the marsh.",
+      "Laboratory studies have repeatedly confirmed that salty water damages the eggs of frogs.",
+      "Frog numbers have held steady in nearby marshes that receive no runoff from salted roads."
+    ],
+    "correctIndex": 4,
+    "choiceExplanations": [
+      "This offers a competing explanation for the decline, so it weakens the argument.",
+      "A comparison with other counties' salt use says nothing about what happened in this marsh.",
+      "Fewer frog-eating birds is what one would expect once frogs decline, whatever the cause; it does not point to salt.",
+      "The passage already says frog eggs are damaged by salty water, so this adds nothing new.",
+      "Correct. If frogs nearby are doing fine where there is no salty runoff, a region-wide cause is unlikely and the salt stands out as the explanation."
+    ],
+    "choiceTraps": [
+      "reversed",
+      "irrelevant_comparison",
+      "out_of_scope",
+      "restates_premise",
+      "correct"
+    ],
+    "mostTempting": 3
+  },
+  {
+    "id": "strengthen-004",
+    "type": "strengthen",
+    "difficulty": 2,
+    "topic": "sales training course",
+    "stimulus": "Skeptics at Norvane Insurance doubt that the company's new two-week sales course was worth its cost. Yet the course plainly made the company's agents better at selling. In a questionnaire completed a month afterward, more than eighty percent of the agents who took the course said they now felt more confident when speaking with customers, and nearly as many said they would recommend the course to a colleague.",
+    "stem": "Which one of the following, if true, most strengthens the argument?",
+    "key": {
+      "conclusion": "The sales course made Norvane's agents better at selling.",
+      "premises": [
+        "More than eighty percent of agents who took the course said they felt more confident speaking with customers.",
+        "Nearly as many said they would recommend the course to a colleague."
+      ],
+      "gap": "The evidence is about how agents feel, their confidence and their liking for the course; the conclusion is about how well they sell. Feeling more confident is not the same as selling more.",
+      "flawTag": "term_shift",
+      "idealAnswer": "At Norvane, agents who feel more confident with customers actually sell more policies. That connects the confidence the agents reported to the selling ability the conclusion is about.",
+      "acceptableIdeas": [
+        "Agents who took the course sold noticeably more in the following months than they had before.",
+        "Agents who took the course outsold comparable agents who did not.",
+        "Confidence with customers is a reliable predictor of an agent's sales.",
+        "The agents' self-reports of improvement matched an increase in their measured sales."
+      ],
+      "commonMistakes": [
+        "Giving more evidence that agents liked the course, which is still about feelings rather than sales.",
+        "Saying the survey had a high response rate, which makes the survey reliable but does not link confidence to selling.",
+        "Giving a fact about the course's cost, which is not what the conclusion claims."
+      ]
+    },
+    "choices": [
+      "Agents who feel confident often overestimate how well their conversations with customers have gone.",
+      "The course cost Norvane less per agent than similar courses cost its competitors.",
+      "At Norvane, agents' confidence with customers has closely tracked the number of policies they sell.",
+      "More than eighty percent of the agents who took the course completed the questionnaire.",
+      "Most of the agents who took the course had asked to be enrolled in it."
+    ],
+    "correctIndex": 2,
+    "choiceExplanations": [
+      "This suggests that feeling confident is a poor guide to actual performance, which weakens the argument.",
+      "The conclusion is that agents sell better, not that the course was cheap compared with competitors' courses.",
+      "Correct. If confidence and sales have gone together at Norvane, the reported rise in confidence is real evidence that the agents now sell better.",
+      "A high response rate makes the survey a fair picture of how agents feel, but it still leaves the step from feeling confident to selling better unsupported.",
+      "That agents asked to enroll tells us about their interest in the course, not about whether it improved their selling."
+    ],
+    "choiceTraps": [
+      "reversed",
+      "irrelevant_comparison",
+      "correct",
+      "half_right",
+      "out_of_scope"
+    ],
+    "mostTempting": 3
+  },
+  {
+    "id": "strengthen-005",
+    "type": "strengthen",
+    "difficulty": 2,
+    "topic": "organic farm certification",
+    "stimulus": "Forty percent of the farms in Almera Province are certified organic, compared with only fifteen percent of the farms in neighboring Brask Province. Some officials in Brask insist that their province is nonetheless the region's leading source of organic produce. But the certification figures show that this cannot be right: Almera clearly produces more organic food each year than Brask does.",
+    "stem": "Which one of the following, if true, most strengthens the argument?",
+    "key": {
+      "conclusion": "Almera produces more organic food each year than Brask does.",
+      "premises": [
+        "Forty percent of Almera's farms are certified organic.",
+        "Only fifteen percent of Brask's farms are certified organic."
+      ],
+      "gap": "The evidence is the percentage of farms that are organic; the conclusion is about the amount of organic food. If Brask has many more farms, or much bigger ones, fifteen percent of them could out-produce forty percent of Almera's.",
+      "flawTag": "percent_vs_number",
+      "idealAnswer": "The two provinces have about the same number of farms and their farms are about the same size. Then a higher percentage of organic farms really does mean more organic food.",
+      "acceptableIdeas": [
+        "Almera has at least as many farms as Brask.",
+        "Organic farms in Brask are not much larger or more productive than those in Almera.",
+        "Almera has more organic farmland in total than Brask does.",
+        "The total output of Almera's organic farms has been measured and exceeds Brask's."
+      ],
+      "commonMistakes": [
+        "Giving a fact about how much organic food people buy, which is consumption rather than production.",
+        "Saying Almera's share of organic farms is growing, which is still a percentage.",
+        "Pointing out that Brask's organic farms are larger, which weakens the argument."
+      ]
+    },
+    "choices": [
+      "Almera has about as many farms as Brask, and farms in the two provinces are similar in size.",
+      "Organic farms in Brask are, on average, several times larger than those in Almera.",
+      "Certification as an organic farm is more expensive in Almera than it is in Brask.",
+      "Consumers in Almera buy more organic food per person than consumers in Brask do.",
+      "The share of Almera's farms that are certified organic has risen in each of the past ten years."
+    ],
+    "correctIndex": 0,
+    "choiceExplanations": [
+      "Correct. With similar numbers of farms of similar size, forty percent of Almera's farms would yield more organic food than fifteen percent of Brask's.",
+      "If Brask's organic farms are several times larger, Brask could produce more despite its lower percentage, so this weakens the argument.",
+      "What certification costs in each province does not show which one produces more organic food.",
+      "This is about how much organic food consumers buy, not how much each province produces.",
+      "A rising share in Almera is still a percentage of farms and says nothing about the total amount compared with Brask."
+    ],
+    "choiceTraps": [
+      "correct",
+      "reversed",
+      "irrelevant_comparison",
+      "shifted_term",
+      "out_of_scope"
+    ],
+    "mostTempting": 3
+  },
+  {
+    "id": "strengthen-006",
+    "type": "strengthen",
+    "difficulty": 3,
+    "topic": "pottery evidence of ancient trade",
+    "stimulus": "Archaeologist: It has been suggested that the hill people of Varna traded regularly with the coastal Selu culture. This is doubtful. The Selu shipped nearly everything they traded, from oil to dried fish, in stamped clay jars of a distinctive type, and such jars were too fragile to survive a return journey. Three seasons of excavation at Varna have recovered thousands of pottery fragments, yet not one of them comes from a Selu jar.",
+    "stem": "Which one of the following, if true, adds the most support for the archaeologist's conclusion?",
+    "key": {
+      "conclusion": "It is doubtful that the hill people of Varna traded regularly with the Selu.",
+      "premises": [
+        "The Selu shipped nearly everything they traded in distinctive stamped clay jars.",
+        "Those jars were too fragile to survive a return journey, so they would have stayed where they were delivered.",
+        "Three seasons of excavation at Varna recovered thousands of pottery fragments, none from a Selu jar."
+      ],
+      "gap": "Finding no Selu fragments suggests no trade only if the digging has reached the places where such fragments would be; the thousands of fragments found might come from parts of the site where imported jars never ended up.",
+      "flawTag": "absence_of_evidence",
+      "idealAnswer": "The excavations covered the places where imported jars would have been stored or thrown away, such as storerooms and rubbish pits. Then the absence of Selu fragments is real evidence that the jars never arrived.",
+      "acceptableIdeas": [
+        "The excavated areas are a fair sample of the whole settlement, including where trade goods were kept.",
+        "Fragments of Selu jars have been found at every other site known to have traded with the Selu.",
+        "The soil at Varna preserves pottery well, so Selu fragments would have survived if they had been there.",
+        "The people of Varna did not reuse broken imported jars in ways that would destroy the fragments."
+      ],
+      "commonMistakes": [
+        "Repeating that Selu jars are distinctive or stamped, which is already given.",
+        "Pointing out that only one part of the site has been dug, which weakens the argument.",
+        "Giving a fact about Selu trade with other coastal peoples, which is not about Varna."
+      ]
+    },
+    "choices": [
+      "The excavations at Varna have so far been confined to the settlement's burial ground.",
+      "The people of Varna made their own pottery from clay dug near the settlement.",
+      "Selu jars can be distinguished from other pottery by the stamps that they bear.",
+      "The excavated areas at Varna include the storerooms and refuse pits where imports would have ended up.",
+      "The Selu are known to have traded regularly with several other cultures that lived along the coast."
+    ],
+    "correctIndex": 3,
+    "choiceExplanations": [
+      "If only the burial ground has been dug, the absence of Selu fragments tells us little about trade, so this weakens the argument.",
+      "That Varna made its own pottery explains the local fragments but does not make it less likely that Selu jars also arrived.",
+      "The passage already says the jars are stamped and distinctive; this adds nothing.",
+      "Correct. If the places where imported jars would have been kept and discarded have been searched and nothing was found, the lack of fragments is strong evidence that Selu goods did not reach Varna.",
+      "Trade between the Selu and other coastal peoples says nothing about whether they traded with the hill people of Varna."
+    ],
+    "choiceTraps": [
+      "reversed",
+      "out_of_scope",
+      "restates_premise",
+      "correct",
+      "shifted_term"
+    ],
+    "mostTempting": 4
+  },
+  {
+    "id": "strengthen-007",
+    "type": "strengthen",
+    "difficulty": 3,
+    "topic": "school start times",
+    "stimulus": "Parent: The district's plan to start high school classes an hour later is a fad. Teenagers simply need to go to bed earlier.\nSuperintendent: The plan rests on more than fashion. The national association of sleep researchers, whose members have spent decades studying adolescents, has formally recommended later start times for high schools. When the people who know the most about a question agree on the answer, a school district should follow their advice. Our district should adopt the later schedule.",
+    "stem": "Which one of the following, if true, most strengthens the superintendent's argument?",
+    "key": {
+      "conclusion": "The district should adopt the later high school schedule.",
+      "premises": [
+        "The national association of sleep researchers, whose members have studied adolescents for decades, formally recommends later start times.",
+        "When the people who know the most about a question agree on the answer, a district should follow their advice."
+      ],
+      "gap": "The superintendent leans on the experts' authority without showing that their general recommendation fits this district, or that it rests on evidence about what actually happens when schools like these start later.",
+      "flawTag": "appeal_to_authority",
+      "idealAnswer": "The association's recommendation is based on what happened in districts like this one after they moved to later start times. That shows the experts' advice applies here and rests on relevant evidence, not just on their reputation.",
+      "acceptableIdeas": [
+        "Districts similar to this one that adopted later starts saw better attendance and grades.",
+        "The recommendation rests on studies of high schools, not only on laboratory research about sleep.",
+        "The researchers took into account practical matters such as buses and after-school activities when making the recommendation.",
+        "Students in this district currently get less sleep than the researchers say adolescents need."
+      ],
+      "commonMistakes": [
+        "Repeating that the researchers are experienced, which the superintendent already said.",
+        "Saying that some members of the association dispute the evidence, which weakens the argument.",
+        "Giving a fact about how large or well known the association is."
+      ]
+    },
+    "choices": [
+      "Many members of the association have teenage children who attend public high schools.",
+      "The recommendation was based on results in districts much like this one that adopted later starts.",
+      "High schools in the district already start later in the day than its elementary schools do.",
+      "Several of the association's members have disputed the studies on which the recommendation relies.",
+      "The members of the association have spent several decades studying adolescents."
+    ],
+    "correctIndex": 1,
+    "choiceExplanations": [
+      "That members have teenage children does not make their recommendation better founded or more applicable to this district.",
+      "Correct. This shows the experts' advice rests on evidence from comparable districts, which is exactly what the appeal to their authority left open.",
+      "How the district's high school and elementary schedules compare today says nothing about whether the experts' advice is sound or fits this district.",
+      "Disagreement among the members about the underlying studies undermines the claim that the experts agree, so this weakens the argument.",
+      "The superintendent already said the members have spent decades studying adolescents; this merely repeats it."
+    ],
+    "choiceTraps": [
+      "out_of_scope",
+      "correct",
+      "irrelevant_comparison",
+      "reversed",
+      "restates_premise"
+    ],
+    "mostTempting": 4
+  },
+  {
+    "id": "weaken-001",
+    "type": "weaken",
+    "difficulty": 1,
+    "topic": "street musicians and tourism",
+    "stimulus": "Tourism official: Our survey of thirty cities found that those with the most street musicians also attract the most tourists. The pattern held for large cities and small ones alike, in every region we examined. Street music evidently draws visitors. So if our city wants more tourists, it should make performing licenses free and invite musicians to play in every public square.",
+    "stem": "Which one of the following, if true, most seriously weakens the tourism official's argument?",
+    "key": {
+      "conclusion": "If the city wants more tourists, it should make performing licenses free and invite musicians into every public square.",
+      "premises": [
+        "In a survey of thirty cities, those with the most street musicians also attract the most tourists.",
+        "The pattern held for large and small cities in every region.",
+        "Street music draws visitors (an intermediate conclusion)."
+      ],
+      "gap": "The survey shows musicians and tourists are found together, not which brings the other. Musicians may simply go where the tourists already are.",
+      "flawTag": "correlation_causation",
+      "idealAnswer": "Street musicians go to cities that already have lots of tourists, because that is where they can earn money. If the tourists attract the musicians rather than the other way around, adding musicians would not bring more visitors.",
+      "acceptableIdeas": [
+        "The causation runs the other way: crowds of tourists attract street performers.",
+        "Something else, such as a famous old town or many festivals, draws both tourists and musicians.",
+        "Cities that added many street musicians saw no increase in tourism afterward.",
+        "Tourists surveyed say street music played no part in their decision to visit."
+      ],
+      "commonMistakes": [
+        "Saying tourists enjoy street music, which supports the official.",
+        "Objecting that free licenses would cost the city revenue, which does not touch the reasoning.",
+        "Saying thirty cities is too few, without offering a reason the pattern might mislead."
+      ]
+    },
+    "choices": [
+      "Street musicians tend to move to cities that already draw large crowds of tourists.",
+      "Tourists in the surveyed cities often said that street music made their visits more enjoyable.",
+      "The cities with the fewest street musicians were among those with the fewest tourists.",
+      "Street musicians earn more per hour in large cities than they do in small ones.",
+      "The survey counted only musicians, not jugglers, mimes, or other street performers."
+    ],
+    "correctIndex": 0,
+    "choiceExplanations": [
+      "Correct. If musicians follow the tourists, the pattern in the survey is explained without street music drawing anyone, and inviting more musicians would not bring more visitors.",
+      "Tourists enjoying the music fits the official's view that it draws visitors, so this strengthens rather than weakens.",
+      "This is just the other half of the pattern the survey already reported.",
+      "What musicians earn in large versus small cities has no bearing on whether music attracts tourists.",
+      "Leaving other kinds of performers out of the count does not affect the link claimed between musicians and tourists."
+    ],
+    "choiceTraps": [
+      "correct",
+      "reversed",
+      "restates_premise",
+      "irrelevant_comparison",
+      "out_of_scope"
+    ],
+    "mostTempting": 2
+  },
+  {
+    "id": "weaken-002",
+    "type": "weaken",
+    "difficulty": 1,
+    "topic": "online restaurant reviews",
+    "stimulus": "The great majority of people who have eaten at the new restaurant Saffron Table were clearly delighted with their meals. The restaurant has been open for only two months and serves about a thousand diners each week. Yet more than three hundred reviews of it have already been posted on a popular dining website, and nearly all of them award it the highest possible rating.",
+    "stem": "Which one of the following, if true, most seriously weakens the argument?",
+    "key": {
+      "conclusion": "The great majority of people who have eaten at Saffron Table were delighted with their meals.",
+      "premises": [
+        "The restaurant has been open two months and serves about a thousand diners a week.",
+        "More than three hundred reviews have been posted on a dining website, nearly all giving the highest rating."
+      ],
+      "gap": "About three hundred reviewers out of roughly eight thousand diners chose to post; they may not be typical of everyone who ate there, especially if something prompted satisfied or rewarded diners to post.",
+      "flawTag": "unrepresentative_sample",
+      "idealAnswer": "The restaurant gives diners a reward, such as a free dessert, for posting a top rating. Then the glowing reviews come from people with a reason to post them and do not show what most diners thought.",
+      "acceptableIdeas": [
+        "Only a small, self-selected fraction of diners posted reviews, and unhappy diners may not have bothered.",
+        "Many of the reviews were written by the owner's friends, relatives, or staff.",
+        "The website removes or hides low ratings.",
+        "People who post reviews are not typical of all the restaurant's customers."
+      ],
+      "commonMistakes": [
+        "Saying a few reviews were negative, which leaves 'nearly all' positive.",
+        "Saying the restaurant is new, which the passage already states.",
+        "Giving a fact that makes the reviews look more trustworthy, such as that they are detailed."
+      ]
+    },
+    "choices": [
+      "Most of the reviews describe in detail the particular dishes that the reviewer ordered.",
+      "Saffron Table receives more reviews each week than most other restaurants in the city.",
+      "A few of the reviews complain that the restaurant is too noisy on weekends.",
+      "The dining website allows reviews to be posted only by people who hold registered accounts.",
+      "Saffron Table offers a free dessert to diners who show that they have posted a top rating."
+    ],
+    "correctIndex": 4,
+    "choiceExplanations": [
+      "Detailed reviews look like the work of real diners, which makes the reviews more credible, not less.",
+      "How the number of reviews compares with other restaurants does not show whether the reviewers are typical diners.",
+      "A few complaints about noise are consistent with nearly all reviews giving the top rating.",
+      "Requiring an account says nothing about whether those who post are typical of the restaurant's diners.",
+      "Correct. If diners are rewarded for posting top ratings, the reviews reflect the reward rather than what diners in general thought of their meals."
+    ],
+    "choiceTraps": [
+      "reversed",
+      "irrelevant_comparison",
+      "half_right",
+      "out_of_scope",
+      "correct"
+    ],
+    "mostTempting": 2
+  },
+  {
+    "id": "weaken-003",
+    "type": "weaken",
+    "difficulty": 1,
+    "topic": "municipal water supply",
+    "stimulus": "Water commissioner: Within ten years our town's demand for water will exceed what the Elk River can supply. We therefore face a simple choice: build a second reservoir or impose permanent rationing on every household. Rationing would be bitterly unpopular and would discourage new businesses from settling here. So the town should begin building a second reservoir at once, whatever the expense.",
+    "stem": "Which one of the following, if true, most seriously weakens the water commissioner's argument?",
+    "key": {
+      "conclusion": "The town should begin building a second reservoir at once, whatever the expense.",
+      "premises": [
+        "Within ten years demand for water will exceed what the Elk River can supply.",
+        "The only choices are a second reservoir or permanent rationing.",
+        "Rationing would be unpopular and would discourage new businesses."
+      ],
+      "gap": "The commissioner assumes there are only two ways to deal with the shortfall. If a third option could close the gap, rejecting rationing does not make the reservoir necessary.",
+      "flawTag": "false_dichotomy",
+      "idealAnswer": "The town could close the gap another way, for example by fixing its leaking pipes, which would save more water than the expected shortfall. Then the choice is not just reservoir or rationing.",
+      "acceptableIdeas": [
+        "A large share of the town's water is lost to leaks that could be repaired cheaply.",
+        "The town could buy water from a neighboring district or tap a nearby aquifer.",
+        "Voluntary conservation measures such as efficient fixtures would cut demand enough.",
+        "There is some third option besides a reservoir and permanent rationing."
+      ],
+      "commonMistakes": [
+        "Saying the reservoir would be expensive, which the commissioner has already set aside.",
+        "Saying rationing really would hurt business, which supports the commissioner.",
+        "Saying the reservoir would take years to build, which supports starting at once."
+      ]
+    },
+    "choices": [
+      "A second reservoir would take at least six years to design and build.",
+      "Towns that ration water generally attract fewer new businesses than towns that do not.",
+      "The Elk River supplies water to two other towns located farther downstream.",
+      "Repairing leaks in the town's old pipes would save more water than the expected shortfall.",
+      "Building a reservoir would cost the town more than it has spent on any earlier public project."
+    ],
+    "correctIndex": 3,
+    "choiceExplanations": [
+      "A long construction time is a reason to start right away, so this supports the commissioner.",
+      "This confirms what the commissioner already said about rationing and business.",
+      "That other towns also draw on the river does not offer a way out of the choice the commissioner describes.",
+      "Correct. If fixing leaks would cover the shortfall, the town is not forced to choose between a reservoir and rationing, and the case for building collapses.",
+      "The commissioner argues for building 'whatever the expense', and a comparison with past projects does not show that any alternative exists."
+    ],
+    "choiceTraps": [
+      "reversed",
+      "restates_premise",
+      "out_of_scope",
+      "correct",
+      "irrelevant_comparison"
+    ],
+    "mostTempting": 4
+  },
+  {
+    "id": "weaken-004",
+    "type": "weaken",
+    "difficulty": 2,
+    "topic": "popularity of a reform package",
+    "stimulus": "Party strategists fear that the governor's reform package will prove unpopular. But the package as a whole is sure to be favored by a majority of voters. It has five parts: a property tax cut, new road funds, smaller class sizes, a pay raise for nurses, and an expanded parks budget. In a recent statewide poll, each of these measures, considered on its own, was favored by a clear majority.",
+    "stem": "Which one of the following, if true, most seriously weakens the argument?",
+    "key": {
+      "conclusion": "The reform package as a whole is sure to be favored by a majority of voters.",
+      "premises": [
+        "The package has five parts: a property tax cut, road funds, smaller classes, a nurses' pay raise, and a larger parks budget.",
+        "In a statewide poll each measure, considered on its own, was favored by a clear majority."
+      ],
+      "gap": "Voters liking each measure separately does not show they will like all five together; the combination has features, such as its total cost, that no single part has.",
+      "flawTag": "part_whole",
+      "idealAnswer": "Voters like each measure by itself but think the state cannot pay for all five at once, so they would reject them as a package. What is true of each part is not true of the whole.",
+      "acceptableIdeas": [
+        "Most voters believe a tax cut combined with four new spending programs would wreck the state budget.",
+        "Different majorities favor different measures, and many voters strongly oppose at least one part of the package.",
+        "A poll that asked about the whole package found that most voters opposed it.",
+        "Voters who support one measure often do so only if the others are not also adopted."
+      ],
+      "commonMistakes": [
+        "Saying the poll might be inaccurate, without any reason given.",
+        "Saying some measures were more popular than others, which leaves each with a majority.",
+        "Giving a fact that confirms each measure is popular, which supports the argument."
+      ]
+    },
+    "choices": [
+      "The poll was conducted by a firm that has accurately predicted the outcomes of several recent elections.",
+      "Most voters think the state cannot afford to carry out all five of the measures at once.",
+      "The property tax cut was favored by a larger majority than the parks budget was.",
+      "The governor's previous reform package was defeated in the legislature two years ago.",
+      "Each of the five measures was favored by a majority in every region of the state."
+    ],
+    "correctIndex": 1,
+    "choiceExplanations": [
+      "A reliable polling firm makes the evidence more trustworthy, which supports the argument.",
+      "Correct. If voters think the five measures are unaffordable together, their approval of each one separately does not carry over to the package.",
+      "Different sizes of majority still leave every measure favored by a majority.",
+      "A vote by legislators on an earlier package tells us nothing about how voters view this one.",
+      "This only elaborates the poll result that each measure is popular on its own."
+    ],
+    "choiceTraps": [
+      "reversed",
+      "correct",
+      "irrelevant_comparison",
+      "out_of_scope",
+      "restates_premise"
+    ],
+    "mostTempting": 3
+  },
+  {
+    "id": "weaken-005",
+    "type": "weaken",
+    "difficulty": 2,
+    "topic": "enforcing a written agreement",
+    "stimulus": "Client: My former partner now says our agreement to split the profits is not binding.\nParalegal: You need not worry. I have reviewed every case in which this state's appeals court enforced a profit-sharing agreement, and in each one the agreement had been put in writing and signed by both parties. Your agreement is in writing and bears both signatures. So the court will certainly enforce it.",
+    "stem": "Which one of the following, if true, most seriously weakens the paralegal's argument?",
+    "key": {
+      "conclusion": "The court will certainly enforce the client's profit-sharing agreement.",
+      "premises": [
+        "In every case where the appeals court enforced a profit-sharing agreement, the agreement was written and signed by both parties.",
+        "The client's agreement is written and bears both signatures."
+      ],
+      "gap": "The cases show that being written and signed is something every enforced agreement had, not that every written, signed agreement gets enforced. The paralegal looked only at agreements that were enforced.",
+      "flawTag": "necessary_vs_sufficient",
+      "idealAnswer": "The court has refused to enforce plenty of written, signed profit-sharing agreements. So being written and signed is needed for enforcement but does not guarantee it.",
+      "acceptableIdeas": [
+        "Many written and signed agreements have been thrown out for other reasons, such as vague terms or fraud.",
+        "The paralegal reviewed only the cases where agreements were enforced, not the ones where they were rejected.",
+        "A court also requires other things, such as clear terms, before it will enforce an agreement.",
+        "Writing and signatures are necessary for enforcement, not sufficient."
+      ],
+      "commonMistakes": [
+        "Saying the court has never enforced an unwritten agreement, which fits the paralegal's evidence.",
+        "Saying the partner signed willingly, which helps the client.",
+        "Saying only that 'certainly' is too strong, without giving a fact that shows why."
+      ]
+    },
+    "choices": [
+      "The appeals court has never enforced a profit-sharing agreement that was merely spoken.",
+      "Most profit-sharing disputes in the state are settled before they ever reach a court.",
+      "The appeals court has declined to enforce many signed, written agreements to share profits.",
+      "Written agreements are enforced more often in this state than in neighboring states.",
+      "The client's former partner signed the agreement willingly and in the presence of witnesses."
+    ],
+    "correctIndex": 2,
+    "choiceExplanations": [
+      "This is another way of stating the paralegal's own finding that every enforced agreement was in writing.",
+      "How often disputes settle out of court does not bear on whether this agreement would be enforced.",
+      "Correct. If many written, signed agreements have gone unenforced, having those two features does not make enforcement certain.",
+      "A comparison with neighboring states does not show whether this particular agreement will be enforced.",
+      "Evidence that the partner signed freely removes a possible objection, so it helps the paralegal's conclusion."
+    ],
+    "choiceTraps": [
+      "restates_premise",
+      "out_of_scope",
+      "correct",
+      "irrelevant_comparison",
+      "reversed"
+    ],
+    "mostTempting": 0
+  },
+  {
+    "id": "weaken-006",
+    "type": "weaken",
+    "difficulty": 3,
+    "topic": "ski resort injuries",
+    "stimulus": "The clinic at Mount Corbet ski resort treated 310 injured skiers last winter, up from 240 the winter before. The resort's management attributes the increase to chance. More likely, skiing at Mount Corbet has become more dangerous because the resort stopped grooming its steepest runs. Last winter was the first in which those runs were left ungroomed, a change made to cut costs.",
+    "stem": "Which one of the following, if true, most seriously weakens the argument?",
+    "key": {
+      "conclusion": "Skiing at Mount Corbet has become more dangerous because the resort stopped grooming its steepest runs.",
+      "premises": [
+        "The clinic treated 310 injured skiers last winter, up from 240 the winter before.",
+        "Last winter was the first in which the steepest runs were left ungroomed."
+      ],
+      "gap": "A higher number of injuries shows greater danger only if the number of skiers did not rise by as much. With many more skiers, the chance of any one skier being hurt could have stayed the same or fallen.",
+      "flawTag": "percent_vs_number",
+      "idealAnswer": "Far more people skied at Mount Corbet last winter, so the injury rate per skier actually went down. More injuries in total does not mean skiing there got more dangerous.",
+      "acceptableIdeas": [
+        "The number of skiers rose by a larger proportion than the number of injuries did.",
+        "The resort sold nearly twice as many lift tickets last winter.",
+        "Most of last winter's injuries happened on groomed beginner slopes, not on the steep ungroomed runs.",
+        "The clinic began treating minor injuries last winter that it used to send elsewhere."
+      ],
+      "commonMistakes": [
+        "Saying ungroomed runs are known to be risky, which supports the argument.",
+        "Repeating that more skiers were treated, which is the evidence already given.",
+        "Saying the resort saved money, which is beside the point."
+      ]
+    },
+    "choices": [
+      "Nearly twice as many people skied at Mount Corbet last winter as the winter before.",
+      "Ungroomed runs at other resorts have been associated with higher rates of injury among skiers.",
+      "The clinic treated more injured skiers last winter than in any earlier winter.",
+      "Mount Corbet has more steep runs than any other ski resort in the region.",
+      "Leaving the steepest runs ungroomed saved the resort less money than it had expected."
+    ],
+    "correctIndex": 0,
+    "choiceExplanations": [
+      "Correct. If the number of skiers nearly doubled while injuries rose by less than a third, each skier's chance of injury fell, so skiing there did not become more dangerous.",
+      "Evidence that ungroomed runs raise injury rates elsewhere supports the argument's explanation.",
+      "This restates the increase in injuries without telling us whether the risk to each skier went up.",
+      "How Mount Corbet's terrain compares with other resorts does not explain a change from one winter to the next.",
+      "How much money the change saved has nothing to do with whether skiing became more dangerous."
+    ],
+    "choiceTraps": [
+      "correct",
+      "reversed",
+      "restates_premise",
+      "irrelevant_comparison",
+      "out_of_scope"
+    ],
+    "mostTempting": 2
+  },
+  {
+    "id": "weaken-007",
+    "type": "weaken",
+    "difficulty": 3,
+    "topic": "abandonment of a hill settlement",
+    "stimulus": "Historian: The sudden abandonment of the hill settlement at Ardmoor is usually blamed on drought. But tree rings show that rainfall there was normal throughout the decade in which the settlement emptied, and its storehouses were found still full of grain. Hunger, then, did not drive the inhabitants out. They must have left by choice, most likely drawn by the growing market town downriver.",
+    "stem": "Which one of the following, if true, most undermines the historian's reasoning?",
+    "key": {
+      "conclusion": "The inhabitants of Ardmoor must have left by choice, most likely drawn by the growing market town downriver.",
+      "premises": [
+        "Tree rings show rainfall was normal throughout the decade the settlement emptied.",
+        "The storehouses were found still full of grain.",
+        "So hunger did not drive the inhabitants out (an intermediate conclusion)."
+      ],
+      "gap": "Ruling out hunger does not show the people left freely. Other things can force a community out, such as an attack or an epidemic, and the historian never considers them.",
+      "flawTag": "ignores_alternatives",
+      "idealAnswer": "There are signs the settlement was attacked, such as burned buildings at its gate. That would mean the people were driven out by violence, so ruling out hunger does not show they left by choice.",
+      "acceptableIdeas": [
+        "Excavation found evidence of a raid, fire, or battle at the settlement.",
+        "Burials from the final years show an epidemic swept through the community.",
+        "The settlement's only water source failed or was fouled.",
+        "People who leave by choice would have taken their grain with them, so full storehouses point to a hurried, forced departure."
+      ],
+      "commonMistakes": [
+        "Saying the market town was growing at the time, which supports the historian.",
+        "Giving more evidence that rainfall was normal, which the historian already relies on.",
+        "Questioning the tree-ring method without offering another reason the people might have left."
+      ]
+    },
+    "choices": [
+      "The market town downriver grew rapidly during the decade in which Ardmoor was abandoned.",
+      "Tree rings from other hills in the region also indicate normal rainfall in that decade.",
+      "Ardmoor's storehouses were larger than those of most hill settlements of the period.",
+      "Some of the grain found in Ardmoor's storehouses had been harvested several years earlier.",
+      "The gate and outer houses of Ardmoor show signs of having been burned in an attack."
+    ],
+    "correctIndex": 4,
+    "choiceExplanations": [
+      "Rapid growth in the market town fits the historian's suggestion about where the people went, so it supports the reasoning.",
+      "This confirms the rainfall evidence the historian already uses against the drought explanation.",
+      "The size of the storehouses compared with other settlements does not bear on why the people left.",
+      "Older grain in the stores is consistent with there having been plenty of food and does not suggest another reason for leaving.",
+      "Correct. Evidence of an attack is a reason other than hunger that could have forced the inhabitants out, so it undercuts the step from 'not hunger' to 'by choice'."
+    ],
+    "choiceTraps": [
+      "reversed",
+      "restates_premise",
+      "irrelevant_comparison",
+      "out_of_scope",
+      "correct"
+    ],
+    "mostTempting": 3
+  }
+]
