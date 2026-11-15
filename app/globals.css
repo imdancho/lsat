@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens (CLAUDE.md §14): calm and focused, "law library meets modern app".
+ * Light theme only. Green, amber and red are reserved for grading verdicts,
+ * so the single accent is a deep indigo.
+ */
+@theme {
+  --color-paper: #fafaf7;
+  --color-surface: #ffffff;
+  --color-ink: #1a1a1a;
+  --color-muted: #5f5e58;
+  --color-line: #e4e2da;
+  --color-accent: #3730a3;
+  --color-accent-strong: #312e81;
+}
+
+/* `inline` because these point at the variables next/font sets on <html>. */
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-serif;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}
