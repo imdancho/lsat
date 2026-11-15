@@ -1,0 +1,68 @@
+{
+  "conclusionPlacement": {
+    "first": 10,
+    "middle": 10,
+    "end": 15
+  },
+  "blindCheck": {
+    "method": "Every question was re-solved blind: the solver was given only the stimulus, the stem and the five choices, never the key, the explanations or the trap tags. Two independent solvers (fresh Claude sessions that had never seen the key) each worked through all 35 questions (one in reverse order, arguing for its second-best choice before settling). Each returned an answer, a confidence, a flag for a second defensible choice, and notes on anything unfair or un-LSAT-like. A question would have been rewritten if either solver disagreed with the key or flagged a second defensible answer; questions with wording notes were revised and then re-solved blind by a third, fresh solver.",
+    "rounds": [
+      {
+        "label": "1 — solver A, all questions",
+        "solved": 35,
+        "matchedKey": 35,
+        "markedAmbiguous": 0,
+        "notes": "8 wording notes"
+      },
+      {
+        "label": "1 — solver B, all questions (reverse order)",
+        "solved": 35,
+        "matchedKey": 35,
+        "markedAmbiguous": 0,
+        "notes": "4 wording notes, all among solver A's 8"
+      },
+      {
+        "label": "2 — solver C, the 8 revised questions",
+        "solved": 8,
+        "matchedKey": 8,
+        "markedAmbiguous": 0,
+        "notes": "2 distractor notes; both distractors reworded afterwards"
+      }
+    ],
+    "rewritten": [
+      {
+        "id": "main_conclusion-005",
+        "change": "Stimulus rewritten. The closing sentence began with 'Evidently' and read as a second conclusion; it is now an explanation inside the evidence, so the rebuttal is the only conclusion."
+      },
+      {
+        "id": "necessary_assumption-006",
+        "change": "Removed 'has studied the proposal', which gave the expert's opinion a basis other than her medical standing and kept the credited assumption from being strictly required. One distractor reworded to match. After round 2, a distractor that compared her knowledge with the opponents' was replaced, because the rebuttal framing made it a near miss."
+      },
+      {
+        "id": "necessary_assumption-003",
+        "change": "Conclusion narrowed from 'the mill never left the family's hands' to 'was not sold at any time in that decade', closing a second gap that no choice addressed."
+      },
+      {
+        "id": "main_conclusion-001",
+        "change": "Credited choice was a word-for-word copy of the first sentence and the longest choice; now a shorter paraphrase."
+      },
+      {
+        "id": "main_conclusion-006",
+        "change": "Fixed a pronoun in the credited choice that made it say translations are 'truest to' the wording they depart from."
+      },
+      {
+        "id": "flaw-006",
+        "change": "Credited choice said the key term shifts 'between its evidence and its conclusion'; the shift is between two premises, and the choice now says so."
+      },
+      {
+        "id": "strengthen-007",
+        "change": "Replaced a distractor (the association is the largest of its kind) that lent the argument slight support. After round 2, the restated-premise distractor was matched to the stimulus wording."
+      },
+      {
+        "id": "weaken-004",
+        "change": "Credited choice no longer ends by flatly denying the conclusion; it now attacks the inference from each part to the whole."
+      }
+    ],
+    "outcome": "No question had a wrong key or two defensible answers. All 8 rewrites were for clarity and LSAT style. The optional scripted pipeline (`scripts/generate-questions.ts` and `scripts/verify-questions.ts`) applies the same blind-solve filter with the Claude API."
+  }
+}
