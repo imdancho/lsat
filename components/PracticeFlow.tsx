@@ -10,7 +10,8 @@ import { DifficultyLabel, TypeBadge } from "@/components/TypeBadge";
 import { useAttempts } from "@/components/useAttempts";
 import { useSpeechSupport } from "@/components/useSpeechRecognition";
 import { VoiceInput } from "@/components/VoiceInput";
-import { pickNextQuestion, recommendType, saveAttempt } from "@/lib/progress";
+import { saveAttempt } from "@/lib/progress";
+import { pickNextQuestion, recommendType } from "@/lib/stats";
 import { QUESTION_TYPE_INFO } from "@/lib/taxonomy";
 import type {
   ApiErrorBody,
@@ -215,9 +216,12 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
     );
   }
 
-  const next = pickNextQuestion(questions, attempts, question.type, question.id);
+  const next = pickNextQuestion(questions, attempts, {
+    focus: question.type,
+    excludeId: question.id,
+  });
   const weakType = recommendType(attempts);
-  const drill = pickNextQuestion(questions, attempts, weakType, question.id);
+  const drill = pickNextQuestion(questions, attempts, { excludeId: question.id });
 
   return (
     <article className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 sm:py-12">

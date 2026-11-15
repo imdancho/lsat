@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { PracticeMenu } from "@/components/PracticeMenu";
+import { Suspense } from "react";
+import { PracticeMenu, PracticeMenuFromUrl } from "@/components/PracticeMenu";
 import { listSummaries } from "@/lib/questions";
 
 export const metadata: Metadata = {
@@ -7,6 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default function PracticePage() {
+  const questions = listSummaries();
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
       <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
@@ -18,7 +20,9 @@ export default function PracticePage() {
         graded.
       </p>
       <div className="mt-8">
-        <PracticeMenu questions={listSummaries()} />
+        <Suspense fallback={<PracticeMenu questions={questions} focus={null} />}>
+          <PracticeMenuFromUrl questions={questions} />
+        </Suspense>
       </div>
     </div>
   );

@@ -60,6 +60,9 @@ export const STUDENT_MISTAKE_TAGS = [
 ] as const;
 export type StudentMistakeTag = (typeof STUDENT_MISTAKE_TAGS)[number];
 
+/** What a lesson teaches or a drill targets: a question type or a reasoning mistake. */
+export type Focus = QuestionType | StudentMistakeTag;
+
 export type Difficulty = 1 | 2 | 3;
 export type ChoiceIndex = 0 | 1 | 2 | 3 | 4;
 export type FiveOf<T> = [T, T, T, T, T];

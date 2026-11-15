@@ -6,8 +6,6 @@ import {
   STUDENT_MISTAKE_TAGS,
   TRAP_TAGS,
   type Attempt,
-  type QuestionSummary,
-  type QuestionType,
 } from "@/lib/types";
 
 export const STORAGE_KEY = "prephrase:v1";
@@ -21,66 +19,70 @@ const AttemptSchema: z.ZodType<Attempt> = z.object({
   mcqCorrect: z.boolean().nullable(),
   mcqTrap: z.enum(TRAP_TAGS).nullable(),
   inputMode: z.enum(["typed", "voice"]),
-  at: z.string(),
+  at: z.iso.datetime(),
 });
 
-const StoreSchema = z.object({ attempts: z.array(AttemptSchema) });
+/** Everything this app keeps in the browser. */
+export type Store = { attempts: Attempt[] };
 
-const NO_ATTEMPTS: Attempt[] = [];
+const EMPTY_STORE: Store = { attempts: [] };
 const CHANGE_EVENT = "prephrase:progress";
 
-// useSyncExternalStore needs the same array back until the stored value changes.
-let cachedRaw: string | null | undefined;
-let cachedAttempts: Attempt[] = NO_ATTEMPTS;
-
-function readRaw(): string | null {
+/**
+ * Reads the stored JSON leniently: an entry that no longer fits the schema is
+ * dropped by itself instead of taking every other attempt down with it.
+ */
+function parseStore(raw: string | null): Store {
+  if (!raw) return EMPTY_STORE;
   try {
-    return window.localStorage.getItem(STORAGE_KEY);
+    const data: unknown = JSON.parse(raw);
+    const entries: unknown[] =
+      typeof data === "object" && data !== null && "attempts" in data && Array.isArray(data.attempts)
+        ? data.attempts
+        : [];
+    const attempts = entries.flatMap((entry) => {
+      const parsed = AttemptSchema.safeParse(entry);
+      return parsed.success ? [parsed.data] : [];
+    });
+    return { attempts };
   } catch {
-    return null; // storage blocked (private mode, disabled cookies)
+    return EMPTY_STORE; // corrupted JSON: start clean rather than crash the page
   }
 }
 
-/** All attempts, oldest first. Safe to call during server rendering. */
-export function readAttempts(): Attempt[] {
-  if (typeof window === "undefined") return NO_ATTEMPTS;
-  const raw = readRaw();
-  if (raw === cachedRaw) return cachedAttempts;
+// useSyncExternalStore needs the same object back until the stored value changes.
+let cachedRaw: string | null | undefined;
+let cachedStore: Store = EMPTY_STORE;
 
-  cachedRaw = raw;
-  cachedAttempts = NO_ATTEMPTS;
-  if (raw) {
-    try {
-      const parsed = StoreSchema.safeParse(JSON.parse(raw));
-      if (parsed.success) cachedAttempts = parsed.data.attempts;
-    } catch {
-      // corrupted JSON: treat as no progress rather than crash the page
-    }
-  }
-  return cachedAttempts;
-}
-
-function writeAttempts(attempts: Attempt[]) {
+/** The stored state. Safe to call during server rendering, where it is empty. */
+export function readStore(): Store {
+  if (typeof window === "undefined") return EMPTY_STORE;
+  let raw: string | null;
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ attempts }));
+    raw = window.localStorage.getItem(STORAGE_KEY);
+  } catch {
+    raw = null; // storage blocked (private mode, disabled cookies)
+  }
+  if (raw !== cachedRaw) {
+    cachedRaw = raw;
+    cachedStore = parseStore(raw);
+  }
+  return cachedStore;
+}
+
+export const serverStore = (): Store => EMPTY_STORE;
+
+function updateStore(update: (store: Store) => Store) {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(update(readStore())));
   } catch {
     return; // storage full or blocked: the session still works, it just isn't saved
   }
   window.dispatchEvent(new Event(CHANGE_EVENT));
 }
 
-/** Adds an attempt, or replaces the one with the same timestamp. */
-export function saveAttempt(attempt: Attempt) {
-  const others = readAttempts().filter((a) => a.at !== attempt.at);
-  writeAttempts([...others, attempt]);
-}
-
-export function clearProgress() {
-  writeAttempts([]);
-}
-
-/** Calls back whenever progress changes, in this tab or another one. */
-export function subscribeToProgress(onChange: () => void): () => void {
+/** Calls back whenever the stored state changes, in this tab or another one. */
+export function subscribeToStore(onChange: () => void): () => void {
   window.addEventListener(CHANGE_EVENT, onChange);
   window.addEventListener("storage", onChange);
   return () => {
@@ -89,67 +91,15 @@ export function subscribeToProgress(onChange: () => void): () => void {
   };
 }
 
-export const serverAttempts = (): Attempt[] => NO_ATTEMPTS;
-
-export type TypeStats = { attempts: number; averageScore: number | null };
-
-export function statsByType(attempts: Attempt[]): Record<QuestionType, TypeStats> {
-  const stats = {} as Record<QuestionType, TypeStats>;
-  for (const type of QUESTION_TYPES) {
-    const scores = attempts.filter((a) => a.type === type).map((a) => a.score);
-    stats[type] = {
-      attempts: scores.length,
-      averageScore: scores.length
-        ? scores.reduce((sum, s) => sum + s, 0) / scores.length
-        : null,
-    };
-  }
-  return stats;
+/** Adds an attempt, or replaces the one with the same timestamp. */
+export function saveAttempt(attempt: Attempt) {
+  updateStore((store) => ({
+    ...store,
+    attempts: [...store.attempts.filter((a) => a.at !== attempt.at), attempt],
+  }));
 }
 
-const MIN_ATTEMPTS_TO_JUDGE = 2;
-
-/**
- * The type to drill next: the lowest average score among types tried at least
- * twice, otherwise the least practiced type.
- */
-export function recommendType(attempts: Attempt[]): QuestionType {
-  const stats = statsByType(attempts);
-  const judged = QUESTION_TYPES.filter(
-    (type) => stats[type].attempts >= MIN_ATTEMPTS_TO_JUDGE,
-  );
-  if (judged.length > 0) {
-    return judged.reduce((weakest, type) =>
-      (stats[type].averageScore ?? 0) < (stats[weakest].averageScore ?? 0)
-        ? type
-        : weakest,
-    );
-  }
-  return QUESTION_TYPES.reduce((least, type) =>
-    stats[type].attempts < stats[least].attempts ? type : least,
-  );
-}
-
-/**
- * The next question of a type: the first one not yet attempted, otherwise the
- * one attempted longest ago. `excludeId` skips the question on screen.
- */
-export function pickNextQuestion(
-  questions: QuestionSummary[],
-  attempts: Attempt[],
-  type: QuestionType,
-  excludeId?: string,
-): QuestionSummary | undefined {
-  const candidates = questions.filter(
-    (q) => q.type === type && q.id !== excludeId,
-  );
-  const lastSeen = new Map<string, string>();
-  for (const attempt of attempts) lastSeen.set(attempt.questionId, attempt.at);
-
-  const unseen = candidates.find((q) => !lastSeen.has(q.id));
-  if (unseen) return unseen;
-
-  return [...candidates].sort((a, b) =>
-    (lastSeen.get(a.id) ?? "").localeCompare(lastSeen.get(b.id) ?? ""),
-  )[0];
+/** Deletes every saved attempt. */
+export function clearAttempts() {
+  updateStore((store) => ({ ...store, attempts: [] }));
 }
