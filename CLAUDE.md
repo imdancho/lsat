@@ -1,4 +1,4 @@
-# CLAUDE.md — Prephrase: AI trainer for LSAT Logical Reasoning
+# CLAUDE.md — Prephrase: AI trainer for LSAT Logical Reasoning (repo: `lsat`)
 
 > Working name: **Prephrase** (rename freely). This file is the single source of truth for the build.
 > Hackathon constraints: 24h total, **~6 hours left**. Ship a working product, not a perfect one.
@@ -51,7 +51,6 @@ On the real LSAT you pick from 5 answer choices, so students learn to guess and 
   pricing/page.tsx            # Free vs Pro
   api/grade/route.ts          # POST: grade free-text answer
   api/generate/route.ts       # P2: POST: generate one new question
-  api/transcribe/route.ts     # POST: audio → text via Groq Whisper (fallback for browsers without Web Speech API)
   api/checkout/route.ts       # POST: create Stripe Checkout Session (test mode)
   api/checkout/verify/route.ts# GET: verify a session_id after redirect
   pricing/success/page.tsx    # "Welcome to Pro" after test payment
@@ -77,7 +76,7 @@ On the real LSAT you pick from 5 answer choices, so students learn to guess and 
   generate-questions.ts       # builds the bank via the API
   verify-questions.ts         # blind-solves each question; drops ones the model gets wrong
 README.md
-.env.example                  # ANTHROPIC_API_KEY= GROQ_API_KEY= STRIPE_SECRET_KEY= STRIPE_PRICE_PRO_MONTHLY= STRIPE_PRICE_TEST_DAY=
+.env.example                  # ANTHROPIC_API_KEY= STRIPE_SECRET_KEY= STRIPE_PRICE_PRO_MONTHLY= STRIPE_PRICE_TEST_DAY=
 /components (add)  VoiceInput.tsx, useSpeechRecognition.ts, TestModeBanner.tsx
 ```
 
@@ -341,7 +340,7 @@ Problem → Solution → Demo link → Screenshots/GIF → How the AI grading wo
 | 1 | 0:00–0:20 | Scaffold Next.js + Tailwind + zod + SDK, layout + nav, deploy skeleton to Vercel, env var set |
 | 2 | 0:20–1:15 | types, schemas, taxonomy, prompts, anthropic.ts; author 35 questions directly into `data/questions.json` + blind self-check + `scripts/validate-questions.ts` passes |
 | 3 | 1:15–2:30 | `/practice`, `/practice/[id]`, `PracticeFlow`, `/api/grade`, localStorage attempts — **test 5 questions on prod** |
-| 3b | +30 min | Voice input (section 19): Web Speech API per field + one-take voice mode + Groq fallback |
+| 3b | +30 min | Voice input (section 19): Web Speech API only — mic per field + one-take voice mode. No Groq. |
 | 4 | 2:30–3:15 | `/progress`, lessons, recommendation logic (incl. "answer traps you fall for" from `mcqTrap`) |
 | 5 | 3:15–3:50 | Landing + Pricing + Stripe test Checkout (section 20) + soft paywall + `?demo=1` |
 | 6 | 3:50–4:30 | P2: `/test` and/or `/api/generate` (only if P0/P1 are solid) |
@@ -368,8 +367,10 @@ Goal: the student can answer out loud in English instead of typing — faster, a
   `aborted` errors with friendly messages.
 - Auto-stop after 60 s or 4 s of silence (reset a timer on every `onresult`).
 
-### 19.2 Fallback engine — Groq Whisper (`whisper-large-v3-turbo`, cheapest hosted Whisper)
-- Used when Web Speech API is unavailable or errors with `network`, or when the user toggles "High-accuracy mode".
+### 19.2 Fallback engine — Groq Whisper — **SKIP for this build (P2, only if everything else is done)**
+Default behaviour without it: if Web Speech API is unavailable (Firefox), hide the mic button and show a small hint
+"Voice answers work in Chrome, Edge and Safari." Do not add GROQ_API_KEY or /api/transcribe unless the human asks.
+- (Optional) Used when Web Speech API is unavailable or errors with `network`, or when the user toggles "High-accuracy mode".
 - Client: `MediaRecorder` (audio/webm;codecs=opus; Safari → audio/mp4), max 60 s, send Blob as `FormData` to `/api/transcribe`.
 - `/api/transcribe`: validate size (< 4 MB — Vercel body limit is 4.5 MB), rate limit 30/IP/hour, forward to
   `POST https://api.groq.com/openai/v1/audio/transcriptions` with fields:
