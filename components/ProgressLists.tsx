@@ -118,7 +118,8 @@ export function RecentAttempts({
             <Link
               href={`/practice/${attempt.questionId}`}
               aria-label={`Retry: ${topics.get(attempt.questionId)}`}
-              className="rounded-md text-sm font-medium text-accent underline-offset-4 hover:underline"
+              // The padding only enlarges the tap area; the negative margin keeps the layout.
+              className="-m-3 rounded-md p-3 text-sm font-medium text-accent underline underline-offset-4"
             >
               Retry
             </Link>

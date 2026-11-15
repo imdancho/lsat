@@ -23,13 +23,13 @@ export function LessonCard({ lesson }: { lesson: Lesson }) {
         <dl className="mt-4 space-y-3">
           <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-amber-900">
             <dt className="font-semibold">
-              <span aria-hidden="true">✗ </span>A weak answer
+              <span aria-hidden="true">✗ </span>An answer that misses
             </dt>
             <dd className="mt-1 leading-relaxed">{example.weak}</dd>
           </div>
           <div className="rounded-lg border border-green-200 bg-green-50 p-4 text-green-900">
             <dt className="font-semibold">
-              <span aria-hidden="true">✓ </span>A strong answer
+              <span aria-hidden="true">✓ </span>An answer that works
             </dt>
             <dd className="mt-1 leading-relaxed">{example.strong}</dd>
           </div>

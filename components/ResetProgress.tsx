@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useState } from "react";
+import { useId, useLayoutEffect, useState } from "react";
 import { clearAttempts } from "@/lib/progress";
 
 /**
@@ -13,6 +13,7 @@ export function ResetProgress({ onReset }: { onReset?: () => void }) {
   // Set when the student cancels: the trigger then takes focus back as it
   // reappears, instead of leaving the keyboard at the top of the page.
   const [returnFocus, setReturnFocus] = useState(false);
+  const questionId = useId();
 
   // Pages stay mounted while hidden, so close the question when the student
   // leaves; otherwise it would still be open on their next visit.
@@ -24,13 +25,19 @@ export function ResetProgress({ onReset }: { onReset?: () => void }) {
     [],
   );
 
+  const cancel = () => {
+    setReturnFocus(true);
+    setConfirming(false);
+  };
+
   if (!confirming) {
     return (
       <button
         type="button"
         autoFocus={returnFocus}
         onClick={() => setConfirming(true)}
-        className="rounded-md text-sm font-medium text-muted underline underline-offset-4 hover:text-ink"
+        // The padding only enlarges the tap area; the negative margin keeps the text where it was.
+        className="-m-2 rounded-md p-2 text-sm font-medium text-muted underline underline-offset-4 hover:text-ink"
       >
         Reset progress
       </button>
@@ -40,10 +47,15 @@ export function ResetProgress({ onReset }: { onReset?: () => void }) {
   return (
     <div
       role="group"
-      aria-label="Confirm reset"
+      // Named by the question itself, so a screen reader reads the warning
+      // when focus lands on a button inside.
+      aria-labelledby={questionId}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") cancel();
+      }}
       className="flex flex-wrap items-center gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-red-900"
     >
-      <p className="mr-auto">
+      <p id={questionId} className="mr-auto">
         Delete every saved attempt on this device? This cannot be undone.
       </p>
       <button
@@ -59,10 +71,7 @@ export function ResetProgress({ onReset }: { onReset?: () => void }) {
       <button
         type="button"
         autoFocus
-        onClick={() => {
-          setReturnFocus(true);
-          setConfirming(false);
-        }}
+        onClick={cancel}
         className="rounded-md border border-red-300 bg-white px-4 py-1.5 font-medium"
       >
         Cancel

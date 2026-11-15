@@ -229,6 +229,11 @@ export function ProgressDashboard({ questions }: { questions: QuestionSummary[] 
   if (today === null) return <DashboardSkeleton />;
   return (
     <div className="space-y-6">
+      {/* Always present, so that the message is announced when it appears. */}
+      <p role="status" className="sr-only">
+        {resets > 0 && attempts.length === 0 &&
+          "Progress reset. Every saved attempt on this device was deleted."}
+      </p>
       {questionsAnswered(attempts) < QUESTIONS_TO_UNLOCK ? (
         <Locked
           attempts={attempts}

@@ -6,7 +6,7 @@ export type Lesson = {
   title: string;
   /** Three to five plain sentences. */
   explanation: string;
-  /** One worked micro-example: an argument, a weak answer and a strong one. */
+  /** One worked micro-example: an argument, an answer that misses (weak) and one that works (strong). */
   example: { argument: string; weak: string; strong: string; why: string };
   /** Three things to do on the next question. */
   avoid: [string, string, string];
@@ -42,7 +42,7 @@ export const LESSONS: Record<Focus, Lesson> = {
       weak: "The evidence is not strong enough to prove the conclusion.",
       strong:
         "The finishers chose to run and were fit enough to finish, so they do not show how running would affect everyone else.",
-      why: "The strong answer says who was left out of the evidence and why that matters. The weak one could be said about any argument.",
+      why: "The answer that works says who was left out of the evidence and why that matters. The one that misses could be said about any argument.",
     },
     avoid: [
       "State the conclusion and the evidence separately before you judge anything.",
@@ -60,7 +60,7 @@ export const LESSONS: Record<Focus, Lesson> = {
       weak: "Customers like bread from the new oven more than bread from the old one.",
       strong:
         "Enough customers come in each morning to buy twice as many loaves as the bakery sells now.",
-      why: "Deny the strong answer and the conclusion fails: with too few buyers, faster baking cannot double sales. Deny the weak one and the argument is untouched, because customers only need to like the bread as much as before.",
+      why: "Deny the answer that works and the conclusion fails: with too few buyers, faster baking cannot double sales. Deny the one that misses and the argument is untouched, because customers only need to like the bread as much as before.",
     },
     avoid: [
       "Deny your answer and check whether the argument falls apart.",
@@ -78,7 +78,7 @@ export const LESSONS: Record<Focus, Lesson> = {
       weak: "Attendance on weekday mornings went up by a third.",
       strong:
         "Most of the new weekday morning visitors leave a child in the childcare room while they exercise.",
-      why: "The strong answer ties the rise to the room itself, which makes other explanations, such as a seasonal bump, less likely. The weak answer only repeats what the manager already said.",
+      why: "The answer that works ties the rise to the room itself, which makes other explanations, such as a seasonal bump, less likely. The one that misses only repeats what the manager already said.",
     },
     avoid: [
       "Find the gap first; a strengthener has to touch it.",
@@ -149,7 +149,7 @@ export const LESSONS: Record<Focus, Lesson> = {
       weak: "The taste tests may not have included enough different kinds of soup.",
       strong:
         "Liking the taste in a test does not mean people will buy more of it; price and habit also decide what sells.",
-      why: "The evidence is about preference and the conclusion is about sales. The strong answer speaks to that distance, while the weak one questions the test without connecting it to sales.",
+      why: "The evidence is about preference and the conclusion is about sales. The answer that works speaks to that distance, while the one that misses questions the test without connecting it to sales.",
     },
     avoid: [
       "Finish the sentence: the evidence is about X, but the conclusion is about Y.",
@@ -167,7 +167,7 @@ export const LESSONS: Record<Focus, Lesson> = {
       weak: "There could be other factors the principal has not considered.",
       strong:
         "Students who are already good at math may be the ones who choose to join a chess club.",
-      why: "Both answers sense the same problem, but only the strong one names the other factor: who joins. That is the difference between noticing a gap and identifying it.",
+      why: "Both answers sense the same problem, but only the second names the other factor: who joins. That is the difference between noticing a gap and identifying it.",
     },
     avoid: [
       "Replace 'other factors' with the one factor you have in mind.",
@@ -256,7 +256,7 @@ export const LESSONS: Record<Focus, Lesson> = {
       weak: "Anyone who practices a presentation every evening for a week always presents well.",
       strong:
         "How well Priya presents depends at least partly on how much she has practiced.",
-      why: "The weak answer would guarantee the conclusion, but the argument can survive without so broad a rule. Deny the strong one and the practice tells us nothing about Friday, so it is truly required.",
+      why: "The answer that misses would guarantee the conclusion, but the argument can survive without so broad a rule. Deny the one that works and the practice tells us nothing about Friday, so it is truly required.",
     },
     avoid: [
       "Ask whether your answer guarantees the conclusion or is merely needed for it.",

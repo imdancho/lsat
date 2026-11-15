@@ -98,7 +98,7 @@ function DrillBanner({
           href="/practice"
           className="rounded-md font-medium text-muted underline underline-offset-4 hover:text-ink"
         >
-          Show all question types
+          Leave this drill
         </Link>
       </p>
     </section>
