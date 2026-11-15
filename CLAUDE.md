@@ -51,6 +51,13 @@ On the real LSAT you pick from 5 answer choices, so students learn to guess and 
   pricing/page.tsx            # Free vs Pro
   api/grade/route.ts          # POST: grade free-text answer
   api/generate/route.ts       # P2: POST: generate one new question
+  api/transcribe/route.ts     # POST: audio → text via Groq Whisper (fallback for browsers without Web Speech API)
+  api/checkout/route.ts       # POST: create Stripe Checkout Session (test mode)
+  api/checkout/verify/route.ts# GET: verify a session_id after redirect
+  pricing/success/page.tsx    # "Welcome to Pro" after test payment
+/docs
+  lsat-style-guide.md         # analysis of official LSAC samples → authoring rules (READ before writing questions)
+  question-bank-report.md     # generated stats about the bank
 /components
   PracticeFlow.tsx            # The core client component (steps A→B→C→D)
   FeedbackCard.tsx, ChoiceList.tsx, TypeBadge.tsx, MistakeTagChip.tsx, ProgressCharts.tsx
@@ -70,7 +77,8 @@ On the real LSAT you pick from 5 answer choices, so students learn to guess and 
   generate-questions.ts       # builds the bank via the API
   verify-questions.ts         # blind-solves each question; drops ones the model gets wrong
 README.md
-.env.example                  # ANTHROPIC_API_KEY=
+.env.example                  # ANTHROPIC_API_KEY= GROQ_API_KEY= STRIPE_SECRET_KEY= STRIPE_PRICE_PRO_MONTHLY= STRIPE_PRICE_TEST_DAY=
+/components (add)  VoiceInput.tsx, useSpeechRecognition.ts, TestModeBanner.tsx
 ```
 
 ## 5. Data model
@@ -103,7 +111,14 @@ type Question = {
   choices: [string, string, string, string, string];
   correctIndex: 0 | 1 | 2 | 3 | 4;           // HIDDEN until reveal
   choiceExplanations: [string, string, string, string, string];
+  choiceTraps: [TrapTag, TrapTag, TrapTag, TrapTag, TrapTag]; // "correct" at correctIndex; HIDDEN until reveal
+  mostTempting: 0 | 1 | 2 | 3 | 4;           // index of the designed most-attractive wrong answer
 };
+
+type TrapTag =
+  | "correct" | "out_of_scope" | "reversed" | "too_strong" | "restates_premise"
+  | "irrelevant_comparison" | "wrong_flaw" | "half_right" | "shifted_term"
+  | "not_required" | "intermediate_conclusion";
 
 type StudentMistakeTag =
   | "misidentified_conclusion" | "restated_premise" | "missed_gap" | "too_vague"
@@ -122,7 +137,10 @@ type GradeResult = {
 type Attempt = {
   questionId: string; type: QuestionType; flawTag: FlawTag;
   score: number; mistakeTags: StudentMistakeTag[];
-  mcqCorrect: boolean | null; at: string; // ISO
+  mcqCorrect: boolean | null;
+  mcqTrap: TrapTag | null;     // trap of the choice the student picked (feeds the progress page: "you fall for out_of_scope answers")
+  inputMode: "typed" | "voice";
+  at: string; // ISO
 };
 ```
 
@@ -221,6 +239,8 @@ For each question:
   commonMistakes (2–4).
 Vary topics; no two stimuli on the same subject. Return ONLY a JSON array matching the schema.
 ```
+At runtime (`/api/generate`) append the full text of `docs/lsat-style-guide.md` sections 3–8 to GENERATOR_SYSTEM
+(import it as a string at build time), plus: "Label every wrong choice with a distinct trap tag and set mostTempting."
 
 ### VERIFIER_SYSTEM
 ```
@@ -229,6 +249,17 @@ You are an expert LSAT test-taker. Solve the question. Return ONLY JSON:
 ```
 
 ## 9. Question bank build
+
+**READ `docs/lsat-style-guide.md` BEFORE WRITING ANY QUESTION.** It is an analysis of LSAC's public sample
+questions and an official practice test: stimulus length, speaker labels, conclusion placement, exact stem
+patterns per type, abstract flaw-answer phrasing, trap taxonomy, difficulty levers, banned topics and a QA
+checklist. Every question must follow it and pass its checklist. Also:
+- If web fetch is available, you MAY additionally study LSAC's public LR sample questions page to refine
+  patterns — analysis only, never copy text, never reuse their topics.
+- Balance `correctIndex`: exactly 7 per index across 35 questions.
+- Fill `choiceTraps` and `mostTempting` for every question.
+- Write a short `docs/question-bank-report.md`: counts per type/difficulty/topic, correctIndex distribution,
+  trap distribution, how many questions were rewritten after the blind self-check. (Pitch material.)
 
 **Default for this build (Claude Code on the web, sandbox may not reach api.anthropic.com):**
 Claude Code writes the bank itself directly into `data/questions.json`, following GENERATOR_SYSTEM rules,
@@ -270,7 +301,7 @@ Recommendation logic (`lib/progress.ts`): `pickNextQuestion(focus?)` → prefer 
 - **Free:** 10 AI-graded answers per day (counter in localStorage, resets at local midnight), full question bank in MCQ mode, progress page.
 - **Pro — $29/month:** unlimited AI grading, unlimited generated questions targeting your weak spots, timed sections, full lesson library.
 - **Until Test Day — $99 for 4 months** (highlight as best value; matches a typical prep cycle).
-- Buttons open a modal "Pro is launching soon — get early access" with an email input that just stores to localStorage + shows thanks (no backend). Do NOT block jurors: 10/day is enough to demo; add `?demo=1` query param that disables the counter.
+- Buttons start a **Stripe Checkout in test mode** (see section 20). Do NOT block jurors: 10/day is enough to demo; add `?demo=1` query param that disables the counter.
 - Small comparison line: "7Sage $69/mo, LSAT Demon $99/mo — Prephrase Pro $29/mo, and it works alongside them."
 
 ## 13. Landing page (`/`)
@@ -310,8 +341,9 @@ Problem → Solution → Demo link → Screenshots/GIF → How the AI grading wo
 | 1 | 0:00–0:20 | Scaffold Next.js + Tailwind + zod + SDK, layout + nav, deploy skeleton to Vercel, env var set |
 | 2 | 0:20–1:15 | types, schemas, taxonomy, prompts, anthropic.ts; author 35 questions directly into `data/questions.json` + blind self-check + `scripts/validate-questions.ts` passes |
 | 3 | 1:15–2:30 | `/practice`, `/practice/[id]`, `PracticeFlow`, `/api/grade`, localStorage attempts — **test 5 questions on prod** |
-| 4 | 2:30–3:15 | `/progress`, lessons, recommendation logic |
-| 5 | 3:15–3:50 | Landing + Pricing + soft paywall + `?demo=1` |
+| 3b | +30 min | Voice input (section 19): Web Speech API per field + one-take voice mode + Groq fallback |
+| 4 | 2:30–3:15 | `/progress`, lessons, recommendation logic (incl. "answer traps you fall for" from `mcqTrap`) |
+| 5 | 3:15–3:50 | Landing + Pricing + Stripe test Checkout (section 20) + soft paywall + `?demo=1` |
 | 6 | 3:50–4:30 | P2: `/test` and/or `/api/generate` (only if P0/P1 are solid) |
 | 7 | 4:30–5:00 | Polish, mobile check, README, final deploy, test the prod URL in an incognito window |
 
@@ -323,3 +355,72 @@ Definition of done for every phase: `npm run lint` + `npm run build` pass in the
 - Never print, log or commit `ANTHROPIC_API_KEY`. It is configured in Vercel; code reads `process.env.ANTHROPIC_API_KEY` only on the server.
 - If a command needs internet beyond package registries and fails, don't retry with workarounds — tell the human what's blocked.
 - `/api/grade` must fail gracefully with a clear message if the key is missing (so a missing env var is obvious on Vercel).
+
+## 19. Voice answers (practice flow)
+
+Goal: the student can answer out loud in English instead of typing — faster, and closer to "explain it to a tutor".
+
+### 19.1 Primary engine — Web Speech API (free, no key, live transcript)
+- `useSpeechRecognition.ts` hook wrapping `window.SpeechRecognition || window.webkitSpeechRecognition`.
+  Settings: `lang = "en-US"`, `interimResults = true`, `continuous = true`, `maxAlternatives = 1`.
+- Works in Chrome, Edge, Safari (desktop + iOS). Not in Firefox → use fallback 19.2.
+- Requires HTTPS (Vercel is fine) and microphone permission. Handle `not-allowed`, `no-speech`, `network`,
+  `aborted` errors with friendly messages.
+- Auto-stop after 60 s or 4 s of silence (reset a timer on every `onresult`).
+
+### 19.2 Fallback engine — Groq Whisper (`whisper-large-v3-turbo`, cheapest hosted Whisper)
+- Used when Web Speech API is unavailable or errors with `network`, or when the user toggles "High-accuracy mode".
+- Client: `MediaRecorder` (audio/webm;codecs=opus; Safari → audio/mp4), max 60 s, send Blob as `FormData` to `/api/transcribe`.
+- `/api/transcribe`: validate size (< 4 MB — Vercel body limit is 4.5 MB), rate limit 30/IP/hour, forward to
+  `POST https://api.groq.com/openai/v1/audio/transcriptions` with fields:
+  `model=whisper-large-v3-turbo`, `language=en`, `response_format=json`, `temperature=0`,
+  `prompt="LSAT logical reasoning answer. Terms: conclusion, premise, assumption, flaw, weaken, strengthen, correlation, causation, sample, necessary, sufficient."`
+  Header `Authorization: Bearer ${process.env.GROQ_API_KEY}`. Return `{ text }`.
+- If `GROQ_API_KEY` is missing, the route returns 501 and the UI hides the fallback button.
+
+### 19.3 UI
+- `VoiceInput.tsx`: a mic button inside every answer textarea (step A and step B).
+  States: idle (mic icon) → listening (pulsing red dot + "Listening… tap to stop" + live interim text in grey)
+  → done (final text appended to the textarea, fully editable). Keyboard: Space toggles when the button is focused.
+- **One-take mode** (toggle above step A: "Answer by voice in one go"): one recording for everything.
+  Prompt shown: *"Say the conclusion, then what's wrong / what's missing / what would strengthen or weaken it."*
+  The transcript goes to `/api/grade` as `{ mode: "voice_single", transcript }`. Add to GRADER_SYSTEM:
+  "If mode is voice_single, first split the transcript into the student's conclusion and main answer, then grade
+  both. Ignore filler words, false starts and self-corrections — grade the final stated idea. Do not penalize
+  spoken grammar."
+- After grading, show the transcript the grader used ("What we heard") so the student can spot recognition errors.
+- Save `inputMode: "voice"` in the attempt.
+- Optional, free: a speaker icon on the stimulus and on the feedback card that reads text aloud via
+  `window.speechSynthesis` (en-US voice, rate 1.0). Only if time remains.
+
+## 20. Stripe test-mode checkout (pricing page)
+
+Use Stripe **Checkout Sessions** with test keys. No webhooks, no database — this is a demo of the payment flow.
+
+### 20.1 Products (created by the human in the Stripe Dashboard sandbox)
+- `Prephrase Pro` → recurring price **$29.00 / month** → id goes to `STRIPE_PRICE_PRO_MONTHLY`.
+- `Prephrase Until Test Day` → one-time price **$99.00** → id goes to `STRIPE_PRICE_TEST_DAY`.
+- Secret key `sk_test_...` → `STRIPE_SECRET_KEY`. All three live only in Vercel env vars.
+
+### 20.2 Code
+- `npm i stripe`. `lib/stripe.ts`: `new Stripe(process.env.STRIPE_SECRET_KEY!)`. Throw a clear error at request time
+  (not build time) if missing. Refuse to run if the key starts with `sk_live_` (safety: demo only).
+- `POST /api/checkout` body `{ plan: "pro_monthly" | "test_day" }` →
+  `stripe.checkout.sessions.create({ mode: plan === "pro_monthly" ? "subscription" : "payment",
+  line_items: [{ price, quantity: 1 }], success_url: `${origin}/pricing/success?session_id={CHECKOUT_SESSION_ID}`,
+  cancel_url: `${origin}/pricing?canceled=1`, allow_promotion_codes: true })` → return `{ url }`; client does
+  `window.location.href = url`. Take `origin` from the request headers.
+- `GET /api/checkout/verify?session_id=...` → retrieve session; valid if `status === "complete"`
+  (and `payment_status` is `paid` or `no_payment_required`). Return `{ ok, plan, email }`.
+- `/pricing/success`: calls verify; on success saves `{ pro: true, plan, since }` to localStorage and shows
+  "Welcome to Pro 🎉" + "Start practicing" button. Pro flag removes the daily limit and shows a "PRO" badge in nav.
+  On failure: "We couldn't confirm the payment" + back to pricing.
+- `/pricing?canceled=1`: small toast "Checkout canceled — no charge made."
+- "Manage / reset demo Pro" link on /progress that clears the flag (for re-demos).
+
+### 20.3 UI
+- `TestModeBanner.tsx` on /pricing (and inside the pricing cards): "Demo checkout in Stripe test mode — no real
+  charge. Use card **4242 4242 4242 4242**, any future date, any CVC, any ZIP." with a copy button for the number.
+- Buttons: "Start Pro — $29/mo" and "Get Until Test Day — $99". Loading state while creating the session;
+  error toast on failure.
+- If Stripe env vars are missing, buttons fall back to the "Get early access" email modal (never a broken button).
