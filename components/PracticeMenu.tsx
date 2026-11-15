@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useId } from "react";
 import { DifficultyLabel } from "@/components/TypeBadge";
-import { useAttempts } from "@/components/useAttempts";
+import { ProOffer } from "@/components/ProOffer";
+import { useAccess, useAttempts } from "@/components/useAttempts";
 import {
   focusTypes,
   parseFocus,
@@ -214,9 +215,23 @@ export function PracticeMenu({ questions }: { questions: QuestionSummary[] }) {
   const attempts = useAttempts();
   const scores = bestScores(attempts);
   const recommended = recommendType(attempts);
+  const access = useAccess();
+  // A whole type finished: the moment to offer Pro, unless they already have it.
+  const finishedType = QUESTION_TYPES.find((type) => {
+    const ofType = questions.filter((q) => q.type === type);
+    return ofType.length > 0 && ofType.every((q) => scores.has(q.id));
+  });
 
   return (
     <>
+      {finishedType && access !== null && access.kind !== "pro" && (
+        <div className="mb-6">
+          <ProOffer
+            compact
+            title={`You have finished every ${QUESTION_TYPE_INFO[finishedType].label} question`}
+          />
+        </div>
+      )}
       <Suspense fallback={null}>
         <DrillBanner questions={questions} attempts={attempts} />
       </Suspense>
