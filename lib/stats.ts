@@ -145,8 +145,6 @@ export function recentAttempts(attempts: Attempt[], limit = 10): Attempt[] {
 
 /** Graded attempts a type needs before its average says anything. */
 export const MIN_ATTEMPTS_TO_JUDGE = 2;
-/** An average at or above this is going well enough to look at other types first. */
-const GOING_WELL = 75;
 
 export type Recommendation = {
   type: QuestionType;
@@ -157,11 +155,10 @@ export type Recommendation = {
  * The type to drill next: the lowest average among types graded at least
  * twice, otherwise the least practiced type.
  *
- * One refinement keeps the drill from locking onto whichever type happened to
- * reach two attempts first: while some types are still unjudged, the weakest
- * judged type is only recommended if it really is weak. If it is going well,
- * the student is sent to the type they have practiced least, until every type
- * has an average to compare.
+ * Averages are only compared once every type has one. Until then the student
+ * is sent to the type they have practiced least; otherwise the drill would
+ * lock onto whichever type happened to reach two attempts first and never
+ * give the others a chance to be judged.
  */
 export function recommend(attempts: Attempt[]): Recommendation {
   const stats = statsByType(attempts);
@@ -171,7 +168,9 @@ export function recommend(attempts: Attempt[]): Recommendation {
   const judged = QUESTION_TYPES.filter(
     (type) => stats[type].attempts >= MIN_ATTEMPTS_TO_JUDGE,
   );
-  if (judged.length === 0) return { type: leastPracticed, reason: "least_practiced" };
+  if (judged.length < QUESTION_TYPES.length) {
+    return { type: leastPracticed, reason: "least_practiced" };
+  }
 
   const average = (type: QuestionType) => stats[type].averageScore ?? 0;
   // Equal averages: the one with fewer attempts is the less settled of the two.
@@ -181,10 +180,7 @@ export function recommend(attempts: Attempt[]): Recommendation {
       ? type
       : low,
   );
-  const everyTypeJudged = judged.length === QUESTION_TYPES.length;
-  return everyTypeJudged || average(weakest) < GOING_WELL
-    ? { type: weakest, reason: "lowest_average" }
-    : { type: leastPracticed, reason: "least_practiced" };
+  return { type: weakest, reason: "lowest_average" };
 }
 
 export const recommendType = (attempts: Attempt[]): QuestionType =>
