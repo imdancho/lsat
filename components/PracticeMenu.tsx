@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useId } from "react";
+import { Suspense, useId } from "react";
 import { DifficultyLabel } from "@/components/TypeBadge";
 import { useAttempts } from "@/components/useAttempts";
 import {
@@ -41,19 +41,28 @@ const joinWithOr = (labels: string[]) =>
     ? labels.join("")
     : `${labels.slice(0, -1).join(", ")} or ${labels[labels.length - 1]}`;
 
+/**
+ * The drill this page was opened for, from ?focus= in the address. The query
+ * string only exists in the browser, so everything that calls this must sit
+ * inside its own <Suspense>; keeping those boundaries small lets the rest of
+ * the menu be served as ready HTML and stay in place when the scripts load.
+ */
+function useFocus(): Focus | null {
+  return parseFocus(useSearchParams().get("focus"));
+}
+
 /** Shown when the page is opened for one mistake or type, e.g. from a lesson. */
 function DrillBanner({
-  focus,
-  types,
   questions,
   attempts,
 }: {
-  focus: Focus;
-  types: QuestionType[];
   questions: QuestionSummary[];
   attempts: Attempt[];
 }) {
   const headingId = useId();
+  const focus = useFocus();
+  if (!focus) return null;
+  const types = focusTypes(focus, attempts);
   const { label, kind } = focusInfo(focus);
   const next = pickNextQuestion(questions, attempts, { focus });
   const typeLabels = types.map((type) => QUESTION_TYPE_INFO[type].label);
@@ -96,18 +105,51 @@ function DrillBanner({
   );
 }
 
+/** A card's badge. The card's border picks up on it through data-badge. */
+function Badge({ text }: { text: string | null }) {
+  if (!text) return null;
+  return (
+    <p
+      data-badge
+      className="mt-3 inline-block rounded-full bg-accent-soft px-3 py-1 text-sm font-medium text-accent"
+    >
+      {text}
+    </p>
+  );
+}
+
+/** The badge once the address is known: during a drill it marks the drill's types instead. */
+function BadgeFromUrl({
+  type,
+  recommended,
+  attempts,
+}: {
+  type: QuestionType;
+  recommended: boolean;
+  attempts: Attempt[];
+}) {
+  const focus = useFocus();
+  if (focus) {
+    return (
+      <Badge text={focusTypes(focus, attempts).includes(type) ? "In your drill" : null} />
+    );
+  }
+  return <Badge text={recommended ? "Recommended for you" : null} />;
+}
+
 function TypeCard({
   type,
   questions,
   attempts,
   scores,
-  badge,
+  recommended,
 }: {
   type: QuestionType;
   questions: QuestionSummary[];
   attempts: Attempt[];
   scores: Map<string, number | null>;
-  badge: string | null;
+  /** Whether this is the type the student should practice next. */
+  recommended: boolean;
 }) {
   const info = QUESTION_TYPE_INFO[type];
   const ofType = questions.filter((q) => q.type === type);
@@ -115,9 +157,7 @@ function TypeCard({
   const next = pickNextQuestion(questions, attempts, { focus: type });
 
   return (
-    <li
-      className={`rounded-xl border bg-surface p-5 ${badge ? "border-accent/40" : "border-line"}`}
-    >
+    <li className="rounded-xl border border-line bg-surface p-5 has-[[data-badge]]:border-accent/40">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
         <h2 className="text-xl font-semibold">{info.label}</h2>
         <p className="text-sm text-muted">
@@ -125,11 +165,9 @@ function TypeCard({
         </p>
       </div>
       <p className="mt-1 text-muted">{info.description}</p>
-      {badge && (
-        <p className="mt-3 inline-block rounded-full bg-accent-soft px-3 py-1 text-sm font-medium text-accent">
-          {badge}
-        </p>
-      )}
+      <Suspense fallback={<Badge text={recommended ? "Recommended for you" : null} />}>
+        <BadgeFromUrl type={type} recommended={recommended} attempts={attempts} />
+      </Suspense>
       {next && (
         <p className="mt-4">
           <Link
@@ -167,33 +205,21 @@ function TypeCard({
   );
 }
 
-type PracticeMenuProps = {
-  questions: QuestionSummary[];
-  /** A mistake or type to drill; null shows the plain menu. */
-  focus: Focus | null;
-};
-
-export function PracticeMenu({ questions, focus }: PracticeMenuProps) {
+/**
+ * The five question types with the student's progress in each. Opened with
+ * ?focus=<mistake or type>, it also shows a drill banner and marks the types
+ * that belong to the drill.
+ */
+export function PracticeMenu({ questions }: { questions: QuestionSummary[] }) {
   const attempts = useAttempts();
   const scores = bestScores(attempts);
-  const drillTypes = focus ? focusTypes(focus, attempts) : [];
   const recommended = recommendType(attempts);
-
-  const badgeFor = (type: QuestionType) => {
-    if (focus) return drillTypes.includes(type) ? "In your drill" : null;
-    return type === recommended ? "Recommended for you" : null;
-  };
 
   return (
     <>
-      {focus && (
-        <DrillBanner
-          focus={focus}
-          types={drillTypes}
-          questions={questions}
-          attempts={attempts}
-        />
-      )}
+      <Suspense fallback={null}>
+        <DrillBanner questions={questions} attempts={attempts} />
+      </Suspense>
       <ul className="grid gap-4 sm:grid-cols-2">
         {QUESTION_TYPES.map((type) => (
           <TypeCard
@@ -202,20 +228,10 @@ export function PracticeMenu({ questions, focus }: PracticeMenuProps) {
             questions={questions}
             attempts={attempts}
             scores={scores}
-            badge={badgeFor(type)}
+            recommended={type === recommended}
           />
         ))}
       </ul>
     </>
   );
-}
-
-/**
- * The menu with its drill taken from ?focus= in the address. Reading the query
- * string is only possible in the browser, so render this inside <Suspense>
- * with the plain menu as the fallback.
- */
-export function PracticeMenuFromUrl({ questions }: { questions: QuestionSummary[] }) {
-  const focus = parseFocus(useSearchParams().get("focus"));
-  return <PracticeMenu questions={questions} focus={focus} />;
 }

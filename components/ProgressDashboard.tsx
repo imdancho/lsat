@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 import { StatTile, TypeMeters } from "@/components/ProgressCharts";
 import { MistakeList, RecentAttempts, TrapList } from "@/components/ProgressLists";
 import { ManagePro } from "@/components/ProStatus";
@@ -57,16 +57,21 @@ function DashboardSkeleton() {
 function Locked({
   attempts,
   questions,
+  headingRef,
+  onReset,
 }: {
   attempts: Attempt[];
   questions: QuestionSummary[];
+  /** The heading takes keyboard focus after a reset, when the profile above it is gone. */
+  headingRef: RefObject<HTMLHeadingElement | null>;
+  onReset: () => void;
 }) {
   const next = pickNextQuestion(questions, attempts);
   const remaining = ATTEMPTS_TO_UNLOCK - attempts.length;
   return (
     <div className="space-y-6">
       <section className="rounded-xl border border-line bg-surface p-6 sm:p-8">
-        <h2 className="text-2xl font-semibold">
+        <h2 ref={headingRef} tabIndex={-1} className="rounded-md text-2xl font-semibold">
           Answer {ATTEMPTS_TO_UNLOCK} questions to unlock your reasoning profile
         </h2>
         <p className="mt-3 max-w-2xl leading-relaxed text-muted">
@@ -87,7 +92,7 @@ function Locked({
           <Card title="Recent attempts">
             <RecentAttempts attempts={recentAttempts(attempts)} questions={questions} />
           </Card>
-          <ResetProgress />
+          <ResetProgress onReset={onReset} />
         </>
       )}
     </div>
@@ -98,10 +103,12 @@ function Profile({
   attempts,
   questions,
   today,
+  onReset,
 }: {
   attempts: Attempt[];
   questions: QuestionSummary[];
   today: string;
+  onReset: () => void;
 }) {
   const summary = summarize(attempts, today);
   const byType = statsByType(attempts);
@@ -190,7 +197,7 @@ function Profile({
         >
           All lessons
         </Link>
-        <ResetProgress />
+        <ResetProgress onReset={onReset} />
       </div>
     </div>
   );
@@ -201,13 +208,32 @@ export function ProgressDashboard({ questions }: { questions: QuestionSummary[] 
   const attempts = useAttempts();
   const today = useToday();
 
+  // A reset removes the content that held keyboard focus. Once the empty
+  // state has replaced it, focus goes to that state's heading.
+  const lockedHeading = useRef<HTMLHeadingElement>(null);
+  const [resets, setResets] = useState(0);
+  useEffect(() => {
+    if (resets > 0) lockedHeading.current?.focus();
+  }, [resets]);
+  const handleReset = () => setResets((count) => count + 1);
+
   if (today === null) return <DashboardSkeleton />;
   return (
     <div className="space-y-6">
       {attempts.length < ATTEMPTS_TO_UNLOCK ? (
-        <Locked attempts={attempts} questions={questions} />
+        <Locked
+          attempts={attempts}
+          questions={questions}
+          headingRef={lockedHeading}
+          onReset={handleReset}
+        />
       ) : (
-        <Profile attempts={attempts} questions={questions} today={today} />
+        <Profile
+          attempts={attempts}
+          questions={questions}
+          today={today}
+          onReset={handleReset}
+        />
       )}
       <ManagePro />
     </div>

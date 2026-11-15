@@ -9,8 +9,9 @@ export const maxDuration = 40;
 
 const VERIFICATIONS_PER_HOUR = 60;
 const NO_STORE = { "Cache-Control": "no-store" };
-// Test-mode session ids only: this checkout is a demo.
-const SESSION_ID = /^cs_test_[A-Za-z0-9_]{8,250}$/;
+// Test-mode session ids only: this checkout is a demo. The pattern also keeps
+// anything that could change the request path (slashes, dots) away from Stripe.
+const SESSION_ID = /^cs_test_[A-Za-z0-9_-]{8,250}$/;
 
 const isProPlan = (value: unknown): value is ProPlan =>
   typeof value === "string" && (PRO_PLANS as readonly string[]).includes(value);

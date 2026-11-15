@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { EarlyAccessDialog } from "@/components/EarlyAccessDialog";
 import { Toast } from "@/components/Toast";
 import { useMembership } from "@/components/useAttempts";
@@ -68,6 +68,20 @@ export function CheckoutButton({
   const [error, setError] = useState<string | null>(null);
   const [earlyAccess, setEarlyAccess] = useState(false);
 
+  // Pages stay mounted while hidden. If the visitor moves to another page,
+  // drop anything in progress here: an answer that arrives later must not
+  // pull them into checkout, and a modal dialog must not be left open.
+  const onScreen = useRef(true);
+  useLayoutEffect(() => {
+    onScreen.current = true;
+    return () => {
+      onScreen.current = false;
+      setStarting(false);
+      setError(null);
+      setEarlyAccess(false);
+    };
+  }, []);
+
   // Coming back from Stripe with the Back button can restore this page from
   // the browser's cache with the button still in its "redirecting" state.
   useEffect(() => {
@@ -83,6 +97,7 @@ export function CheckoutButton({
     setStarting(true);
     setError(null);
     const outcome = await startCheckout(plan);
+    if (!onScreen.current) return;
     if (outcome.kind === "redirect") {
       window.location.href = outcome.url; // stays "starting" until the browser leaves
       return;
