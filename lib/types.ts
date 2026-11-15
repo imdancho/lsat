@@ -125,6 +125,16 @@ export type GradeResult = {
   tip: string;
 };
 
+/** Body of POST /api/grade: two answer fields, or one voice recording for both. */
+export type GradeRequest =
+  | {
+      questionId: string;
+      answers: { conclusion: string; main: string };
+      /** "voice" when any of the text was dictated. */
+      inputMode?: InputMode;
+    }
+  | { questionId: string; mode: "voice_single"; transcript: string };
+
 /** Successful response of POST /api/grade: the grade plus the answer-side reveal. */
 export type GradeResponse = { result: GradeResult } & QuestionReveal;
 

@@ -6,7 +6,11 @@ import {
   MissingApiKeyError,
   ModelRefusalError,
 } from "@/lib/anthropic";
-import { buildGraderUser, GRADER_SYSTEM } from "@/lib/prompts";
+import {
+  buildGraderUser,
+  GRADER_SYSTEM,
+  type StudentSubmission,
+} from "@/lib/prompts";
 import { getQuestion, toReveal } from "@/lib/questions";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { GradeResultSchema } from "@/lib/schemas";
@@ -18,12 +22,22 @@ export const maxDuration = 60;
 const GRADES_PER_HOUR = 40;
 const HOUR_MS = 60 * 60 * 1000;
 const MAX_ANSWER_CHARS = 600;
+const MAX_TRANSCRIPT_CHARS = 1500;
 
+const questionId = z.string().min(1).max(64);
 const answer = z.string().trim().max(MAX_ANSWER_CHARS);
-const BodySchema = z.object({
-  questionId: z.string().min(1).max(64),
+const FieldsBodySchema = z.object({
+  questionId,
   answers: z.object({ conclusion: answer.min(1), main: answer }),
+  inputMode: z.enum(["typed", "voice"]).optional(),
 });
+// One-take voice mode: a single recording covers both answers.
+const VoiceBodySchema = z.object({
+  questionId,
+  mode: z.literal("voice_single"),
+  transcript: z.string().trim().min(1).max(MAX_TRANSCRIPT_CHARS),
+});
+const BodySchema = z.union([VoiceBodySchema, FieldsBodySchema]);
 
 function fail(
   status: number,
@@ -95,22 +109,33 @@ export async function POST(request: Request): Promise<Response> {
     return fail(
       400,
       "bad_request",
-      `Write the conclusion, and keep each answer under ${MAX_ANSWER_CHARS} characters.`,
+      `Your answer is missing or too long. Typed answers can be up to ${MAX_ANSWER_CHARS} characters each, a voice answer up to ${MAX_TRANSCRIPT_CHARS}.`,
     );
   }
 
   const question = getQuestion(body.data.questionId);
   if (!question) return fail(404, "not_found", "That question does not exist.");
 
-  const { answers } = body.data;
-  if (question.type !== "main_conclusion" && answers.main.length === 0) {
+  const submission: StudentSubmission =
+    "mode" in body.data
+      ? { mode: "voice_single", transcript: body.data.transcript }
+      : {
+          mode: "fields",
+          answers: body.data.answers,
+          dictated: body.data.inputMode === "voice",
+        };
+  if (
+    submission.mode === "fields" &&
+    question.type !== "main_conclusion" &&
+    submission.answers.main.length === 0
+  ) {
     return fail(400, "bad_request", "Answer the second question before checking.");
   }
 
   try {
     const result = await callJSON(
       GRADER_SYSTEM,
-      buildGraderUser(question, answers),
+      buildGraderUser(question, submission),
       GradeResultSchema,
       { maxTokens: 2000, effort: "low" },
     );

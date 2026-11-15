@@ -8,20 +8,39 @@ import { FeedbackCard, FeedbackCardSkeleton } from "@/components/FeedbackCard";
 import { Stimulus } from "@/components/Stimulus";
 import { DifficultyLabel, TypeBadge } from "@/components/TypeBadge";
 import { useAttempts } from "@/components/useAttempts";
+import { useSpeechSupport } from "@/components/useSpeechRecognition";
+import { VoiceInput } from "@/components/VoiceInput";
 import { pickNextQuestion, recommendType, saveAttempt } from "@/lib/progress";
 import { QUESTION_TYPE_INFO } from "@/lib/taxonomy";
 import type {
   ApiErrorBody,
   Attempt,
   ChoiceIndex,
+  GradeRequest,
   GradeResponse,
+  InputMode,
   PublicQuestion,
   QuestionSummary,
+  QuestionType,
 } from "@/lib/types";
 
 const MAX_ANSWER_CHARS = 600;
+const MAX_TRANSCRIPT_CHARS = 1500;
 const CONCLUSION_PROMPT =
   "In one sentence, what is the author's main conclusion?";
+
+/** What to say in one-take voice mode, where one recording covers both answers. */
+const ONE_TAKE_PROMPT: Record<QuestionType, string> = {
+  main_conclusion:
+    "Say the conclusion, then how the other statements support it.",
+  flaw: "Say the conclusion, then what's wrong with the reasoning.",
+  necessary_assumption:
+    "Say the conclusion, then what's missing: what must be true for it to follow.",
+  strengthen:
+    "Say the conclusion, then one new fact that would strengthen the argument.",
+  weaken:
+    "Say the conclusion, then one new fact that would weaken the argument.",
+};
 
 type GradeError = { message: string; rateLimited: boolean };
 
@@ -39,16 +58,13 @@ type GradeOutcome =
   | { ok: false; error: GradeError };
 
 /** Calls the grading API and turns every failure into a message for the student. */
-async function requestGrade(
-  questionId: string,
-  answers: { conclusion: string; main: string },
-): Promise<GradeOutcome> {
+async function requestGrade(request: GradeRequest): Promise<GradeOutcome> {
   let response: Response;
   try {
     response = await fetch("/api/grade", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ questionId, answers }),
+      body: JSON.stringify(request),
     });
   } catch {
     return {
@@ -75,6 +91,11 @@ async function requestGrade(
   return { ok: true, grade: body as GradeResponse };
 }
 
+/** Adds a dictated phrase to the text already in a field. */
+function withSpoken(current: string, spoken: string, maxLength: number): string {
+  return (current ? `${current} ${spoken}` : spoken).slice(0, maxLength);
+}
+
 function StepHeading({ step, children }: { step: number; children: string }) {
   return (
     <h2 className="flex items-baseline gap-3 text-xl font-semibold">
@@ -95,6 +116,10 @@ type PracticeFlowProps = {
 export function PracticeFlow({ question, questions }: PracticeFlowProps) {
   const [conclusion, setConclusion] = useState("");
   const [main, setMain] = useState("");
+  // One-take voice mode: a single recording covers both answers.
+  const [oneTake, setOneTake] = useState(false);
+  const [transcript, setTranscript] = useState("");
+  const [dictated, setDictated] = useState(false);
   const [isGrading, setIsGrading] = useState(false);
   const [error, setError] = useState<GradeError | null>(null);
   // Holds the correct answer and explanations from the moment of grading.
@@ -105,13 +130,17 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
 
   const feedbackRef = useRef<HTMLElement>(null);
   const attempts = useAttempts();
+  const speech = useSpeechSupport();
 
   const typeInfo = QUESTION_TYPE_INFO[question.type];
   const mainIsOptional = question.type === "main_conclusion";
-  const canSubmit =
-    !isGrading &&
-    conclusion.trim().length > 0 &&
-    (mainIsOptional || main.trim().length > 0);
+  const locked = isGrading || grade !== null;
+  const hasAnswer = oneTake
+    ? transcript.trim().length > 0
+    : conclusion.trim().length > 0 &&
+      (mainIsOptional || main.trim().length > 0);
+  const canSubmit = !isGrading && hasAnswer;
+  const inputMode: InputMode = oneTake || dictated ? "voice" : "typed";
 
   // Move the reader (and keyboard focus) to the feedback when it arrives.
   useEffect(() => {
@@ -127,7 +156,7 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
       mistakeTags: response.result.mistakeTags,
       mcqCorrect: pick === null ? null : pick === response.correctIndex,
       mcqTrap: pick === null ? null : response.choiceTraps[pick],
-      inputMode: "typed",
+      inputMode,
       at,
     };
   }
@@ -137,10 +166,19 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
     if (!canSubmit) return;
     setIsGrading(true);
     setError(null);
-    const outcome = await requestGrade(question.id, {
-      conclusion: conclusion.trim(),
-      main: main.trim(),
-    });
+    const outcome = await requestGrade(
+      oneTake
+        ? {
+            questionId: question.id,
+            mode: "voice_single",
+            transcript: transcript.trim(),
+          }
+        : {
+            questionId: question.id,
+            answers: { conclusion: conclusion.trim(), main: main.trim() },
+            inputMode,
+          },
+    );
     setIsGrading(false);
     if (!outcome.ok) {
       setError(outcome.error);
@@ -156,6 +194,25 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
     if (!grade || !attemptAt) return;
     setPicked(index);
     saveAttempt(attemptFor(grade, attemptAt, index));
+  }
+
+  /** A mic button that dictates into one of the answer fields. */
+  function micFor(
+    setText: (update: (current: string) => string) => void,
+    label: string,
+    maxLength: number,
+  ) {
+    if (speech !== "supported") return undefined;
+    return (
+      <VoiceInput
+        label={label}
+        disabled={locked}
+        onText={(spoken) => {
+          setDictated(true);
+          setText((current) => withSpoken(current, spoken, maxLength));
+        }}
+      />
+    );
   }
 
   const next = pickNextQuestion(questions, attempts, question.type, question.id);
@@ -181,36 +238,81 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
       </section>
 
       <form onSubmit={handleSubmit} className="mt-10 space-y-8">
-        <div>
-          <StepHeading step={1}>Find the conclusion</StepHeading>
-          <div className="mt-3">
-            <AnswerField
-              id="answer-conclusion"
-              label={CONCLUSION_PROMPT}
-              value={conclusion}
-              onChange={setConclusion}
-              maxLength={MAX_ANSWER_CHARS}
-              readOnly={isGrading || grade !== null}
+        {speech === "supported" && (
+          <label className="flex w-fit cursor-pointer items-center gap-2.5 font-medium">
+            <input
+              type="checkbox"
+              checked={oneTake}
+              disabled={locked}
+              onChange={(event) => setOneTake(event.target.checked)}
+              className="size-4 accent-accent"
             />
-          </div>
-        </div>
-
-        <div>
-          <StepHeading step={2}>Answer in your own words</StepHeading>
-          <p className="mt-3 max-w-[68ch] border-l-2 border-accent pl-4 leading-relaxed">
-            {question.stem}
+            Answer by voice in one go
+          </label>
+        )}
+        {speech === "unsupported" && (
+          <p className="text-sm text-muted">
+            Voice answers work in Chrome, Edge and Safari.
           </p>
-          <div className="mt-4">
-            <AnswerField
-              id="answer-main"
-              label={typeInfo.prompt}
-              value={main}
-              onChange={setMain}
-              maxLength={MAX_ANSWER_CHARS}
-              readOnly={isGrading || grade !== null}
-            />
+        )}
+
+        {oneTake ? (
+          <div>
+            <StepHeading step={1}>Say your answer</StepHeading>
+            <p className="mt-3 max-w-[68ch] border-l-2 border-accent pl-4 leading-relaxed">
+              {question.stem}
+            </p>
+            <p className="mt-4 italic text-muted">
+              {ONE_TAKE_PROMPT[question.type]}
+            </p>
+            <div className="mt-3">
+              <AnswerField
+                id="answer-transcript"
+                label={grade ? "What we heard" : "Your spoken answer"}
+                value={transcript}
+                onChange={setTranscript}
+                maxLength={MAX_TRANSCRIPT_CHARS}
+                readOnly={locked}
+                action={micFor(setTranscript, "Start recording", MAX_TRANSCRIPT_CHARS)}
+              />
+            </div>
           </div>
-        </div>
+        ) : (
+          <>
+            <div>
+              <StepHeading step={1}>Find the conclusion</StepHeading>
+              <div className="mt-3">
+                <AnswerField
+                  id="answer-conclusion"
+                  label={CONCLUSION_PROMPT}
+                  value={conclusion}
+                  onChange={setConclusion}
+                  maxLength={MAX_ANSWER_CHARS}
+                  readOnly={locked}
+                  action={micFor(setConclusion, "Speak", MAX_ANSWER_CHARS)}
+                />
+              </div>
+            </div>
+
+            <div>
+              <StepHeading step={2}>Answer in your own words</StepHeading>
+              <p className="mt-3 max-w-[68ch] border-l-2 border-accent pl-4 leading-relaxed">
+                {question.stem}
+              </p>
+              <div className="mt-4">
+                <AnswerField
+                  id="answer-main"
+                  label={typeInfo.prompt}
+                  value={main}
+                  onChange={setMain}
+                  maxLength={MAX_ANSWER_CHARS}
+                  readOnly={locked}
+                  action={micFor(setMain, "Speak", MAX_ANSWER_CHARS)}
+                />
+              </div>
+            </div>
+          </>
+        )}
 
         {grade === null && (
           <div>
@@ -272,7 +374,7 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
           </section>
 
           <section className="mt-10">
-            <StepHeading step={3}>Confirm on the real format</StepHeading>
+            <StepHeading step={oneTake ? 2 : 3}>Confirm on the real format</StepHeading>
             <p className="mt-3 max-w-[68ch] leading-relaxed">{question.stem}</p>
             <div className="mt-4">
               <ChoiceList
