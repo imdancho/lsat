@@ -35,7 +35,7 @@ export function Toast({ tone, children, onDismiss, autoDismissMs }: ToastProps) 
           type="button"
           onClick={onDismiss}
           aria-label="Dismiss"
-          className="-mr-1 -mt-0.5 rounded-md px-1.5 text-xl leading-none opacity-80 hover:opacity-100"
+          className="-my-2 -mr-2 flex size-10 shrink-0 items-center justify-center rounded-md text-xl leading-none opacity-80 hover:opacity-100"
         >
           <span aria-hidden="true">×</span>
         </button>

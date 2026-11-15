@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { fail, HOUR_MS, readJson, tooManyRequests } from "@/lib/api";
+import { fail, HOUR_MS, readJson, refuseForeign, tooManyRequests } from "@/lib/api";
 import { getQuestion, toReveal } from "@/lib/questions";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import type { ScoreResponse } from "@/lib/types";
@@ -19,6 +19,9 @@ const BodySchema = z.object({
  * explanations for its questions, once, after the student has handed it in.
  */
 export async function POST(request: Request): Promise<Response> {
+  const refusal = refuseForeign(request);
+  if (refusal) return refusal;
+
   const limit = rateLimit(`score:${clientIp(request)}`, SECTIONS_PER_HOUR, HOUR_MS);
   if (!limit.ok) {
     return tooManyRequests(

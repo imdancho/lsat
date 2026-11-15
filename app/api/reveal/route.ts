@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { fail, HOUR_MS, readJson, tooManyRequests } from "@/lib/api";
+import { fail, HOUR_MS, readJson, refuseForeign, tooManyRequests } from "@/lib/api";
 import { getQuestion, toReveal } from "@/lib/questions";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import type { QuestionReveal } from "@/lib/types";
@@ -17,6 +17,9 @@ const BodySchema = z.object({
  * does not count against the free plan's AI-graded answers.
  */
 export async function POST(request: Request): Promise<Response> {
+  const refusal = refuseForeign(request);
+  if (refusal) return refusal;
+
   const limit = rateLimit(`reveal:${clientIp(request)}`, REVEALS_PER_HOUR, HOUR_MS);
   if (!limit.ok) {
     return tooManyRequests(

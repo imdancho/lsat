@@ -221,10 +221,17 @@ export function ProgressDashboard({ questions }: { questions: QuestionSummary[] 
   // state has replaced it, focus goes to that state's heading.
   const lockedHeading = useRef<HTMLHeadingElement>(null);
   const [resets, setResets] = useState(0);
+  const focusPending = useRef(false);
   useEffect(() => {
-    if (resets > 0) lockedHeading.current?.focus();
+    // Once per reset: not again when this page is shown after a visit elsewhere.
+    if (!focusPending.current) return;
+    focusPending.current = false;
+    lockedHeading.current?.focus();
   }, [resets]);
-  const handleReset = () => setResets((count) => count + 1);
+  const handleReset = () => {
+    focusPending.current = true;
+    setResets((count) => count + 1);
+  };
 
   if (today === null) return <DashboardSkeleton />;
   return (

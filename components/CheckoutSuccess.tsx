@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PAID_PLANS } from "@/lib/plan";
 import { saveMembership } from "@/lib/progress";
 import type { ProPlan, VerifyResponse } from "@/lib/types";
@@ -57,13 +57,17 @@ export function CheckoutSuccess() {
   // The answer for one particular check, so an old answer is never shown for a new one.
   const [checked, setChecked] = useState<{ key: string; result: Confirmation } | null>(null);
   const key = `${sessionId}#${retries}`;
+  // Once confirmed, a session is not checked again when this page is shown
+  // again later; a failed re-check must not take "Welcome" back.
+  const confirmedKey = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!sessionId) return;
+    if (!sessionId || confirmedKey.current === key) return;
     let stale = false;
     void confirmSession(sessionId).then((result) => {
       // A confirmed payment counts even if the visitor has already left this page.
       if (result.status === "confirmed") {
+        confirmedKey.current = key;
         saveMembership({ pro: true, plan: result.plan, since: new Date().toISOString() });
       }
       if (!stale) setChecked({ key, result });

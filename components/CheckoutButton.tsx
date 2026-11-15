@@ -83,11 +83,11 @@ export function CheckoutButton({
   // Pages stay mounted while hidden. If the visitor moves to another page,
   // drop anything in progress here: an answer that arrives later must not
   // pull them into checkout, and a modal dialog must not be left open.
-  const onScreen = useRef(true);
+  // Counts up whenever the page is left, so an answer to an older request is ignored.
+  const visit = useRef(0);
   useLayoutEffect(() => {
-    onScreen.current = true;
     return () => {
-      onScreen.current = false;
+      visit.current += 1;
       setStarting(false);
       setError(null);
       setEarlyAccess(false);
@@ -109,8 +109,9 @@ export function CheckoutButton({
     if (starting) return;
     setStarting(true);
     setError(null);
+    const startedDuring = visit.current;
     const outcome = await startCheckout(plan);
-    if (!onScreen.current) return;
+    if (visit.current !== startedDuring) return;
     if (outcome.kind === "redirect") {
       window.location.href = outcome.url; // stays "starting" until the browser leaves
       return;

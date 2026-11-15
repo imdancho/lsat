@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { fail, HOUR_MS, readJson, tooManyRequests } from "@/lib/api";
+import { fail, HOUR_MS, readJson, refuseForeign, tooManyRequests } from "@/lib/api";
 import { publicOrigin } from "@/lib/origin";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import {
@@ -23,6 +23,9 @@ const BodySchema = z.object({ plan: z.enum(PRO_PLANS) });
  * page itself; without one, it is the URL of Stripe's hosted checkout page.
  */
 export async function POST(request: Request): Promise<Response> {
+  const refusal = refuseForeign(request);
+  if (refusal) return refusal;
+
   const limit = rateLimit(`checkout:${clientIp(request)}`, CHECKOUTS_PER_HOUR, HOUR_MS);
   if (!limit.ok) {
     return tooManyRequests(

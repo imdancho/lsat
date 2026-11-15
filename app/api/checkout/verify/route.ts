@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 import type Stripe from "stripe";
-import { fail, HOUR_MS, tooManyRequests } from "@/lib/api";
+import { fail, HOUR_MS, refuseForeign, tooManyRequests } from "@/lib/api";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { describeStripeFailure, getStripe } from "@/lib/stripe";
 import { PRO_PLANS, type ProPlan, type VerifyResponse } from "@/lib/types";
@@ -29,6 +29,9 @@ export async function GET(request: NextRequest): Promise<Response> {
   // GET handlers once, and whatever happens before this line would be baked
   // into the build as the answer to every later request.
   const sessionId = request.nextUrl.searchParams.get("session_id");
+
+  const refusal = refuseForeign(request);
+  if (refusal) return refusal;
 
   const limit = rateLimit(`verify:${clientIp(request)}`, VERIFICATIONS_PER_HOUR, HOUR_MS);
   if (!limit.ok) {

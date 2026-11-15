@@ -57,10 +57,6 @@ export default function PricingPage() {
         Start free, with no sign-up. Upgrade when you want every answer graded.
       </p>
 
-      <div className="mt-8">
-        <ProNotice />
-      </div>
-
       <ul className="mt-8 grid gap-5 lg:grid-cols-3">
         <li className="flex flex-col rounded-2xl border border-line bg-surface p-6">
           <h2 className="text-2xl font-semibold">{FREE_PLAN.name}</h2>
@@ -105,6 +101,11 @@ export default function PricingPage() {
           );
         })}
       </ul>
+
+      {/* Below the plans: it appears after the page has loaded and must not push them down. */}
+      <div className="mt-6">
+        <ProNotice />
+      </div>
 
       <p className="mt-8 max-w-3xl leading-relaxed">
         7Sage $69/mo, LSAT Demon $99/mo — Prephrase Pro $29/mo, and it works

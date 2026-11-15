@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { fail, HOUR_MS, readJson, tooManyRequests } from "@/lib/api";
+import { fail, HOUR_MS, readJson, refuseForeign, tooManyRequests } from "@/lib/api";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { PRO_PLANS } from "@/lib/types";
 
@@ -18,6 +18,9 @@ const BodySchema = z.object({
  * logs. Connect a mailing-list service here before relying on it.
  */
 export async function POST(request: Request): Promise<Response> {
+  const refusal = refuseForeign(request);
+  if (refusal) return refusal;
+
   const limit = rateLimit(`early-access:${clientIp(request)}`, SIGNUPS_PER_HOUR, HOUR_MS);
   if (!limit.ok) {
     return tooManyRequests("Too many sign-ups from here. Try again later.", limit.retryAfterSeconds);

@@ -42,6 +42,9 @@ export function EarlyAccessDialog({
   const emailId = useId();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>({ step: "form", error: null });
+  // A click only closes the dialog if it also began on the backdrop; a text
+  // selection dragged out of the email field must not.
+  const pressedBackdrop = useRef(false);
   const planName = PAID_PLANS[plan].name;
 
   useEffect(() => {
@@ -62,8 +65,13 @@ export function EarlyAccessDialog({
       aria-labelledby={titleId}
       onClose={onClose}
       // A click on the backdrop lands on the dialog element itself.
+      onPointerDown={(event) => {
+        pressedBackdrop.current = event.target === event.currentTarget;
+      }}
       onClick={(event) => {
-        if (event.target === event.currentTarget) event.currentTarget.close();
+        if (pressedBackdrop.current && event.target === event.currentTarget) {
+          event.currentTarget.close();
+        }
       }}
       // Explicit alignment and width: a dialog inherits text alignment from
       // wherever it sits in the page, and would otherwise touch the screen edges.
@@ -76,12 +84,14 @@ export function EarlyAccessDialog({
         {status.step === "done" ? (
           <>
             <p role="status" className="mt-3 leading-relaxed">
-              You&rsquo;re on the list. We&rsquo;ll email{" "}
-              <span className="font-medium">{email.trim()}</span> when {planName}{" "}
-              checkout opens. Until then, the free plan stays free.
+              Thanks, we&rsquo;ve noted{" "}
+              <span className="font-medium">{email.trim()}</span>. We&rsquo;ll
+              only use it to tell you when {planName} opens. Until then, the
+              free plan stays free.
             </p>
             <button
               type="button"
+              autoFocus
               onClick={() => dialogRef.current?.close()}
               className="mt-6 rounded-lg bg-accent px-5 py-2.5 font-medium text-white transition-colors hover:bg-accent-strong"
             >
