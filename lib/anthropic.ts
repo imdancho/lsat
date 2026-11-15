@@ -46,6 +46,8 @@ export class InvalidModelOutputError extends Error {
 }
 
 let client: Anthropic | undefined;
+// Cleared if the API rejects a request that asks for the fallback.
+let fallbackAccepted = true;
 
 function getClient(): Anthropic {
   // Checked per request, not at import time, so a missing key never breaks the build.
@@ -63,6 +65,31 @@ function extractJSON(text: string): string {
   return start !== -1 && end > start ? body.slice(start, end + 1) : body;
 }
 
+type MessageParams = Anthropic.Beta.MessageCreateParamsNonStreaming;
+
+/**
+ * Sends the request with the refusal fallback switched on. The fallback is a
+ * beta feature, so if the API rejects a request because of it, the same
+ * request goes out once more without it and later calls skip it.
+ */
+async function createMessage(params: MessageParams) {
+  const messages = getClient().beta.messages;
+  if (!fallbackAccepted) return messages.create(params);
+  try {
+    return await messages.create({
+      ...params,
+      betas: [FALLBACK_BETA],
+      fallbacks: "default",
+    });
+  } catch (error) {
+    if (!(error instanceof Anthropic.BadRequestError)) throw error;
+    const response = await messages.create(params);
+    fallbackAccepted = false;
+    console.warn("[anthropic] refusal fallback rejected by the API; continuing without it");
+    return response;
+  }
+}
+
 type Attempt<T> = { ok: true; value: T } | { ok: false; problem: string };
 
 async function attempt<T>(
@@ -71,13 +98,11 @@ async function attempt<T>(
   schema: z.ZodType<T>,
   options: CallJSONOptions,
 ): Promise<Attempt<T>> {
-  const response = await getClient().beta.messages.create({
+  const response = await createMessage({
     model: MODEL,
     max_tokens: options.maxTokens,
     // No temperature: this model rejects non-default sampling parameters.
     output_config: { effort: options.effort ?? "low" },
-    betas: [FALLBACK_BETA],
-    fallbacks: "default",
     system: [
       {
         type: "text",
