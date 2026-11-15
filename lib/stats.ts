@@ -18,6 +18,13 @@ export const ATTEMPTS_TO_UNLOCK = 3;
 const mean = (values: number[]): number | null =>
   values.length ? values.reduce((sum, v) => sum + v, 0) / values.length : null;
 
+/**
+ * Reasoning scores of the attempts that have one. Attempts answered in
+ * multiple-choice mode carry no score and are left out.
+ */
+const scoresOf = (attempts: Attempt[]): number[] =>
+  attempts.flatMap((a) => (a.score === null ? [] : [a.score]));
+
 /** Local calendar day of a moment, as YYYY-MM-DD. */
 export function localDay(date: Date): string {
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -50,7 +57,7 @@ export function dayStreak(attempts: Attempt[], today: string): number {
 export type Summary = {
   /** Distinct questions answered at least once. */
   questionsDone: number;
-  /** Mean reasoning score over all attempts, 0–100. */
+  /** Mean reasoning score over the AI-graded attempts, 0–100. */
   averageScore: number | null;
   /** Multiple-choice picks made, and how many were right. */
   picks: number;
@@ -62,19 +69,20 @@ export function summarize(attempts: Attempt[], today: string): Summary {
   const picked = attempts.filter((a) => a.mcqCorrect !== null);
   return {
     questionsDone: new Set(attempts.map((a) => a.questionId)).size,
-    averageScore: mean(attempts.map((a) => a.score)),
+    averageScore: mean(scoresOf(attempts)),
     picks: picked.length,
     correctPicks: picked.filter((a) => a.mcqCorrect).length,
     streakDays: dayStreak(attempts, today),
   };
 }
 
+/** AI-graded attempts on one question type, and their mean reasoning score. */
 export type TypeStats = { attempts: number; averageScore: number | null };
 
 export function statsByType(attempts: Attempt[]): Record<QuestionType, TypeStats> {
   const stats = {} as Record<QuestionType, TypeStats>;
   for (const type of QUESTION_TYPES) {
-    const scores = attempts.filter((a) => a.type === type).map((a) => a.score);
+    const scores = scoresOf(attempts.filter((a) => a.type === type));
     stats[type] = { attempts: scores.length, averageScore: mean(scores) };
   }
   return stats;

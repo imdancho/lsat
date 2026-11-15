@@ -106,7 +106,13 @@ export function RecentAttempts({
             </p>
           </div>
           <p className="text-sm text-muted">
-            <span className="text-base font-semibold text-ink">{attempt.score}</span> / 100
+            {attempt.score === null ? (
+              "Choices only"
+            ) : (
+              <>
+                <span className="text-base font-semibold text-ink">{attempt.score}</span> / 100
+              </>
+            )}
           </p>
           {topics.has(attempt.questionId) && (
             <Link

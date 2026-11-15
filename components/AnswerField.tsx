@@ -1,7 +1,9 @@
 import type { ReactNode } from "react";
 
 type AnswerFieldProps = {
+  /** Unique in the document; other pages may stay mounted in the background, so derive it from useId(). */
   id: string;
+  name: string;
   label: string;
   value: string;
   onChange: (value: string) => void;
@@ -15,6 +17,7 @@ type AnswerFieldProps = {
 /** A labelled free-response textarea with a character count. */
 export function AnswerField({
   id,
+  name,
   label,
   value,
   onChange,
@@ -29,6 +32,7 @@ export function AnswerField({
       </label>
       <textarea
         id={id}
+        name={name}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         maxLength={maxLength}

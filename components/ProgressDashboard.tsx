@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { StatTile, TypeMeters } from "@/components/ProgressCharts";
 import { MistakeList, RecentAttempts, TrapList } from "@/components/ProgressLists";
+import { ManagePro } from "@/components/ProStatus";
 import { ResetProgress } from "@/components/ResetProgress";
 import { useAttempts, useToday } from "@/components/useAttempts";
 import {
@@ -201,8 +202,14 @@ export function ProgressDashboard({ questions }: { questions: QuestionSummary[] 
   const today = useToday();
 
   if (today === null) return <DashboardSkeleton />;
-  if (attempts.length < ATTEMPTS_TO_UNLOCK) {
-    return <Locked attempts={attempts} questions={questions} />;
-  }
-  return <Profile attempts={attempts} questions={questions} today={today} />;
+  return (
+    <div className="space-y-6">
+      {attempts.length < ATTEMPTS_TO_UNLOCK ? (
+        <Locked attempts={attempts} questions={questions} />
+      ) : (
+        <Profile attempts={attempts} questions={questions} today={today} />
+      )}
+      <ManagePro />
+    </div>
+  );
 }

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useId } from "react";
 import { DifficultyLabel } from "@/components/TypeBadge";
 import { useAttempts } from "@/components/useAttempts";
 import {
@@ -19,13 +20,17 @@ import {
   type QuestionType,
 } from "@/lib/types";
 
-/** Best score per question, from the student's saved attempts. */
-function bestScores(attempts: Attempt[]): Map<string, number> {
-  const best = new Map<string, number>();
-  for (const attempt of attempts) {
+/**
+ * Best reasoning score per attempted question. A question answered only in
+ * multiple-choice mode is in the map with null: done, but never graded.
+ */
+function bestScores(attempts: Attempt[]): Map<string, number | null> {
+  const best = new Map<string, number | null>();
+  for (const { questionId, score } of attempts) {
+    const previous = best.get(questionId) ?? null;
     best.set(
-      attempt.questionId,
-      Math.max(best.get(attempt.questionId) ?? 0, attempt.score),
+      questionId,
+      score === null ? previous : Math.max(previous ?? 0, score),
     );
   }
   return best;
@@ -48,15 +53,16 @@ function DrillBanner({
   questions: QuestionSummary[];
   attempts: Attempt[];
 }) {
+  const headingId = useId();
   const { label, kind } = focusInfo(focus);
   const next = pickNextQuestion(questions, attempts, { focus });
   const typeLabels = types.map((type) => QUESTION_TYPE_INFO[type].label);
   return (
     <section
-      aria-labelledby="drill-heading"
+      aria-labelledby={headingId}
       className="mb-6 rounded-xl border border-accent/30 bg-accent-soft p-5 sm:p-6"
     >
-      <h2 id="drill-heading" className="text-xl font-semibold">
+      <h2 id={headingId} className="text-xl font-semibold">
         Your drill: {label}
       </h2>
       <p className="mt-2 max-w-2xl leading-relaxed">
@@ -100,7 +106,7 @@ function TypeCard({
   type: QuestionType;
   questions: QuestionSummary[];
   attempts: Attempt[];
-  scores: Map<string, number>;
+  scores: Map<string, number | null>;
   badge: string | null;
 }) {
   const info = QUESTION_TYPE_INFO[type];
@@ -149,7 +155,7 @@ function TypeCard({
                 <span className="flex shrink-0 items-baseline gap-3">
                   <DifficultyLabel difficulty={q.difficulty} />
                   <span className="w-12 text-right text-sm font-semibold">
-                    {scores.has(q.id) ? `${scores.get(q.id)}` : "—"}
+                    {scores.has(q.id) ? (scores.get(q.id) ?? "done") : "—"}
                   </span>
                 </span>
               </Link>

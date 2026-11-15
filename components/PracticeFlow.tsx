@@ -1,17 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { AnswerField } from "@/components/AnswerField";
 import { ChoiceList } from "@/components/ChoiceList";
 import { FeedbackCard, FeedbackCardSkeleton } from "@/components/FeedbackCard";
 import { Stimulus } from "@/components/Stimulus";
 import { DifficultyLabel, TypeBadge } from "@/components/TypeBadge";
-import { useAttempts } from "@/components/useAttempts";
+import { useAccess, useAttempts } from "@/components/useAttempts";
 import { useSpeechSupport } from "@/components/useSpeechRecognition";
 import { VoiceInput } from "@/components/VoiceInput";
-import { saveAttempt } from "@/lib/progress";
-import { pickNextQuestion, recommendType } from "@/lib/stats";
+import { FREE_GRADES_PER_DAY, resolveAccess, type Access } from "@/lib/plan";
+import {
+  readDemoMode,
+  readStore,
+  recordGradedAnswer,
+  saveAttempt,
+} from "@/lib/progress";
+import { localDay, pickNextQuestion, recommendType } from "@/lib/stats";
 import { QUESTION_TYPE_INFO } from "@/lib/taxonomy";
 import type {
   ApiErrorBody,
@@ -21,8 +27,10 @@ import type {
   GradeResponse,
   InputMode,
   PublicQuestion,
+  QuestionReveal,
   QuestionSummary,
   QuestionType,
+  RevealRequest,
 } from "@/lib/types";
 
 const MAX_ANSWER_CHARS = 600;
@@ -42,6 +50,8 @@ const ONE_TAKE_PROMPT: Record<QuestionType, string> = {
   weaken:
     "Say the conclusion, then one new fact that would weaken the argument.",
 };
+
+const LETTERS = ["A", "B", "C", "D", "E"] as const;
 
 type GradeError = { message: string; rateLimited: boolean };
 
@@ -92,6 +102,37 @@ async function requestGrade(request: GradeRequest): Promise<GradeOutcome> {
   return { ok: true, grade: body as GradeResponse };
 }
 
+type RevealOutcome =
+  | { ok: true; reveal: QuestionReveal }
+  | { ok: false; message: string };
+
+/** Multiple-choice mode: trades a pick for the correct answer and the explanations. */
+async function requestReveal(request: RevealRequest): Promise<RevealOutcome> {
+  let response: Response;
+  try {
+    response = await fetch("/api/reveal", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(request),
+    });
+  } catch {
+    return {
+      ok: false,
+      message: "Could not reach the server. Check your connection and pick again.",
+    };
+  }
+  const body: unknown = await response.json().catch(() => null);
+  if (!response.ok) {
+    return {
+      ok: false,
+      message: isApiError(body)
+        ? body.error.message
+        : "Something went wrong while checking your pick. Pick again.",
+    };
+  }
+  return { ok: true, reveal: body as QuestionReveal };
+}
+
 /** Adds a dictated phrase to the text already in a field. */
 function withSpoken(current: string, spoken: string, maxLength: number): string {
   return (current ? `${current} ${spoken}` : spoken).slice(0, maxLength);
@@ -105,6 +146,45 @@ function StepHeading({ step, children }: { step: number; children: string }) {
       </span>
       {children}
     </h2>
+  );
+}
+
+/** How much AI grading is left. Keeps its height while storage is still unread. */
+function QuotaLine({ access }: { access: Access | null }) {
+  let text = "";
+  if (access?.kind === "pro") text = "Pro: unlimited AI grading.";
+  else if (access?.kind === "demo") text = "Demo mode: the daily limit is off.";
+  else if (access?.kind === "free") {
+    text = `Free plan: ${access.remaining} of ${FREE_GRADES_PER_DAY} AI-graded answers left today.`;
+  }
+  return <p className="mt-1 min-h-5 text-sm text-muted">{text}</p>;
+}
+
+/** Shown in place of the answer form once the free plan's daily grades are used up. */
+function LimitNotice() {
+  const headingId = useId();
+  return (
+    <section
+      aria-labelledby={headingId}
+      className="mt-10 rounded-xl border border-accent/30 bg-accent-soft p-5 sm:p-6"
+    >
+      <h2 id={headingId} className="text-xl font-semibold">
+        You&rsquo;ve used today&rsquo;s {FREE_GRADES_PER_DAY} free AI-graded answers
+      </h2>
+      <p className="mt-2 max-w-2xl leading-relaxed">
+        They come back at midnight. Until then, every question is open in
+        multiple-choice mode: pick an answer and see why each choice is right
+        or wrong. Pro grades every answer you write, with no daily limit.
+      </p>
+      <p className="mt-4">
+        <Link
+          href="/pricing"
+          className="inline-block rounded-lg bg-accent px-5 py-2.5 font-medium text-white transition-colors hover:bg-accent-strong"
+        >
+          See Pro plans
+        </Link>
+      </p>
+    </section>
   );
 }
 
@@ -128,9 +208,17 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
   const [grade, setGrade] = useState<GradeResponse | null>(null);
   const [attemptAt, setAttemptAt] = useState<string | null>(null);
   const [picked, setPicked] = useState<ChoiceIndex | null>(null);
+  // Multiple-choice mode (no AI grade): the answer arrives only after a pick.
+  const [choiceReveal, setChoiceReveal] = useState<QuestionReveal | null>(null);
+  const [revealError, setRevealError] = useState<string | null>(null);
 
+  // Earlier questions can stay mounted in the background, so field ids must
+  // be unique per instance for each label to reach its own field.
+  const fieldId = useId();
   const feedbackRef = useRef<HTMLElement>(null);
+  const choicesRef = useRef<HTMLElement>(null);
   const attempts = useAttempts();
+  const access = useAccess();
   const speech = useSpeechSupport();
 
   const typeInfo = QUESTION_TYPE_INFO[question.type];
@@ -143,10 +231,23 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
   const canSubmit = !isGrading && hasAnswer;
   const inputMode: InputMode = oneTake || dictated ? "voice" : "typed";
 
+  const reveal: QuestionReveal | null = grade ?? choiceReveal;
+  const answered = picked !== null && reveal !== null;
+  const outOfGrades = access?.kind === "free" && access.remaining === 0;
+  // No AI grading for this question: the free grades are used up, or the
+  // student has already started answering it by picking a choice.
+  const choicesOnly = grade === null && !isGrading && (picked !== null || outOfGrades);
+
   // Move the reader (and keyboard focus) to the feedback when it arrives.
   useEffect(() => {
     if (grade) feedbackRef.current?.focus();
   }, [grade]);
+
+  // Picking replaces the choice buttons with the explained answers, which
+  // would drop keyboard focus; keep it on the section instead.
+  useEffect(() => {
+    if (answered) choicesRef.current?.focus();
+  }, [answered]);
 
   function attemptFor(response: GradeResponse, at: string, pick: ChoiceIndex | null): Attempt {
     return {
@@ -165,6 +266,15 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     if (!canSubmit) return;
+    // Checked against the clock and storage as they are now, not as of the last render.
+    const accessNow = resolveAccess(readStore(), readDemoMode(), localDay(new Date()));
+    if (accessNow.kind === "free" && accessNow.remaining === 0) {
+      setError({
+        message: `You have used today's ${FREE_GRADES_PER_DAY} free AI-graded answers.`,
+        rateLimited: true,
+      });
+      return;
+    }
     setIsGrading(true);
     setError(null);
     const outcome = await requestGrade(
@@ -185,16 +295,42 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
       setError(outcome.error);
       return;
     }
-    const at = new Date().toISOString();
+    const now = new Date();
+    const at = now.toISOString();
     setGrade(outcome.grade);
     setAttemptAt(at);
     saveAttempt(attemptFor(outcome.grade, at, null));
+    if (accessNow.kind === "free") recordGradedAnswer(localDay(now));
   }
 
-  function handlePick(index: ChoiceIndex) {
-    if (!grade || !attemptAt) return;
+  async function handlePick(index: ChoiceIndex) {
+    if (picked !== null) return;
     setPicked(index);
-    saveAttempt(attemptFor(grade, attemptAt, index));
+    if (grade && attemptAt) {
+      saveAttempt(attemptFor(grade, attemptAt, index));
+      return;
+    }
+
+    // Multiple-choice mode: the server releases the answer in exchange for the pick.
+    setRevealError(null);
+    const outcome = await requestReveal({ questionId: question.id, pick: index });
+    if (!outcome.ok) {
+      setPicked(null);
+      setRevealError(outcome.message);
+      return;
+    }
+    setChoiceReveal(outcome.reveal);
+    saveAttempt({
+      questionId: question.id,
+      type: question.type,
+      flawTag: outcome.reveal.flawTag,
+      score: null,
+      mistakeTags: [],
+      mcqCorrect: index === outcome.reveal.correctIndex,
+      mcqTrap: outcome.reveal.choiceTraps[index],
+      inputMode: "typed",
+      at: new Date().toISOString(),
+    });
   }
 
   /** A mic button that dictates into one of the answer fields. */
@@ -241,6 +377,38 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
         <Stimulus text={question.stimulus} />
       </section>
 
+      {choicesOnly && (
+        <>
+          <LimitNotice />
+          <section
+            ref={choicesRef}
+            tabIndex={-1}
+            aria-label="Answer choices"
+            className="mt-10 scroll-mt-6 outline-none"
+          >
+            <StepHeading step={1}>Pick the best answer</StepHeading>
+            <p className="mt-3 max-w-[68ch] leading-relaxed">{question.stem}</p>
+            <div className="mt-4">
+              <ChoiceList
+                choices={question.choices}
+                picked={picked}
+                reveal={choiceReveal}
+                onPick={handlePick}
+              />
+            </div>
+            {revealError && (
+              <p
+                role="alert"
+                className="mt-4 rounded-lg border border-red-200 bg-red-50 p-4 text-red-900"
+              >
+                {revealError}
+              </p>
+            )}
+          </section>
+        </>
+      )}
+
+      {!choicesOnly && (
       <form onSubmit={handleSubmit} className="mt-10 space-y-8">
         {speech === "supported" && (
           <label className="flex w-fit cursor-pointer items-center gap-2.5 font-medium">
@@ -271,7 +439,8 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
             </p>
             <div className="mt-3">
               <AnswerField
-                id="answer-transcript"
+                id={`${fieldId}-transcript`}
+                name="transcript"
                 label={grade ? "What we heard" : "Your spoken answer"}
                 value={transcript}
                 onChange={setTranscript}
@@ -287,7 +456,8 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
               <StepHeading step={1}>Find the conclusion</StepHeading>
               <div className="mt-3">
                 <AnswerField
-                  id="answer-conclusion"
+                  id={`${fieldId}-conclusion`}
+                  name="conclusion"
                   label={CONCLUSION_PROMPT}
                   value={conclusion}
                   onChange={setConclusion}
@@ -305,7 +475,8 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
               </p>
               <div className="mt-4">
                 <AnswerField
-                  id="answer-main"
+                  id={`${fieldId}-main`}
+                  name="main"
                   label={typeInfo.prompt}
                   value={main}
                   onChange={setMain}
@@ -322,14 +493,19 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
           <div>
             <button
               type="submit"
-              disabled={!canSubmit}
-              className="rounded-lg bg-accent px-6 py-3 font-medium text-white transition-colors hover:bg-accent-strong disabled:cursor-not-allowed disabled:bg-line disabled:text-muted"
+              // While grading, the button is marked busy instead of disabled:
+              // a disabled button drops keyboard focus, which would be lost
+              // for good if the grade then failed.
+              disabled={!hasAnswer}
+              aria-disabled={isGrading || undefined}
+              className="rounded-lg bg-accent px-6 py-3 font-medium text-white transition-colors hover:bg-accent-strong disabled:cursor-not-allowed disabled:bg-line disabled:text-muted aria-disabled:cursor-progress aria-disabled:opacity-70"
             >
               {isGrading ? "Grading your reasoning…" : "Check my reasoning"}
             </button>
             <p className="mt-2 text-sm text-muted">
               The answer choices stay hidden until your reasoning is graded.
             </p>
+            <QuotaLine access={access} />
           </div>
         )}
 
@@ -337,11 +513,15 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
           <div role="alert" className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-900">
             <p>{error.message}</p>
             {error.rateLimited ? (
-              <p className="mt-2">
-                <Link href="/pricing" className="font-semibold underline underline-offset-4">
-                  See plans with unlimited grading
-                </Link>
-              </p>
+              // The hourly limit protects the server and applies on every plan,
+              // so only the free plan is pointed to pricing.
+              access?.kind === "free" && (
+                <p className="mt-2">
+                  <Link href="/pricing" className="font-semibold underline underline-offset-4">
+                    See plans with unlimited grading
+                  </Link>
+                </p>
+              )
             ) : (
               <button
                 type="submit"
@@ -354,10 +534,15 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
           </div>
         )}
       </form>
+      )}
 
       <p role="status" className="sr-only">
         {isGrading && "Grading your reasoning…"}
-        {grade && `Graded: ${grade.result.overallScore} out of 100.`}
+        {grade && !answered && `Graded: ${grade.result.overallScore} out of 100.`}
+        {answered &&
+          (picked === reveal.correctIndex
+            ? `Your pick, ${LETTERS[picked]}, is correct.`
+            : `Your pick, ${LETTERS[picked]}, is not correct. The correct answer is ${LETTERS[reveal.correctIndex]}.`)}
       </p>
 
       {isGrading && (
@@ -377,7 +562,12 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
             <FeedbackCard result={grade.result} type={question.type} />
           </section>
 
-          <section className="mt-10">
+          <section
+            ref={choicesRef}
+            tabIndex={-1}
+            aria-label="Answer choices"
+            className="mt-10 scroll-mt-6 outline-none"
+          >
             <StepHeading step={oneTake ? 2 : 3}>Confirm on the real format</StepHeading>
             <p className="mt-3 max-w-[68ch] leading-relaxed">{question.stem}</p>
             <div className="mt-4">
@@ -392,7 +582,7 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
         </>
       )}
 
-      {picked !== null && (
+      {answered && (
         <nav aria-label="What next" className="mt-8 flex flex-wrap gap-3">
           {next && (
             <Link
@@ -411,6 +601,19 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
             </Link>
           )}
         </nav>
+      )}
+
+      {answered && grade !== null && outOfGrades && (
+        <p className="mt-6 max-w-2xl leading-relaxed text-muted">
+          That was your last free AI-graded answer for today. The next
+          questions open in multiple-choice mode.{" "}
+          <Link
+            href="/pricing"
+            className="font-medium text-accent underline underline-offset-4"
+          >
+            Go Pro for unlimited grading
+          </Link>
+        </p>
       )}
     </article>
   );

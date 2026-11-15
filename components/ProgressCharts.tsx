@@ -28,10 +28,14 @@ const attemptsLabel = (count: number) =>
  * Average reasoning score for each question type: a name, a bar and a figure
  * per row. All five types are always listed, in the same order, so a type that
  * has not been tried shows as an empty track rather than disappearing.
+ *
+ * The row layout follows the width of the list itself (a container query), not
+ * of the screen, because the list also appears in a narrow column on the
+ * landing page.
  */
 export function TypeMeters({ stats }: { stats: Record<QuestionType, TypeStats> }) {
   return (
-    <ul className="space-y-4">
+    <ul className="@container space-y-4">
       {QUESTION_TYPES.map((type) => {
         const { attempts, averageScore } = stats[type];
         const label = QUESTION_TYPE_INFO[type].label;
@@ -39,10 +43,10 @@ export function TypeMeters({ stats }: { stats: Record<QuestionType, TypeStats> }
         return (
           <li
             key={type}
-            className="grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1.5 sm:grid-cols-[13rem_1fr_9rem] sm:items-center"
+            className="grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1.5 @lg:grid-cols-[13rem_1fr_9rem] @lg:items-center"
           >
             <span className="font-medium">{label}</span>
-            <span className="text-sm text-muted sm:order-last sm:text-right">
+            <span className="text-sm text-muted @lg:order-last @lg:text-right">
               {score === null ? (
                 "Not tried yet"
               ) : (
@@ -56,7 +60,7 @@ export function TypeMeters({ stats }: { stats: Record<QuestionType, TypeStats> }
             {/* The figure beside the bar carries the value, so the bar itself is decorative. */}
             <div
               aria-hidden="true"
-              className="col-span-2 h-2.5 rounded-r bg-data-track sm:col-span-1"
+              className="col-span-2 h-2.5 rounded-r bg-data-track @lg:col-span-1"
             >
               {score !== null && score > 0 && (
                 <div
