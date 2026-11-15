@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import { CheckoutButton } from "@/components/CheckoutButton";
 import { CanceledToast } from "@/components/PricingNotices";
 import { ProNotice } from "@/components/ProStatus";
-import { TestModeBanner, TestModeNote } from "@/components/TestModeBanner";
 import {
   BEST_VALUE_PLAN,
   FREE_PLAN,
@@ -58,11 +57,6 @@ export default function PricingPage() {
         Start free, with no sign-up. Upgrade when you want every answer graded.
       </p>
 
-      <div className="mt-8 space-y-4">
-        <ProNotice />
-        <TestModeBanner />
-      </div>
-
       <ul className="mt-8 grid gap-5 lg:grid-cols-3">
         <li className="flex flex-col rounded-2xl border border-line bg-surface p-6">
           <h2 className="text-2xl font-semibold">{FREE_PLAN.name}</h2>
@@ -100,14 +94,18 @@ export default function PricingPage() {
               <div className="mt-6 flex-1">
                 <FeatureList features={info.features} />
               </div>
-              <div className="mt-8 space-y-2 text-center">
+              <div className="mt-8">
                 <CheckoutButton plan={plan} emphasized={bestValue} />
-                <TestModeNote />
               </div>
             </li>
           );
         })}
       </ul>
+
+      {/* Below the plans: it appears after the page has loaded and must not push them down. */}
+      <div className="mt-6">
+        <ProNotice />
+      </div>
 
       <p className="mt-8 max-w-3xl leading-relaxed">
         7Sage $69/mo, LSAT Demon $99/mo — Prephrase Pro $29/mo, and it works
@@ -115,8 +113,9 @@ export default function PricingPage() {
       </p>
       <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
         Other products&rsquo; prices are approximate and may change. While
-        Prephrase is in preview, the lesson library is open on every plan, and
-        Pro is remembered on this device only: there are no accounts.
+        Prephrase is in preview, the lesson library and the timed section are
+        open on every plan, and Pro is remembered on this device only: there
+        are no accounts.
       </p>
 
       <Suspense fallback={null}>

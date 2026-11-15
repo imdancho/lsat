@@ -174,12 +174,22 @@ export type Usage = { day: string; count: number };
 
 /** Body and successful response of POST /api/checkout. */
 export type CheckoutRequest = { plan: ProPlan };
-export type CheckoutResponse = { url: string };
+/** Either a payment form to show on the pricing page, or a Stripe-hosted page to send the browser to. */
+export type CheckoutResponse =
+  | { kind: "embedded"; clientSecret: string; publishableKey: string }
+  | { kind: "hosted"; url: string };
 
 /** Response of GET /api/checkout/verify. */
 export type VerifyResponse =
   | { ok: true; plan: ProPlan; email: string | null }
   | { ok: false };
+
+/** Body and response of POST /api/test/score: the picks of one timed section (null = left blank). */
+export type ScoreRequest = { answers: { questionId: string; pick: ChoiceIndex | null }[] };
+export type ScoreResponse = { results: ({ questionId: string } & QuestionReveal)[] };
+
+/** One finished timed section, stored in localStorage. */
+export type TestResult = { at: string; correct: number; total: number; seconds: number };
 
 /** Body of POST /api/early-access. */
 export type EarlyAccessRequest = { email: string; plan: ProPlan };

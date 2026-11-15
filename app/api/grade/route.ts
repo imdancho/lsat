@@ -6,7 +6,7 @@ import {
   MissingApiKeyError,
   ModelRefusalError,
 } from "@/lib/anthropic";
-import { fail, HOUR_MS, readJson, tooManyRequests } from "@/lib/api";
+import { fail, HOUR_MS, readJson, refuseForeign, tooManyRequests } from "@/lib/api";
 import {
   buildGraderUser,
   GRADER_SYSTEM,
@@ -78,6 +78,9 @@ function modelFailure(error: unknown): Response {
 }
 
 export async function POST(request: Request): Promise<Response> {
+  const refusal = refuseForeign(request);
+  if (refusal) return refusal;
+
   const limit = rateLimit(`grade:${clientIp(request)}`, GRADES_PER_HOUR, HOUR_MS);
   if (!limit.ok) {
     return tooManyRequests(

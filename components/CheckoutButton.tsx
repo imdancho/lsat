@@ -2,6 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { EarlyAccessDialog } from "@/components/EarlyAccessDialog";
+import { PaymentDialog } from "@/components/PaymentDialog";
 import { Toast } from "@/components/Toast";
 import { useMembership } from "@/components/useAttempts";
 import { PAID_PLANS } from "@/lib/plan";
@@ -14,6 +15,7 @@ import type {
 
 type CheckoutOutcome =
   | { kind: "redirect"; url: string }
+  | { kind: "form"; clientSecret: string; publishableKey: string }
   /** The server has no working Stripe setup. */
   | { kind: "unavailable" }
   | { kind: "error"; message: string };
@@ -38,10 +40,18 @@ async function startCheckout(plan: ProPlan): Promise<CheckoutOutcome> {
   }
   const body: unknown = await response.json().catch(() => null);
   if (response.ok) {
-    const url = (body as CheckoutResponse | null)?.url;
-    return typeof url === "string" && url
-      ? { kind: "redirect", url }
-      : { kind: "error", message: GENERIC_ERROR };
+    const checkout = body as CheckoutResponse | null;
+    if (checkout?.kind === "embedded" && checkout.clientSecret && checkout.publishableKey) {
+      return {
+        kind: "form",
+        clientSecret: checkout.clientSecret,
+        publishableKey: checkout.publishableKey,
+      };
+    }
+    if (checkout?.kind === "hosted" && checkout.url) {
+      return { kind: "redirect", url: checkout.url };
+    }
+    return { kind: "error", message: GENERIC_ERROR };
   }
   // 503: Stripe is not set up on this server, so offer early access instead.
   if (response.status === 503) return { kind: "unavailable" };
@@ -52,8 +62,9 @@ async function startCheckout(plan: ProPlan): Promise<CheckoutOutcome> {
 }
 
 /**
- * Starts the Stripe test-mode checkout for a plan. If the server cannot offer
- * checkout, it opens the early-access form instead, so the button never dead-ends.
+ * Starts checkout for a plan: a payment form on this page, or Stripe's own
+ * page when the form is not configured. If the server cannot offer checkout
+ * at all, it opens the early-access form instead, so the button never dead-ends.
  */
 export function CheckoutButton({
   plan,
@@ -67,18 +78,20 @@ export function CheckoutButton({
   const [starting, setStarting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [earlyAccess, setEarlyAccess] = useState(false);
+  const [payment, setPayment] = useState<{ clientSecret: string; publishableKey: string } | null>(null);
 
   // Pages stay mounted while hidden. If the visitor moves to another page,
   // drop anything in progress here: an answer that arrives later must not
   // pull them into checkout, and a modal dialog must not be left open.
-  const onScreen = useRef(true);
+  // Counts up whenever the page is left, so an answer to an older request is ignored.
+  const visit = useRef(0);
   useLayoutEffect(() => {
-    onScreen.current = true;
     return () => {
-      onScreen.current = false;
+      visit.current += 1;
       setStarting(false);
       setError(null);
       setEarlyAccess(false);
+      setPayment(null);
     };
   }, []);
 
@@ -96,14 +109,16 @@ export function CheckoutButton({
     if (starting) return;
     setStarting(true);
     setError(null);
+    const startedDuring = visit.current;
     const outcome = await startCheckout(plan);
-    if (!onScreen.current) return;
+    if (visit.current !== startedDuring) return;
     if (outcome.kind === "redirect") {
       window.location.href = outcome.url; // stays "starting" until the browser leaves
       return;
     }
     setStarting(false);
-    if (outcome.kind === "unavailable") setEarlyAccess(true);
+    if (outcome.kind === "form") setPayment(outcome);
+    else if (outcome.kind === "unavailable") setEarlyAccess(true);
     else setError(outcome.message);
   }
 
@@ -134,6 +149,14 @@ export function CheckoutButton({
         <Toast tone="error" onDismiss={() => setError(null)}>
           {error}
         </Toast>
+      )}
+      {payment && (
+        <PaymentDialog
+          plan={plan}
+          clientSecret={payment.clientSecret}
+          publishableKey={payment.publishableKey}
+          onClose={() => setPayment(null)}
+        />
       )}
       {earlyAccess && (
         <EarlyAccessDialog plan={plan} onClose={() => setEarlyAccess(false)} />

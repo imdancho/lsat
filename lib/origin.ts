@@ -7,11 +7,20 @@
  * forwarded headers carry the real host (Next.js fills them in from `Host`
  * when no proxy set them; a hosting proxy such as Vercel's sets them).
  *
- * The headers come from the caller, so this is only safe where a wrong origin
- * can hurt nobody but the caller, as with the redirect URLs of a test-mode
- * checkout. Real payments should pin the origin in configuration instead.
+ * The headers come from the caller, who could name another site and then hand
+ * the resulting checkout link to someone else. Setting SITE_URL (for example
+ * https://prephrase.example) pins the origin and closes that door; without it
+ * the headers are used, which keeps local development and previews working.
  */
 export function publicOrigin(request: Request): string {
+  const pinned = process.env.SITE_URL?.trim();
+  if (pinned) {
+    try {
+      return new URL(pinned).origin;
+    } catch {
+      // Not a URL: ignore it and fall back to the request.
+    }
+  }
   const first = (value: string | null) => value?.split(",")[0]?.trim() || undefined;
   const host =
     first(request.headers.get("x-forwarded-host")) ?? first(request.headers.get("host"));

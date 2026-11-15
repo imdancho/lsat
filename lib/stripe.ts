@@ -41,15 +41,45 @@ export function getStripe(): Stripe {
   return cached.stripe;
 }
 
-/** The Stripe price id configured for a plan. */
-export function priceFor(plan: ProPlan): string {
-  const [variable, value] =
+// The Stripe products behind the two plans. Product ids are not secrets. Each
+// can be overridden by an environment variable holding a product id (prod_…)
+// or a price id (price_…).
+const DEFAULT_PRODUCT: Record<ProPlan, string> = {
+  pro_monthly: "prod_Vd9DF8X7jqbtmo", // Prephrase Pro
+  test_day: "prod_Vd9Dql63Yy7r7t", // Prephrase Until Test Day
+};
+
+export type PlanPrice = { price: string; recurring: boolean };
+
+/**
+ * The price to charge for a plan. A product id is resolved to the product's
+ * default price, and whether that price recurs decides the checkout mode.
+ */
+export async function priceFor(stripe: Stripe, plan: ProPlan): Promise<PlanPrice> {
+  const configured =
     plan === "pro_monthly"
-      ? ["STRIPE_PRICE_PRO_MONTHLY", process.env.STRIPE_PRICE_PRO_MONTHLY]
-      : ["STRIPE_PRICE_TEST_DAY", process.env.STRIPE_PRICE_TEST_DAY];
-  const price = value?.trim();
-  if (!price) throw new StripeNotConfiguredError(variable);
-  return price;
+      ? process.env.STRIPE_PRICE_PRO_MONTHLY
+      : process.env.STRIPE_PRICE_TEST_DAY;
+  const id = configured?.trim() || DEFAULT_PRODUCT[plan];
+  if (!id.startsWith("prod_")) return { price: id, recurring: plan === "pro_monthly" };
+
+  const product = await stripe.products.retrieve(id, { expand: ["default_price"] });
+  const price = product.default_price;
+  if (!price || typeof price === "string") {
+    throw new StripeNotConfiguredError(`a default price on Stripe product ${id}`);
+  }
+  return { price: price.id, recurring: price.recurring !== null };
+}
+
+/**
+ * The publishable key for the payment form shown on the site, or null when it
+ * is not set (checkout then opens on Stripe's own page). Test-mode keys only.
+ */
+export function publishableKey(): string | null {
+  const key = (
+    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || process.env.STRIPE_PUBLISHABLE_KEY
+  )?.trim();
+  return key && key.startsWith("pk_test_") ? key : null;
 }
 
 export type StripeFailure = { status: number; code: string; message: string };

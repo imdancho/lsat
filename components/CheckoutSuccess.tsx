@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PAID_PLANS } from "@/lib/plan";
 import { saveMembership } from "@/lib/progress";
 import type { ProPlan, VerifyResponse } from "@/lib/types";
@@ -57,13 +57,17 @@ export function CheckoutSuccess() {
   // The answer for one particular check, so an old answer is never shown for a new one.
   const [checked, setChecked] = useState<{ key: string; result: Confirmation } | null>(null);
   const key = `${sessionId}#${retries}`;
+  // Once confirmed, a session is not checked again when this page is shown
+  // again later; a failed re-check must not take "Welcome" back.
+  const confirmedKey = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!sessionId) return;
+    if (!sessionId || confirmedKey.current === key) return;
     let stale = false;
     void confirmSession(sessionId).then((result) => {
       // A confirmed payment counts even if the visitor has already left this page.
       if (result.status === "confirmed") {
+        confirmedKey.current = key;
         saveMembership({ pro: true, plan: result.plan, since: new Date().toISOString() });
       }
       if (!stale) setChecked({ key, result });
@@ -89,7 +93,7 @@ export function CheckoutSuccess() {
           Welcome to Pro 🎉
         </h1>
         <p className="mt-4 text-lg leading-relaxed text-muted">
-          Your {planName} test payment is confirmed
+          Your {planName} payment is confirmed
           {result.email ? ` for ${result.email}` : ""}. The daily limit is gone
           on this device, so you can have every answer graded.
         </p>
@@ -97,9 +101,6 @@ export function CheckoutSuccess() {
           <Link href="/practice" className={PRIMARY_BUTTON}>
             Start practicing
           </Link>
-        </p>
-        <p className="mt-6 text-sm text-muted">
-          This was a Stripe test-mode checkout. No real charge was made.
         </p>
       </div>
     );
@@ -112,7 +113,7 @@ export function CheckoutSuccess() {
       </h1>
       <p className="mt-4 text-lg leading-relaxed text-muted">
         {sessionId
-          ? "Stripe did not report a completed payment for this checkout, so Pro was not turned on. If you finished the test checkout, try again in a moment."
+          ? "Stripe did not report a completed payment for this checkout, so Pro was not turned on. If you finished paying, try again in a moment."
           : "This page opens after a checkout. There is no checkout to confirm here."}
       </p>
       <p className="mt-8 flex flex-wrap gap-3">

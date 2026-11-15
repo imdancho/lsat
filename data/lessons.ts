@@ -35,7 +35,7 @@ export const LESSONS: Record<Focus, Lesson> = {
   flaw: {
     title: "Name the gap between evidence and conclusion",
     explanation:
-      "A flawed argument has evidence that could all be true while the conclusion is still false. Your job is to say exactly how that could happen. Start by stating the conclusion and the evidence in your own words, then ask what the author is taking for granted to get from one to the other. A good answer names that specific jump; you do not need the textbook name for it.",
+      "In almost every flawed argument, the evidence could all be true while the conclusion is still false. Your job is to say exactly how that could happen. Start by stating the conclusion and the evidence in your own words, then ask what the author is taking for granted to get from one to the other. A good answer names that specific jump; you do not need the textbook name for it.",
     example: {
       argument:
         "Every employee who finished the company's 10-kilometer charity run said they felt energetic afterward. Running that distance, then, leaves people feeling energetic, and the company should urge all its employees to do it.",
@@ -142,7 +142,7 @@ export const LESSONS: Record<Focus, Lesson> = {
   missed_gap: {
     title: "Aim at the jump, not the topic",
     explanation:
-      "Every argument here has a specific jump: a point where the conclusion says more than the evidence does. An answer misses the gap when it comments on the topic, or on a detail of the evidence, without touching that jump. Before you write, finish this sentence: the evidence is about X, but the conclusion is about Y. Your answer should be about the distance between X and Y.",
+      "Almost every argument here has a specific jump: a point where the conclusion says more than the evidence does. An answer misses the gap when it comments on the topic, or on a detail of the evidence, without touching that jump. Before you write, finish this sentence: the evidence is about X, but the conclusion is about Y. Your answer should be about the distance between X and Y.",
     example: {
       argument:
         "In taste tests, most people preferred the new recipe for the canned soup to the old one. So switching to the new recipe will increase the soup's sales.",
@@ -231,7 +231,7 @@ export const LESSONS: Record<Focus, Lesson> = {
   too_strong: {
     title: "Claim only as much as you need",
     explanation:
-      "Words like all, never, only and always turn a reasonable point into one that is easy to knock down. On assumption questions, the argument rarely needs anything that sweeping; on the others, the evidence rarely supports it. Ask how little would do the job. If your answer still works with 'some' or 'at least one' in place of 'all', the smaller version is the better answer.",
+      "Words like all, never, only and always turn a reasonable point into one that is easy to knock down. On assumption questions, the argument rarely needs anything that sweeping; when you state a conclusion or describe a flaw, the passage rarely claims that much. Ask how little would do the job: if your answer still works with 'some' or 'at least one' in place of 'all', the smaller version is the better answer. A new fact offered to strengthen or weaken is the exception, because there a sweeping fact does more, not less.",
     example: {
       argument:
         "The library started lending board games last year, and since then more teenagers have been visiting. So the board games are attracting teenagers to the library.",
@@ -249,7 +249,7 @@ export const LESSONS: Record<Focus, Lesson> = {
   necessary_sufficient_confusion: {
     title: "Required is not the same as enough",
     explanation:
-      "Something is sufficient if it would guarantee the conclusion, and necessary if the conclusion cannot hold without it. They are different questions, and a claim can be one without being the other. When you are asked what an argument requires, an answer that would prove the conclusion outright is usually more than it needs. Use the denial test: a required assumption is one whose denial breaks the argument.",
+      "Something is sufficient if, added to the evidence, it would guarantee the conclusion, and necessary if the argument cannot work without it: deny it and the evidence no longer supports the conclusion. They are different questions, and a claim can be one without being the other. When you are asked what an argument requires, an answer that would prove the conclusion outright is usually more than it needs. Use the denial test: a required assumption is one whose denial breaks the argument.",
     example: {
       argument:
         "Priya has practiced her presentation every evening this week, far more than she usually practices. So her presentation to the board on Friday will go well.",

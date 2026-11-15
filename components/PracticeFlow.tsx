@@ -238,15 +238,24 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
   // student has already started answering it by picking a choice.
   const choicesOnly = grade === null && !isGrading && (picked !== null || outOfGrades);
 
+  // Focus moves once, when something new arrives; not again each time this
+  // page is shown after a visit elsewhere (effects re-run then).
+  const focusedFeedback = useRef(false);
+  const focusedChoices = useRef(false);
+
   // Move the reader (and keyboard focus) to the feedback when it arrives.
   useEffect(() => {
-    if (grade) feedbackRef.current?.focus();
+    if (!grade || focusedFeedback.current) return;
+    focusedFeedback.current = true;
+    feedbackRef.current?.focus();
   }, [grade]);
 
   // Picking replaces the choice buttons with the explained answers, which
   // would drop keyboard focus; keep it on the section instead.
   useEffect(() => {
-    if (answered) choicesRef.current?.focus();
+    if (!answered || focusedChoices.current) return;
+    focusedChoices.current = true;
+    choicesRef.current?.focus();
   }, [answered]);
 
   function attemptFor(response: GradeResponse, at: string, pick: ChoiceIndex | null): Attempt {
@@ -538,6 +547,7 @@ export function PracticeFlow({ question, questions }: PracticeFlowProps) {
 
       <p role="status" className="sr-only">
         {isGrading && "Grading your reasoning…"}
+        {picked !== null && reveal === null && "Checking your pick…"}
         {grade && !answered && `Graded: ${grade.result.overallScore} out of 100.`}
         {answered &&
           (picked === reveal.correctIndex
